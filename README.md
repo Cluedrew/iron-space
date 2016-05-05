@@ -4,7 +4,7 @@ An outer space base building game. Created as a learning project.
 The project uses the [SFML](http://www.sfml-dev.org/index.php "Find it here.")
 library for interacting with the system.
 
-### Project Status ###
+#### Project Status ####
 Planning - I am creating the plan. The plan means the general layout of the
 code and the interdependance between systems. As well as writing out headers.
 
@@ -30,10 +30,7 @@ First a bit about the layout of the code base.
 + *audio* is for sound loading and playing code.
 + *objects* is planned, holds code that manages individual GameObjects.
 
-### Systems ###
-Overarching systems that cut accross the code base.
-
-##### Main Loop
+### Main Loop ###
 The main loop is the heart of the program, with each iteration of the loop
 another beat. The highest level of the game looks like this:
 
@@ -58,6 +55,14 @@ elsewhere.
 2. Update - Calls to update the state of all objects. This will take into
 account both the input and the time passed, plus and decitions that come from
 within individual code blocks.
+
+    OK I think I have to break this one up. I think I will go with 3 parts:
+    1. Update AI - Use inputs (and the changing situation) to update what a
+GameObject wants to do this frame.
+    2. Update Physics - Use the goals from the AI stage to move things that
+have to be moved.
+    3. Respond to Collisions - If things bumped into each other tell them they
+did and see what they want to do about it.
 3. Output - After the world has changed, show those changes. Draw to the
 screen, play sounds and... I think that is it. I got no rumble going on. The
 logic of deciding what should be outputted mostly happens during update,
@@ -68,6 +73,21 @@ nothing more than a call to sf::Window::setFramerateLimit(limit).
 Besides simply calling code the main loop is incharge of managing tempral
 orginiation. Other things can define what happens but you always have to
 return to the main loop to determain exactly when they happen.
+
+### Services ###
+Services are systems that cut accross the code base. They generally exist to
+provide a single tool to the entire code base.
+
+##### Logging
+Error messages and printing data. Unlike most other parts of the code this
+isn't for the game, it's for me. To help with debugging I would like a system
+built in that makes it easier to add and remove debugging messages in the
+code.
+
+The service is actually a collection of loggers. Each of which will accept
+messages of different types. The loggers will have modes that say which types
+of messages they print. For instance VERBOSE prints everything while QUIET
+prints only error messages.
 
 ##### Physics
 How things move in space. This system moves things around and handles the
@@ -116,6 +136,11 @@ interface is tempral orginiation. If all GameObjects have a single update than
 they have to do everything all at once, which is does not allow things (as
 an example) react to changes around them.
 
+OK maybe there is. I think I will use a more message based system. The always
+on steps (physics, ai) get called every frame. Things that really react only
+happen when another function is called. So most of the time the input and
+collision code for functions doesn't even run. [Formalize this bit.]
+
 GameObjects (and the various specializations) are stored in collections that
 allow the mass dispatches to reach them all automatically. Adding and
 removing objects from these collections should be folded into the constructors
@@ -129,16 +154,18 @@ go null if that object is destroyed. This does mean that whatever owns the
 pointer will have to handle it suddendly going null, but that is better than
 a stale pointer.
 
-### Map ###
-The map is its own system, but not quite in the same way as the other systems
-that are dedicated to a particular domain. Instead the map is both a container
-for MapObjects and a cammra, that handles screen-world coordinate
-translations, a sf::View should handle that.
+### Planes ###
+A Plane object repersents a layer of reality. Currently there are two, the Map
+which repersents the game world and the Gui which is between that and the
+user.
 
-### Gui ###
-Similar to the map for GuiObjects. However it cuts out some extra parts that
-the more static Gui elements. For instance they are locked to the screen and
-do not update according to physics.
+Each maintains the collection of objects within it, finds collisions between
+those objects (collisions to not occur between objects in different planes)
+and distributs input to them. Or mouse actions at least, as those have to
+be translated from screen coordinates to the coordinates of the plane. The
+planes also maintain the draw order of objects within them (between planes
+must be handled by outside code) and maintains the view into the plane that
+appears on screen.
 
 ### Components ###
 The GameObjects are collections of components, I am considering if there is

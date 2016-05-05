@@ -17,12 +17,35 @@ class GameObjectPtr;
 class GameObject
 {
 private:
+  sf::Transfrom/*able*/ transform;
   std::vector<GameObjectPtr*> ptrsToThis;
 
 protected:
 public:
   GameObject ();
+  /* Default constructor to be used by child classes.
+   */
+
   virtual ~GameObject () =0;
+
+  template<typename T>
+  virtual T * getComponent ();
+  template<typename T>
+  virtual T const * getComponent () const;
+  /* Get the component from this object of type T if it exists.
+   * Return: NULL, sub-classes override to provide access to components they
+   *   have and want to show.
+   *
+   * This one is still an idea, part of the reason for this is then I can
+   * access interfaces in components from elsewhere. Sort of a comunication
+   * thing, below is the other option.
+   */
+
+  virtual void giveMessage (MessageEvent const & msg);
+  /* Send a message to this GameObject and have it resolve it.
+   * Params: A reference to a message event.
+   * Effect: Varies with message and sub-class.
+   */
 };
 
 #endif//GAME_OBJECT_HPP
