@@ -117,14 +117,30 @@ there probably will be a bit more overhead to unify playing the sounds that
 are similar. However I've never actually done audio before so this is new
 territory for me, I only know some therory.
 
-### GameObject Hierarcy ###
+### GameObject Class ###
 There is a GameObject class that implements the code for a thing in the game.
-However the actual game objects don't inherite directly from that, instead
-there are some intermetiate classes.
+In the game means actually part of the game, things that move around in the
+world as well as the gui.
+
+The main thing the GameObject consists of its transform (its location in the
+world) and a set of components that create the rest of the components.
+
+GameObjects should not be deleted directly, instead they que themselves up
+to be deleted at the end of the update frame. This way they can destroy
+themselves and it should prevent some conflicts.
+
+##### Hierarcy
+Sub-classes of GameObject implement what components are wired into the object.
+The actual behaviour should come from the components themselves.
+
+Right now I have two types of Sub-GameObjects:
 + *MapObject* is used to repersent object that appear on the map. Which also
-  means in the world, so they interact with the physics engine.
+  means in the world, so they interact with the physics engine. Has AI,
+  graphical and physics components.
 + *GuiObject* is used for items that appear on the screen as part of the
-  interface.
+  interface. Has AI and graphical.
+
+The other way is just creating slots and filling in the needed ones.
 
 I know deep class hierarcies can cause problems, but I think 2 deep is not
 enough to cause the fragility issues of deep hierarcies while allowing me some
@@ -136,23 +152,33 @@ interface is tempral orginiation. If all GameObjects have a single update than
 they have to do everything all at once, which is does not allow things (as
 an example) react to changes around them.
 
-OK maybe there is. I think I will use a more message based system. The always
-on steps (physics, ai) get called every frame. Things that really react only
-happen when another function is called. So most of the time the input and
-collision code for functions doesn't even run. [Formalize this bit.]
+##### GameObject Messaging
+There has to be a way of giving general messages to GameObjects. Most
+GameObjects need to comunicate with each other and they have to do this is
+a very general way that is outside the scope of the generic GameObject.
 
-GameObjects (and the various specializations) are stored in collections that
-allow the mass dispatches to reach them all automatically. Adding and
-removing objects from these collections should be folded into the constructors
-and deconstructors. Similarly, as it is simpler if objects are destroyed at
-a given point in the loop, so there may be a method to regester them for
-deletion later.
+I have two ideas for this:
++ The *getComponent* method, a templated member function that generally
+  returns null, but sub-classes can override it to provide access to its
+  components. These components then act as an interface.
++ The *sendMessage* method, send messages to an virtual function which the
+  sub-classes can override to react to differently. (Visitor Pattern)
 
+This is primarily for comunication between GameObjects, as that is the hardest
+one to generalize. Two other types of messages are Inputs and Collisions,
+which come from the InputHandler and the Physics Engine respectively. These
+may or may not be seperate.
+
+##### GameObject Pointer
 The GameObjectPtr is a special smart pointer that points at GameObjects. It is
 smart in that it is also an observer for the GameObject it points at and will
 go null if that object is destroyed. This does mean that whatever owns the
 pointer will have to handle it suddendly going null, but that is better than
 a stale pointer.
+
+This is for holding onto references to GameObjects for longer times, although
+it can be used for short times as well. References can be used for functions
+and other short term things where the object will not be deleted.
 
 ### Planes ###
 A Plane object repersents a layer of reality. Currently there are two, the Map
@@ -181,3 +207,7 @@ Another wishlist feature is an abstract/template object pool for components.
 Besides general data fragmentation, if components do end up with different
 functions that activate at different stages in the loop, then grouping
 components like this would help with data locality.
+
+Taking it a step further, a couple of components have to be activated every
+frame and it doesn't matter the order between them. Hence we could activate
+them down the pool.

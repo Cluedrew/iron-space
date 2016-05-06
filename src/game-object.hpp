@@ -48,4 +48,13 @@ public:
    */
 };
 
+
+
+void swap (GameObject & obj1, GameObject & obj2);
+/* Swap two GameObjects, deep.
+ * Params: Mutable references to GameObject.
+ * Effect: Swaps the two GameObjects, dependant memory may or may not be
+ *   moved but it will be accessable through the same object as before.
+ */
+
 #endif//GAME_OBJECT_HPP
