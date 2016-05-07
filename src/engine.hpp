@@ -15,13 +15,22 @@
 class Engine
 {
 private:
+  Plane gui;
+  Plane map;
+
+  void /*bool*/ pollInput ();
+  void updateAi (sf::Time const &);
+  void updatePhysics (sf::Time const &);
+  void resolveCollisions ();
+  void render ();
+
 protected:
 public:
   Engine (/*Settings*/);
   virtual ~Engine ();
 
   int runLoop ();
-  /*
+  /* Run the game.
    * Effect: Many, it runs the entire game.
    * Return: The requested exit code, so 0 means the game ran successfully,
    *   non-zero is an error report.

@@ -39,40 +39,36 @@ another beat. The highest level of the game looks like this:
 3. Clean Up
 
 And comparitively, not a lot happens in steps 1 & 3. The main loop itself can
-be divided into four parts:
+be divided into several parts:
 
-1. Input
-2. Update
-3. Output
-4. Timing
+1. Poll Input
+2. Update AI
+3. Update Physics
+4. Collisions
+5. Render
+6. Wait
 
-Again it is the step 2 that needs the most attention. But the others are
-hardly simple so I will talk about them all.
+Input is distributed at the time of polling, but any serious computation
+from it should be resolved during AI.
 
-1. Input - A polling loop that searches for input events. Some important
-system events may be handled in place, however most are sent out and handled
-elsewhere.
-2. Update - Calls to update the state of all objects. This will take into
-account both the input and the time passed, plus and decitions that come from
-within individual code blocks.
+AI is where most of the thinking occures, given the input and the time passed
+(that is, internal changes) each GameObject decides what it is going to do.
 
-    OK I think I have to break this one up. I think I will go with 3 parts:
-    1. Update AI - Use inputs (and the changing situation) to update what a
-GameObject wants to do this frame.
-    2. Update Physics - Use the goals from the AI stage to move things that
-have to be moved.
-    3. Respond to Collisions - If things bumped into each other tell them they
-did and see what they want to do about it.
-3. Output - After the world has changed, show those changes. Draw to the
-screen, play sounds and... I think that is it. I got no rumble going on. The
-logic of deciding what should be outputted mostly happens during update,
-this just spits things to the screen and resolves sounds.
-4. Timing - Frame rate limiter. Keeps things from going too fast. This may be
-nothing more than a call to sf::Window::setFramerateLimit(limit).
+AI is seperated from Physics for two reasons: first they are going in
+different components, secondly it creates a pesudo-double buffer as all AI
+looks at the physical world of the last frame before the physics updates.
 
-Besides simply calling code the main loop is incharge of managing tempral
-orginiation. Other things can define what happens but you always have to
-return to the main loop to determain exactly when they happen.
+Physics is when all of the transforms get updated.
+
+Collisions scans for things that are overlapping and tells them about that.
+Because we are in space things can move over and under each other, but
+reaching each other may repersent something.
+
+Render simply goes through all the GameObjects (in draw order) and gets
+them to draw themselves on screen. Also here the audio service resolves any
+requests that have been made to it over the frame.
+
+Wait causes the program to rest for the remaining time in this frame.
 
 ### Services ###
 Services are systems that cut accross the code base. They generally exist to
@@ -120,37 +116,20 @@ territory for me, I only know some therory.
 ### GameObject Class ###
 There is a GameObject class that implements the code for a thing in the game.
 In the game means actually part of the game, things that move around in the
-world as well as the gui.
+world as well as the gui, as apposed to the engine code that supports all
+of these.
 
-The main thing the GameObject consists of its transform (its location in the
-world) and a set of components that create the rest of the components.
+GameObjects have a set of interface functions, there is one for each step of
+the main loop (minus wait), plus a few for messaging.
+
+The GameObject is made out of a set of components. The transform is inlined
+as part of the GameObject container itself, the others will be stored by
+pointers so they can be swapped out (however I believe only AI will vary in
+the early versions).
 
 GameObjects should not be deleted directly, instead they que themselves up
 to be deleted at the end of the update frame. This way they can destroy
 themselves and it should prevent some conflicts.
-
-##### Hierarcy
-Sub-classes of GameObject implement what components are wired into the object.
-The actual behaviour should come from the components themselves.
-
-Right now I have two types of Sub-GameObjects:
-+ *MapObject* is used to repersent object that appear on the map. Which also
-  means in the world, so they interact with the physics engine. Has AI,
-  graphical and physics components.
-+ *GuiObject* is used for items that appear on the screen as part of the
-  interface. Has AI and graphical.
-
-The other way is just creating slots and filling in the needed ones.
-
-I know deep class hierarcies can cause problems, but I think 2 deep is not
-enough to cause the fragility issues of deep hierarcies while allowing me some
-inheratince advantages. Similarly, I'm aware of the advantages of composition,
-so the inherated classes should be built like packages of components.
-
-The main reason there is not a single GameObject class with a unified
-interface is tempral orginiation. If all GameObjects have a single update than
-they have to do everything all at once, which is does not allow things (as
-an example) react to changes around them.
 
 ##### GameObject Messaging
 There has to be a way of giving general messages to GameObjects. Most
@@ -211,3 +190,26 @@ components like this would help with data locality.
 Taking it a step further, a couple of components have to be activated every
 frame and it doesn't matter the order between them. Hence we could activate
 them down the pool.
+
+##### AI
+Controls how the GameObject acts. Most will have to be custom built for each
+type of GameObject. Duplication might be able to be cut down with a State
+Class system or similar code sharing stratagies but that will wait for a while
+yet.
+
+##### Graphics
+Draws the graphical repersentation of the GameObject onto screen. Pretty
+simple, some special instances may have to be made for special graphical
+effects, but those will not come into effect for a while.
+
+##### Physics
+Defines the collidable (and clickable) area of the object. Is also responable
+for moving the object forward in time. Hence they have to main features,
+an `update` function that moves them forward in time and `collides` pedicate.
+
+For now all physics bodies are circles.
+
+##### Audio
+May not actually need an audio component, the interface around the audio
+service may be enough. However some block of code to act as a reference
+counter may be useful. Or not, this is not going to be in the first wave.
