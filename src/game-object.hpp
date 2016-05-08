@@ -84,7 +84,7 @@ public:
    * Params: Time passed.
    * Effect: Moves the GameObject.
    */
-  { physics->update(deltaT); }
+  { physics->update(this, deltaT); }
 
   void handleCollision (GameObjectPtr with)
   /* Called during Collision Step:

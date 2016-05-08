@@ -28,7 +28,6 @@ First a bit about the layout of the code base.
   Things moving over time, resolving colitions and similar.
 + *graphics* is for image loading and rendering code.
 + *audio* is for sound loading and playing code.
-+ *objects* is planned, holds code that manages individual GameObjects.
 
 ### Main Loop ###
 The main loop is the heart of the program, with each iteration of the loop
@@ -85,20 +84,6 @@ messages of different types. The loggers will have modes that say which types
 of messages they print. For instance VERBOSE prints everything while QUIET
 prints only error messages.
 
-##### Physics
-How things move in space. This system moves things around and handles the
-fallout from that. The fallout being collitions, because the game takes place
-in space I plan to have a lot of moving over and under each other. This is to
-avoid having to move things around to resolve collitions. In turn, that is
-because I don't want to write that code.
-
-Movement is on a 2d plane, so it can be handled with x, y & rotation.
-Collition on the other hand requires a bit more detail, a shape is required on
-both ends so they can hit each other.
-
-Clicks are collitions as well, a click is a point that collides with things
-on screen.
-
 ##### Graphics
 The loading and desplay of images. This is based around an image library
 that loads and stores images. These are mostly sprite sheets. It also includes
@@ -132,21 +117,27 @@ to be deleted at the end of the update frame. This way they can destroy
 themselves and it should prevent some conflicts.
 
 ##### GameObject Messaging
-There has to be a way of giving general messages to GameObjects. Most
-GameObjects need to comunicate with each other and they have to do this is
-a very general way that is outside the scope of the generic GameObject.
+Now besides the regular updates there are a few ways to get information
+to a GameObject out of that ordering.
 
-I have two ideas for this:
-+ The *getComponent* method, a templated member function that generally
-  returns null, but sub-classes can override it to provide access to its
-  components. These components then act as an interface.
-+ The *sendMessage* method, send messages to an virtual function which the
-  sub-classes can override to react to differently. (Visitor Pattern)
+There are three comunication functions on the GameObject. They all act in the
+same way (allowing for pushing events to the AIComponent) but they repersent
+different types of inputs.
++ `handleInput` gets called from the input polling of the main loop and is
+  used to repersent user inputs. There will probably be a union/enum class to
+  repersent the different type of input messages, although there shouldn't be
+  many that need to be sent to the individual GameObjects.
++ `handleMessage` gets called from other GameObjects and can repersent any
+  comunication between them. I think this will be repersented by a shallow
+  hierarcy of classes to allow for all the possible messages that will be
+  coming through.
++ `handleCollision` gets called from the collision detection system (from
+  the Plane class), repersents two GameObjects overlapping and will generally
+  be called in pairs. The main piece of information needed is the other object
+  it collided with plus maybe a collision type {Start, Continue, Finished}.
 
-This is primarily for comunication between GameObjects, as that is the hardest
-one to generalize. Two other types of messages are Inputs and Collisions,
-which come from the InputHandler and the Physics Engine respectively. These
-may or may not be seperate.
+Of these `handleMessage` is really a catch all, rooting a highway through a
+pinhole. The other two are much more specialized.
 
 ##### GameObject Pointer
 The GameObjectPtr is a special smart pointer that points at GameObjects. It is
@@ -172,6 +163,15 @@ planes also maintain the draw order of objects within them (between planes
 must be handled by outside code) and maintains the view into the plane that
 appears on screen.
 
+Movement is on a 2d plane, so it can be handled with x, y & rotation.
+Collition on the other hand requires a bit more detail, a shape is required on
+both ends so they can hit each other.
+
+Clicks are collitions as well, a click is a point that collides with things
+on screen. A click (or other input) can be sent into the Plane and it will be
+passed on to one of the objects. Or not, as clicks can fall through Planes if
+there is nothing in them at that point.
+
 ### Components ###
 The GameObjects are collections of components, I am considering if there is
 some base I can give to the components. For instance if I wanted to have
@@ -191,6 +191,13 @@ Taking it a step further, a couple of components have to be activated every
 frame and it doesn't matter the order between them. Hence we could activate
 them down the pool.
 
+##### Transform
+I will probaly just re-purpose the sf::Transform (or sf::Transformable) to
+create the repersentation of the GameObject's position in 2d Space.
+
+I am considering expanding this to a "Body" that also holds information about
+the GameObject's shape as well.
+
 ##### AI
 Controls how the GameObject acts. Most will have to be custom built for each
 type of GameObject. Duplication might be able to be cut down with a State
@@ -207,7 +214,9 @@ Defines the collidable (and clickable) area of the object. Is also responable
 for moving the object forward in time. Hence they have to main features,
 an `update` function that moves them forward in time and `collides` pedicate.
 
-For now all physics bodies are circles.
+For now all physics bodies are circles. At this point it would be trivial to
+fold it up into the GameObject but I will leave this open for expanstion for
+now. But even then only the collidable area changes.
 
 ##### Audio
 May not actually need an audio component, the interface around the audio
