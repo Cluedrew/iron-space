@@ -222,3 +222,13 @@ now. But even then only the collidable area changes.
 May not actually need an audio component, the interface around the audio
 service may be enough. However some block of code to act as a reference
 counter may be useful. Or not, this is not going to be in the first wave.
+
+### Input Interface ###
+This interface is only for handling input. It will contain or at least be
+bound to the input loop. It is responsible for distributing input and keeping
+track of the state of the user interface.
+
+For instance it should track which units are selected so that when commands
+are entered it knows which units to distribut them to.
+
+It also maps keyboard shortcuts.
