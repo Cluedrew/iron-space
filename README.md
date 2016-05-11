@@ -231,4 +231,6 @@ track of the state of the user interface.
 For instance it should track which units are selected so that when commands
 are entered it knows which units to distribut them to.
 
-It also maps keyboard shortcuts.
+Later it should also map keyboard shortcuts and perhaps notify GameObjects
+as to their state, so they can highlight themselves if they are selected. But
+that is for later.
