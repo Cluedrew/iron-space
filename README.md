@@ -5,8 +5,22 @@ The project uses the [SFML](http://www.sfml-dev.org/index.php "Find it here.")
 library for interacting with the system.
 
 #### Project Status ####
-Planning - I am creating the plan. The plan means the general layout of the
-code and the interdependance between systems. As well as writing out headers.
+Engine Implementation - Implement the basic code for everything and get a bit
+of everything running.
+
++ Get some GameObjects in the gui and map Planes.
++ The GameObjects should render (a solid circles of colour is enough for now).
++ The GameObjects should be clickable.
++ Between the GameObjects, the Interface and Physics at least one GameObject
+  should be orderable to move around the screen.
++ There should be collisions between GameObjects, and some noticable reaction
+  to the collisions.
++ At least one sound effect and one piece of music should be played.
++ Select and install a test harness, get some basic tests up.
+
+All 7 of these points have to be completed before moving on (a few other
+points may join this list). This should ensure that all parts of the engine
+have some working base. It should not actually resemple a game in this stage.
 
 ## Game ##
 The game is a simple game. You find yourself in the depths of space and you

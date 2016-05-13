@@ -10,11 +10,17 @@
  * the global interface.
  */
 
+#include <SFML/System/Clock.hpp>
+#include <SFML/System/Time.hpp>
+
 
 
 class Engine
 {
 private:
+  sf::Clock timer;
+  sf::Time timePerFrame;
+
   Plane gui;
   Plane map;
 
@@ -23,6 +29,7 @@ private:
   void updatePhysics (sf::Time const &);
   void resolveCollisions ();
   void render ();
+  void wait ();
 
 protected:
 public:

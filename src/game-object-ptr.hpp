@@ -37,7 +37,6 @@ public:
    */
 
   GameObjectPtr (GameObject & object);
-  GameObjectPtr (GameObject * object); // X
   /* Target constructor, new pointer points at the given GameObject.
    * Params:
    */
@@ -61,18 +60,10 @@ public:
    */
 
   void setNull ();
-  /*
-   */
-
-  void setTo (GameObjectPtr const & other);
-  void setTo (GameObjectPtr && other);
-  /*
-   * Params: A reference to another GameObjectPtr.
-   * Effect:
+  /* Set the GameObjectPtr to point at nothing.
    */
 
   void setTo (GameObject & object);
-  void setTo (GameObject * object); // X
   /*
    * Params: A reference/pointer to a GameObject.
    * Effect:
@@ -82,14 +73,6 @@ public:
   GameObjectPtr & operator= (GameObjectPtr && other);
   /* Copy/Move assignment, this pointer points
    * Params: A reference to another GameObjectPtr.
-   * Effect:
-   * Return: Mutable refence to this.
-   */
-
-  GameObjectPtr & operator= (GameObject & object);
-  GameObjectPtr & operator= (GameObject * object); // X
-  /* Assign to point at GameObject.
-   * Params:
    * Effect:
    * Return: Mutable refence to this.
    */
