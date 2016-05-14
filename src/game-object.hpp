@@ -9,16 +9,21 @@
  *
  * GameObject contains the position of the object in, which is essental data
  * accross almost all components.
+ *
+ * If you are keeping a pointer (or reference) to a GameObject around for a
+ * longer time, accross function calls or iterations of the main loop, use a
+ * GameObjectPtr. (See its header.)
  */
 
-#include "game-object-ptr.hpp"
 class GameObjectPtr;
 
 class GameObject
 {
 private:
   sf::Transfrom/*able*/ transform;
-  std::vector<GameObjectPtr*> ptrsToThis;
+
+  std::vector<GameObjectPtr *> ptrsToThis;
+  friend class GameObjectPtr;
 
   AiComponent * ai;
   PhysicsComponent * physics;
@@ -31,6 +36,18 @@ public:
               GraphicsComponent * graphics);
   /* Create a new GameObject from its list of components.
    * Params: Pointers to the components, ownership of them is taken.
+   */
+
+  GameObject(GameObject const & other) = delete;
+  GameObject & operator= (GameObject const & other) = delete;
+  GameObject & operator= (GameObject && other) = delete;
+  // Copying and assignment are disabled.
+
+  GameObject(GameObject && other);
+  /* Move constructor, this new GameObject replaces the old one.
+   * Params: Destroying reference to another GameObject.
+   * Effect: Takes components, GameObjectPtrs move from the old GameObject
+   *   to the new one.
    */
 
   virtual ~GameObject ();

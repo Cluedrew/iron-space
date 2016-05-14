@@ -2,7 +2,7 @@
 #define GAME_OBJECT_PTR_HPP
 
 /* A smart pointer to a game object. Goes NULL if the object it points to is
- * destroyed.
+ * destroyed. It is rather coupled with the GameObject itself.
  */
 
 class GameObject;
@@ -87,6 +87,8 @@ public:
    * Params:
    * Return:
    */
+
+  friend class GameObject;
 };
 
 #endif//GAME_OBJECT_PTR_HPP

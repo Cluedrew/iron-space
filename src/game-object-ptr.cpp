@@ -5,7 +5,14 @@
  * The internal operations are here to modularise the common tasks.
  */
 
+#include <iostream>
+#include <cstdlib.h>
 
+
+
+#define FOREACH_PTR(name) \
+  for (std::vector<GameObjectPtr>::iterator name = ptr->ptrsToThis.begin() ; \
+       name != ptr->ptrsToThis.end() ; ++ name )
 
 // Internal operations:
 
@@ -13,23 +20,68 @@
  * Internal function for setting the pointer to point at nothing.
  * If the pointer already points at nothing than nothing is done.
  */
-void GameObjectPtr::unregester ();
+void GameObjectPtr::unregester ()
+{
+  if (nullptr == ptr)
+    return;
+
+  //std::vector<GameObjectPtr>::iterator it;
+  //for (it = ptr->ptrsToThis.begin() ; it != ptr->ptrsToThis.end() ; ++it)
+  FOREACH_PTR(it)
+  {
+    if (*it == ptr)
+    {
+      ptrsToThis.erase(it);
+      ptr == nullptr;
+      return;
+    }
+  }
+
+  std::cerr << "ERROR: GameObject does not have a back reference to" <<
+    << " the GameObjectPtr." << std::endl;
+  exit(EXIT_FAILURE);
+}
 
 /* regesterTo(obj)
  * Internal function for setting the pointer to point at something.
  * If the pointer already points at something it is first unregestered.
  */
-void GameObjectPtr::regesterTo (GameObject * obj);
+void GameObjectPtr::regesterTo (GameObject * obj)
+{
+  unregester();
 
-/* regesterSwitch(other
+  obj->ptrsToThis.push_back(this);
+  ptr = obj;
+}
+
+/* regesterSwitch(other)
+ * Take the other GameObjectPtr's pointer, nulling it if it isn't already
+ * null.
  */
-void GameObjectPtr::regesterSwitch (GameObjectPtr && other);
+void GameObjectPtr::regesterSwitch (GameObjectPtr && other)
+{
+  unregester();
 
-// First level,
+  if (nullptr == other.ptr)
+    return;
 
-// unregesterSafe()
-// copyOther()
-// replaceOther()
+  FOREACH_PTR(it)
+  {
+    if (*it == other.ptr)
+    {
+      *it = this;
+      ptr = other.ptr;
+      other.ptr = nullptr;
+      return;
+    }
+  }
+
+  std::cerr << "ERROR: GameObject does not have a back reference to" <<
+    << " the GameObjectPtr." << std::endl;
+  exit(EXIT_FAILURE);
+}
+
+#undef FOREACH_PTR
 
 // Constructors & Deconstructor ==============================================
 
@@ -63,8 +115,7 @@ GameObjectPtr::GameObjectPtr (GameObject & object) :
 // see header
 GameObjectPtr::~GameObjectPtr ()
 {
-  if (ptr)
-    unregester();
+  unregester();
 }
 
 
@@ -106,45 +157,51 @@ bool GameObjectPtr::isNull () const
 // Assignment Operators
 void GameObjectPtr::setNull ()
 {
-  if (ptr)
-    unregester();
+  unregester();
 }
 
 void GameObjectPtr::setTo (GameObject & object)
 {
-  if (ptr)
-    unregester();
+  regesterTo(&object);
 }
 
 GameObjectPtr & GameObjectPtr::operator= (GameObjectPtr const & other)
 {
-  if (ptr)
-    unregester();
   regesterTo(other.ptr);
 }
 
 GameObjectPtr & GameObjectPtr::operator= (GameObjectPtr && other)
 {
-  if (ptr)
-    unregester();
   regesterSwitch(other);
 }
 
 // Comparison Operators
 bool GameObjectPtr::operator== (GameObjectPtr const & other) const
-{ return ptr == other.ptr; }
+{
+  return ptr == other.ptr;
+}
 
 bool GameObjectPtr::operator!= (GameObjectPtr const & other) const
-{ return ptr != other.ptr; }
+{
+  return ptr != other.ptr;
+}
 
 bool GameObjectPtr::operator> (GameObjectPtr const & other) const
-{ return ptr > other.ptr; }
+{
+  return ptr > other.ptr;
+}
 
 bool GameObjectPtr::operator< (GameObjectPtr const & other) const
-{ return ptr < other.ptr; }
+{
+  return ptr < other.ptr;
+}
 
 bool GameObjectPtr::operator>= (GameObjectPtr const & other) const
-{ return ptr >= other.ptr; }
+{
+  return ptr >= other.ptr;
+}
 
 bool GameObjectPtr::operator<= (GameObjectPtr const & other) const
-{ return ptr <= other.ptr; }
+{
+  return ptr <= other.ptr;
+}
