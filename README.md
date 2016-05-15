@@ -126,9 +126,20 @@ as part of the GameObject container itself, the others will be stored by
 pointers so they can be swapped out (however I believe only AI will vary in
 the early versions).
 
-GameObjects should not be deleted directly, instead they que themselves up
-to be deleted at the end of the update frame. This way they can destroy
-themselves and it should prevent some conflicts.
+##### GameObject Allocation
+
+So GameObjects interact between each other a lot. (Or they probably will.)
+Which means that when they are updating is actually a bad time to delete them
+as they are comunicating back and forth. To further complicate matters each
+GameObject's internals will effect when it is supposed to be deleted.
+
+A 'toDelete' predicate on each GameObject would be one way to solve the
+problem. However a better solution came to mind as I tried to think of a
+shorter way of putting 'GameObject Construction and Destruction'. And that
+is the allocator parameters to containers. If I can wrap up the allocation
+and deallocation rules in an allocator then I can put them in any class. The
+GameObjects might have to have an extra field to reach back to the allocator,
+or possibly not. (New territory for me here.)
 
 ##### GameObject Messaging
 Now besides the regular updates there are a few ways to get information

@@ -7,10 +7,12 @@
 
 GameObject::GameObject (AiComponent * ai, PhysicsComponent * physics,
                         GraphicsComponent * graphics) :
+  sf::Drawable(), sf::Transformable(),
   ptrsToThis(), ai(ai), physics(physics), graphics(graphics)
 {}
 
 GameObject::GameObject (GameObject && other) :
+  sf::Drawable(), sf::Transformable(),
   ptrsToThis(other.ptrsToThis), ai(other.ai),
   physics(other.physics), graphics(other.graphics)
 {
@@ -44,4 +46,48 @@ GameObject::~GameObject ()
   delete ai;
   delete physics;
   delete graphics;
+}
+
+
+
+// see header
+bool handleInput (InputEvent const & input)
+{
+  return ai->handleInput(input);
+}
+
+// see header
+void updateAi (sf::Time const & deltaT)
+{ ai->update(deltaT); }
+
+// see header
+void handleMessage (MessageEvent const & msg)
+{
+  ai->handleMessage(msg);
+}
+
+// see header
+void updatePhysics (sf::Time const & deltaT)
+{
+  physics->update(this, deltaT);
+}
+
+// see header
+void handleCollision (GameObjectPtr with)
+{
+  ai->handleCollision(with);
+}
+
+// see header (?)
+void render (sf::RenderTarget & target, sf::RenderStates states)
+{
+  states.transform *= getTransform();
+  graphics->render(target, states);
+}
+
+// see header
+void draw (sf::RenderTarget & target, sf::RenderStates states) const
+{
+  states.transform *= getTransform();
+  target.draw(*graphics, states);
 }

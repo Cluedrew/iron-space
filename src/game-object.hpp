@@ -15,13 +15,12 @@
  * GameObjectPtr. (See its header.)
  */
 
+#include <SFML/Graphics.hpp>
 class GameObjectPtr;
 
-class GameObject
+class GameObject : public sf::Transformable, public sf::Drawable
 {
 private:
-  sf::Transfrom/*able*/ transform;
-
   std::vector<GameObjectPtr *> ptrsToThis;
   friend class GameObjectPtr;
 
@@ -52,24 +51,7 @@ public:
 
   virtual ~GameObject ();
 
-  template<typename T>
-  virtual T * getComponent ();
-  template<typename T>
-  virtual T const * getComponent () const;
-  /* Get the component from this object of type T if it exists.
-   * Return: NULL, sub-classes override to provide access to components they
-   *   have and want to show.
-   *
-   * This one is still an idea, part of the reason for this is then I can
-   * access interfaces in components from elsewhere. Sort of a comunication
-   * thing, below is the other option.
-   */
 
-  virtual void giveMessage (MessageEvent const & msg);
-  /* Send a message to this GameObject and have it resolve it.
-   * Params: A reference to a message event.
-   * Effect: Varies with message and sub-class.
-   */
 
   bool handleInput (InputEvent const & input)
   /* Called during Input Step:
@@ -111,13 +93,22 @@ public:
    */
   { ai->handleCollision(with); }
 
-  void render (/*Maybe some view data.*/)
+  // Does the GameObject update during the draw state?
+  // YES:
+  void render (sf::RenderTarget & target, sf::RenderStates states)
   /* Called during Render Step:
    * Move and re-draw the object on the screen.
    * Params:
-   * Effect: Draws to screen.
+   * Effect: Updates object and draws to screen.
    */
   { graphics->render(/*view data*/); }
+
+  // NO:
+  void draw (sf::RenderTarget & target, sf::RenderStates states) const;
+  /*
+   * Params: The draw target
+   * Effect: Draws to screen.
+   */
 };
 
 

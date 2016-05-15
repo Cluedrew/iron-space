@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <cstdlib.h>
+#include "game-object.hpp"
 
 
 
