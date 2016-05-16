@@ -17,6 +17,9 @@
  * will quit (probably by exit, might use LoggerQuitException).
  */
 
+#include <map>
+#include <string>
+
 
 
 enum class LoggerDetailLevel : char { Verbose, Normal, Quiet };
@@ -24,13 +27,17 @@ enum class LoggerDetailLevel : char { Verbose, Normal, Quiet };
 class Logger
 {
 private:
-  std::map<std::string,Logger> loggers;
-  Logger ();
+  static std::map<std::string, Logger> loggers;
+
+  std::string const name;
+
+  Logger (std::string const & name);
+  void lprint (std::string const & msgClass, std::string const & text);
 protected:
 public:
   virtual ~Logger ();
 
-  Logger & requestLogger (std::string const &);
+  static Logger & requestLogger (std::string const &);
 
   void note (std::string const &);
   void data (std::string const &);

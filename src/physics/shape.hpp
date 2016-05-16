@@ -12,7 +12,7 @@ public:
   Shape ();
   virtual ~Shape () =0;
 
-  virtual bool overlaps (Shape const & other);
+  virtual bool overlaps (Shape const & other) const;
   /* Visitor pattern may be needed to handle different combinations of shapes.
    */
 };
