@@ -34,4 +34,5 @@ public:
   ImageLibrary & operator= (ImageLibrary const &) = delete;
   ImageLibrary & operator= (ImageLibrary && other) = default;
 };
+
 #endif//IMAGE_LIBRARY_HPP

@@ -24,4 +24,11 @@ T limitValue (T min, T actual, T max)
     return actual;
 }
 
+// see header
+template<typename T>
+T sqr (T num)
+{
+  return num * num;
+}
+
 #endif//MATH_TPP

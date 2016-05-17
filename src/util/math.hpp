@@ -20,8 +20,15 @@ T diff(T lhs, T rhs);
 template<typename T>
 T limitValue (T min, T actual, T max);
 /* Limit the actual value so it is within the given (open) range.
- * Params:
- * Return:
+ * Params: A minimum value, the actual value to be limited and the maximum.
+ * Return: The middle of the three values.
+ */
+
+template<typename T>
+T sqr (T num);
+/* Square function.
+ * Params: Some number.
+ * Return: num * num
  */
 
 #include "math.tpp"

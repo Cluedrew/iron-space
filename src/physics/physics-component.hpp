@@ -14,8 +14,7 @@ private:
   float dx, dy;
   float spin;
 
-  //Shape collider;
-  float radius:
+  Shape body;
 
 protected:
 public:
@@ -29,8 +28,14 @@ public:
    * Effect: Modifies the GameObject's transform.
    */
 
-  bool collidesWith (PhysicsComponent &);
-  // Does the component hold a perminate reference to its GameObject?
+  bool collidesWith (PhysicsComponent const & other);
+  /* Check for a collision between the this component's body and the other
+   *   component's body.
+   * Params: Reference to the other physics component.
+   * Return: True if there was a collision, false otherwise.
+   *
+   * ! Still can't get positional data.
+   */
 };
 
 #endif//PHYSICS_COMPONENT_HPP

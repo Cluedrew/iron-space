@@ -17,7 +17,7 @@ bool Circle::overlaps (Shape const & other) const
   return other.overlaps(*this);
 }
 
-// Shapes don't store their own coordinates right now.
+// ! Shapes don't store their own coordinates right now.
 bool Circle::overlaps (Circle const & other) const
 {
   float xDist = other.x - x;
@@ -25,4 +25,10 @@ bool Circle::overlaps (Circle const & other) const
   float distSqr = xDist * xDist + yDist * yDist;
   float sumR = other.radius + radius;
   return distSqr < sumR * sumR;
+}
+
+bool Circle::overlaps (AlignRect const & other) const
+{
+  // Calcutiation in "align-rect.hpp".
+  return other.overlaps(*this);
 }
