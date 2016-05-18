@@ -1,8 +1,10 @@
 # iron-space
 An outer space base building game. Created as a learning project.
 
-The project uses the [SFML](http://www.sfml-dev.org/index.php "Find it here.")
+The project uses the [SFML](http://www.sfml-dev.org/index.php "SFML Website")
 library for interacting with the system.
+The [Catch](https://github.com/philsquared/Catch "Catch GitHub") library is
+used for testing.
 
 #### Project Status ####
 Engine Implementation - Implement the basic code for everything and get a bit
