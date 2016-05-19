@@ -48,3 +48,34 @@ $(TST_EXE) : $(TST_SRC:%.cpp=%.o)
 
 # Later expanding the system might make it worth dividing up the tests a bit.
 # But that is sort of what tags are for...
+
+# Function that returns a word of 1 if all words in 1 are unique, otherwise
+#   returns the empty string. Should be used as a predicate.
+isunique=$(word $(words $(1)), $(sort $(1))
+#$(if $(call isunique,$(CCPFILES)),,$(error conflicting names of cpp files))
+
+MAIN=main
+TEST=test
+
+# Get a list off all cpp files in the src directory.
+CPPFILES=$(wildcard $(CODEDIR)/*.cpp) $(wildcard $(CODEDIR)/*/*.cpp)
+
+# Compute the list of all normal files (those that do not contain a main).
+MAIN_AND_TEST=$(MAIN) $(TEST)
+NRMFILES=$(filter-out $(MAIN_AND_TEST:%=$(CODEDIR)/%.cpp),$(CPPFILES))
+
+# Source files, cpp files used in the final program.
+SRCFILES=$(filter-out %.tst.cpp,$(NRMFILES))
+
+# Test files, .tst.cpp files that contain catch tests.
+TSTFILES=$(filer %.tst.cpp,$(NRMFILES))
+
+
+# Include the catch header.
+TESTFLAGS=-I$(ROOT)
+
+# The compilation rules themselves should be simple (the only special rule is
+# that test related files need to be compiled with TESTFLAGS) but working
+# out the dependances might be an issue. We would need a list of object files
+# for each of the source file lists... atually that is all we need.
+objectsfor=$(1:$(CODEDIR)/%.cpp=$(TMPDIR)/%.o)
