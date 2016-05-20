@@ -7,7 +7,7 @@
 
 
 Engine::Engine (/*Settings*/) :
-  timer(), increment(sf::milliseconds(1000/60))
+  clock(sf::milliseconds(1000/60))
 {}
 
 Engine::~Engine ()
@@ -20,8 +20,8 @@ int Engine::runLoop ()
   while (running)
   {
     poolInput();
-    updateAi(increment);
-    updatePhysics(increment);
+    updateAi(clock.getIncrement());
+    updatePhysics(clock.getIncrement());
     resolveCollisions();
     render();
     wait();
@@ -43,12 +43,5 @@ void Engine::render ();
  */
 void Engine::wait ()
 {
-  sf::Time time = timer.getElapsedTime();
-  if (time < increment)
-  {
-    sf::Time diff = increment - time;
-    std::chrono::duration<int, std::milli> waitTime(diff.asMilliseconds());
-    std::this_thread::sleep_for<int, std::milli>(waitTime);
-  }
-  timer.restart();
+  clock.wait();
 }

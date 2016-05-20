@@ -9,60 +9,77 @@
 # something a little more repeatable, especially as the project (and the
 # tests) grow.
 
-# Name of the test executable:
+# Makefile for InkV8.0: compiles inkv8 executable and dependances.
+
+# Call without target to make the executable.
+#      with clean to remove intermediate files.
+#      with deepclean to remove all generated files.
+#      with test to run the program with gdb as a test wrapper.
+#      with mem-test to run the program with valgrind as a test wrapper.
+
+# Allows for one level of subdirectories within the code directory.
+# Some of the internal variables do have to be updated as you go.
+
+### Variables & Setup
+
+# 'yes' to turn on debugging options, otherwise leaves them off.
+USE_DEBUG=no
+
+# Name of binary executable.
+EXE=inkv8
+
+# Name of the test executable.
 TST_EXE=run-tests
 
-# Name of the test source (the main file for testing)
-TST_SRC=test
+# The name of the directory that holds code.
+CODEDIR=src
+# The name of the temperary directory for object and dependancy files.
+TMPDIR=.tmp
+# The name of every sub directory of CODEDIR.
+DIRNAMES=physics
 
-# I need a list of all the test files (that contain actual tests).
-TSTFILES=${ list of *.tst.cpp files }
-
-# Now part of the reason I think the two Makefiles will have to merge is
-# there is actually a lot of overlap in terms of the regular .cpp files.
-# Infact the only one we don't care about is main.cpp, which would generate
-# conflicts, ideally every other file will be touched by the tests.
-
-# Test code files are compiled into objects the same way regular code files
-# are. Maybe with the same rule.
-
-# The test executable depends on all test-code-object files
-$(TST_EXE) : $(TST_SRC:%.cpp=%.o)
-	# Similar call as the main exicutable.
-
-# We need for lists of .cpp files
-# MAIN : contains the main function for regular exicution.
-# TEST : contains the main function for testing (could have more than one).
-# CODE : regular source files, linked with main to create the EXE.
-# TESTS: test source files, contain TEST_CASEs to be run.
-
-# All would be compiled to object files in the same way, really it is just
-# a matter of what is linked when.
-# MAIN + CODE would be used to create the regular executable.
-# TEST + TESTS + CODE would be used for tests.
-
-# Next time I'm probably going to just implement the above, at least to start.
-
-# Linking the entire code base might be excesive, but unless there is a way
-# to expant the dependancy tree from .d files.
-
-# Later expanding the system might make it worth dividing up the tests a bit.
-# But that is sort of what tags are for...
-
-# Function that returns a word of 1 if all words in 1 are unique, otherwise
-#   returns the empty string. Should be used as a predicate.
-isunique=$(word $(words $(1)), $(sort $(1))
-#$(if $(call isunique,$(CCPFILES)),,$(error conflicting names of cpp files))
-
+# Name of the executable source (main file for release)
 MAIN=main
+# Name of the test source (the main file for testing)
 TEST=test
 
 # Get a list off all cpp files in the src directory.
 CPPFILES=$(wildcard $(CODEDIR)/*.cpp) $(wildcard $(CODEDIR)/*/*.cpp)
 
+# C++ Compiler
+CXX=g++
+# Flags for compilation
+CXXFLAGS=-Wall --std=c++11
+# Additional libraries for the linking step.
+CXXLIBS=-lsfml-graphics -lsfml-window -lsfml-system
+# Additional flags for debug builds.
+DEBUG=-ggdb -DDEBUG=true
+
+# Functions:
+
+# Function that returns a word of 1 if all words in 1 are unique, otherwise
+#   returns the empty string. Should be used as a predicate.
+isunique=$(word $(words $(1)), $(sort $(1))
+
+# Patterns by which group file types.
+CPP_PAT=$(CODEDIR)/%.cpp
+# SRC_PAT, does not exist, it is CPP_PAT excluding TST_PAT and the origins.
+TST_PAT=$(CODEDIR)/%.tst.cpp
+OBJ_PAT=$(TMPDIR)/%.o
+DEP_PAT=$(TMPDIR)/%.d
+
+# Return a list of all the object files generated from the given cpp files.
+objectsfor=$(1:$(CPP_PAT)=$(OBJ_PAT))
+
+#OBJFILES=$(CPPNAMES:%=$(TMPDIR)/%.o)
+DEPFILES=$(OBJFILES:%.o=%.d)
+SUBDIRS=$(DIRNAMES:%=$(TMPDIR)/%)
+
 # Compute the list of all normal files (those that do not contain a main).
 MAIN_AND_TEST=$(MAIN) $(TEST)
 NRMFILES=$(filter-out $(MAIN_AND_TEST:%=$(CODEDIR)/%.cpp),$(CPPFILES))
+MAINFILE=$(MAIN:%=$(CPP_PAT))
+TESTFILE=$(TEST:%=$(CPP_PAT))
 
 # Source files, cpp files used in the final program.
 SRCFILES=$(filter-out %.tst.cpp,$(NRMFILES))
@@ -70,12 +87,67 @@ SRCFILES=$(filter-out %.tst.cpp,$(NRMFILES))
 # Test files, .tst.cpp files that contain catch tests.
 TSTFILES=$(filer %.tst.cpp,$(NRMFILES))
 
-
 # Include the catch header.
 TESTFLAGS=-I$(ROOT)
 
-# The compilation rules themselves should be simple (the only special rule is
-# that test related files need to be compiled with TESTFLAGS) but working
-# out the dependances might be an issue. We would need a list of object files
-# for each of the source file lists... atually that is all we need.
-objectsfor=$(1:$(CODEDIR)/%.cpp=$(TMPDIR)/%.o)
+# If USE_DEBUG add the DUBUG flags.
+ifeq ($(USE_DEBUG),yes)
+  CXXFLAGS+=$(DEBUG)
+endif
+
+.PHONY : all clean deepclean test mem-test
+
+# Recipies
+
+### Recipes and Rules
+
+all : $(EXE)
+
+# Rule for the binary
+$(EXE) : $(call objectsfor,$(SRCFILES) $(MAINFILE))
+        $(CXX) $(CXXFLAGS) $(CXXLIBS) $^ -o $@
+
+# The test executable depends on all test-code-object files
+$(TST_EXE) : $(call objectsfor,$(NRMFILES) $(TESTFILE))
+        $(CXX) $(CXXFLAGS) $(CXXLIBS) $^ -o $@
+
+# Rule for object files (depends)
+$(OBJFILES) : $(OBJ_PAT) : $(CPP_PAT) | $(TMPDIR)/$(dir %)
+
+# Rule for source object files (build)
+$(call objectsfor,$(SRCFILES) $(MAINFILE)) :
+        $(CXX) $(CXXFLAGS) -MMD -c $< -o $@
+
+# Rule for test object files (build)
+$(call objectsfor,$(TSTFILES) $(TESTFILE)) :
+        $(CXX) $(CXXFLAGS) $(TESTFLAGS) -MMD -c $< -o $@
+
+# Rule for the temperary directory
+$(TMPDIR) :
+        mkdir $@
+
+# Rule for sub temperary directories
+$(SUBDIRS) : | $(TMPDIR)
+        mkdir $@
+
+# Phony rule for cleaning intermediate files
+clean :
+        -rm $(OBJFILES)
+        -rm $(DEPFILES)
+        -rmdir $(TMPDIR)
+
+# Phony rule for cleaning generated files
+deepclean : clean
+        -rm $(EXE)
+
+# Phony rules for running the test wrappers
+test : $(EXE)
+        gdb ./$(EXE)
+
+mem-test : $(EXE)
+        valgrind ./$(EXE)
+
+
+### Include Depends Files
+
+-include $(DEPFILES)

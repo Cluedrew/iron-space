@@ -10,16 +10,14 @@
  * the global interface.
  */
 
-#include <SFML/System/Clock.hpp>
-#include <SFML/System/Time.hpp>
+#include "util/loop-clock.hpp"
 
 
 
 class Engine
 {
 private:
-  sf::Clock timer;
-  sf::Time timePerFrame;
+  LoopClock clock;
 
   Plane gui;
   Plane map;
