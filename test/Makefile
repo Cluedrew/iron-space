@@ -71,8 +71,11 @@ DEP_PAT=$(TMPDIR)/%.d
 # Return a list of all the object files generated from the given cpp files.
 objectsfor=$(1:$(CPP_PAT)=$(OBJ_PAT))
 
-#OBJFILES=$(CPPNAMES:%=$(TMPDIR)/%.o)
-DEPFILES=$(OBJFILES:%.o=%.d)
+# Return a list of all the dependancy files generated for the give cpp files.
+dependsfor=$(1:$(CPP_PAT)=$(DEP_PAT))
+
+OBJFILES=$(call objectsfor,$(CPPFILES))
+DEPFILES=$(call dependsfor,$(CPPFILES))
 SUBDIRS=$(DIRNAMES:%=$(TMPDIR)/%)
 
 # Compute the list of all normal files (those that do not contain a main).
@@ -105,47 +108,47 @@ all : $(EXE)
 
 # Rule for the binary
 $(EXE) : $(call objectsfor,$(SRCFILES) $(MAINFILE))
-        $(CXX) $(CXXFLAGS) $(CXXLIBS) $^ -o $@
+	$(CXX) $(CXXFLAGS) $(CXXLIBS) $^ -o $@
 
 # The test executable depends on all test-code-object files
 $(TST_EXE) : $(call objectsfor,$(NRMFILES) $(TESTFILE))
-        $(CXX) $(CXXFLAGS) $(CXXLIBS) $^ -o $@
+	$(CXX) $(CXXFLAGS) $(CXXLIBS) $^ -o $@
 
-# Rule for object files (depends)
+# Rule for object files (dependency)
 $(OBJFILES) : $(OBJ_PAT) : $(CPP_PAT) | $(TMPDIR)/$(dir %)
 
 # Rule for source object files (build)
 $(call objectsfor,$(SRCFILES) $(MAINFILE)) :
-        $(CXX) $(CXXFLAGS) -MMD -c $< -o $@
+	$(CXX) $(CXXFLAGS) -MMD -c $< -o $@
 
 # Rule for test object files (build)
 $(call objectsfor,$(TSTFILES) $(TESTFILE)) :
-        $(CXX) $(CXXFLAGS) $(TESTFLAGS) -MMD -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(TESTFLAGS) -MMD -c $< -o $@
 
 # Rule for the temperary directory
 $(TMPDIR) :
-        mkdir $@
+	mkdir $@
 
 # Rule for sub temperary directories
 $(SUBDIRS) : | $(TMPDIR)
-        mkdir $@
+	mkdir $@
 
 # Phony rule for cleaning intermediate files
 clean :
-        -rm $(OBJFILES)
-        -rm $(DEPFILES)
-        -rmdir $(TMPDIR)
+	-rm $(subst %,*,$(OBJ_PAT))
+	-rm $(subst %,*,$(DEP_PAT))
+	-rmdir $(TMPDIR)
 
 # Phony rule for cleaning generated files
 deepclean : clean
-        -rm $(EXE)
+	-rm $(EXE)
 
 # Phony rules for running the test wrappers
 test : $(EXE)
-        gdb ./$(EXE)
+	gdb ./$(EXE)
 
 mem-test : $(EXE)
-        valgrind ./$(EXE)
+	valgrind ./$(EXE)
 
 
 ### Include Depends Files
