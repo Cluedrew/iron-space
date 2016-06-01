@@ -8,7 +8,6 @@
 
 #include <iostream>
 #include "util/math.hpp"
-#include "util/echo.hpp"
 
 int main (int argc, char * argv[])
 {
@@ -21,5 +20,4 @@ int main (int argc, char * argv[])
 
   std::cout << "Diff of "  << a << " & " << b << " is " << d << ".";
   std::cout << std::endl;
-  echo("Echo message");
 }

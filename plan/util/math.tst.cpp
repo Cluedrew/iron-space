@@ -4,7 +4,7 @@
 
 #include "catch.hpp"
 
-#include "../src/util/math.hpp"
+#include "math.hpp"
 
 
 

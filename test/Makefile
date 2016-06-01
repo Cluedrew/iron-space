@@ -9,13 +9,14 @@
 # something a little more repeatable, especially as the project (and the
 # tests) grow.
 
-# Makefile for InkV8.0: compiles inkv8 executable and dependances.
+# Makefile for InkV8: compiles iron-space executable and dependances.
 
 # Call without target to make the executable.
 #      with clean to remove intermediate files.
 #      with deepclean to remove all generated files.
-#      with test to run the program with gdb as a test wrapper.
+#      with step-test to run the program with gdb as a test wrapper.
 #      with mem-test to run the program with valgrind as a test wrapper.
+# And you of course may call with any generated file to create that file.
 
 # Allows for one level of subdirectories within the code directory.
 # Some of the internal variables do have to be updated as you go.
@@ -26,7 +27,7 @@
 USE_DEBUG=no
 
 # Name of binary executable.
-EXE=inkv8
+EXE=iron-space
 
 # Name of the test executable.
 TST_EXE=run-tests
@@ -36,7 +37,7 @@ CODEDIR=src
 # The name of the temperary directory for object and dependancy files.
 TMPDIR=.tmp
 # The name of every sub directory of CODEDIR.
-DIRNAMES=physics
+DIRNAMES=physics graphics audio ai util
 
 # Name of the executable source (main file for release)
 MAIN=main
@@ -98,7 +99,7 @@ ifeq ($(USE_DEBUG),yes)
   CXXFLAGS+=$(DEBUG)
 endif
 
-.PHONY : all clean deepclean test mem-test
+.PHONY : all clean deepclean step-test mem-test
 
 # Recipies
 
@@ -144,7 +145,7 @@ deepclean : clean
 	-rm $(EXE)
 
 # Phony rules for running the test wrappers
-test : $(EXE)
+step-test : $(EXE)
 	gdb ./$(EXE)
 
 mem-test : $(EXE)
