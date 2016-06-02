@@ -18,6 +18,10 @@ USE_DEBUG=no
 # Name of binary executable.
 EXE=iron-space
 
+# Name of test binary executable.
+TST_EXE=run-tests
+
+
 # The base name of every code file used to create the binary.
 FILENAMES=main util/math.tst util/echo
 
@@ -67,16 +71,30 @@ SRCMAIN=src/main.cpp
 
 # List of test cpp files, those used for the test executable.
 TSTFILES=$(filter $(TST_PAT),$(NRMFILES))
+TSTMAIN=src/main.tst.cpp
+# ! Should probably generate the various mains.
 
 # Calculated File Names
 SUBDIRS=$(DIRNAMES:%=$(TMPDIR)/%)
+
+# As dir, but removes the trailing /
+getdir=$(patsubst %/,%,$(dir $(1)))
+
+# Extra flags for compilation and linking of the test harness.
+TSTFLAGS=-I$(ROOT)
 
 # If USE_DEBUG add the DUBUG flags.
 ifeq ($(USE_DEBUG),yes)
   CXXFLAGS+=$(DEBUG)
 endif
 
+# Special Rules
+
+# List of 'commands', which are implemented as PHONY rules.
 .PHONY : all clean deepclean test mem-test
+
+# File uses second expansion (one rule does).
+.SECONDEXPANSION :
 
 ### Recipes and Rules
 
@@ -86,27 +104,34 @@ all : $(EXE)
 $(EXE) : $(SRCFILES:$(CPP_PAT)=$(OBJ_PAT)) $(SRCMAIN:$(CPP_PAT)=$(OBJ_PAT))
 	$(CXX) $(CXXFLAGS) $(CXXLIBS) $^ -o $@
 
+# Rule for test binary
+$(TST_EXE) : $(patsubst $(CPP_PAT),$(OBJ_PAT),$(TSTFILES) $(SRCFILES) $(TESTMAIN))
+	$(CXX) $(CXXFLAGS) $(TSTFLAGS) $(CXXLIBS) $^ -o $@
+
 # Rule for object files
-# OK, I think the issue is dir is evaluated before stem is evaluated.
-# I can get around it with SECONDEVALUATION~ but I would prefer not to have
-# that for this 1 case. If there isn't a better way I'll do it.
-$(OBJFILES) : $(TMPDIR)/%.o : $(CODEDIR)/%.cpp | $(dir $(TMPDIR)/$*)
-	@echo generating files in $(dir $@)
-	@echo $(dir $(TMPDIR)/$*)
+# ! This is going to have to be rules for object files.
+#$(OBJFILES) : $(OBJ_PAT) : $(CPP_PAT) | $$(call getdir,$$@)
+
+$(OBJFILES) : $(TMPDIR)/%.o : $(CODEDIR)/%.cpp | $$(call getdir,$$@)
 	$(CXX) $(CXXFLAGS) -MMD -c $< -o $@
 
+#$(OBJFILES) : $(OBJ_PAT) : $(CPP_PAT) | $$(call getdir,$$@)
+#	$(CXX) $(CXXFLAGS) $(TSTFLAGS) -MMD -c $< -o $@
+
 # Rule for the temperary directory
-$(TMPDIR)/ :
+$(TMPDIR) :
 	mkdir $@
 
 # Rule for sub temperary directories
-$(SUBDIRS)/ : | $(TMPDIR)/
+$(SUBDIRS) : | $(TMPDIR)
 	mkdir $@
 
 # Phony rule for cleaning intermediate files
 clean :
-	-rm $(OBJFILES)
-	-rm $(DEPFILES)
+	-rm $(TMPDIR)/*/*.[do]
+	-rm $(TMPDIR)/*.[do]
+#	-rm $(OBJFILES)
+#	-rm $(DEPFILES)
 	-rmdir $(SUBDIRS)
 	-rmdir $(TMPDIR)
 
