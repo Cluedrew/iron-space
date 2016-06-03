@@ -3,7 +3,7 @@
 # Call without target to make the executable.
 #      with clean to remove intermediate files.
 #      with deepclean to remove all generated files.
-#      with test to run the program with gdb as a test wrapper.
+#      with step-test to run the program with gdb as a test wrapper.
 #      with mem-test to run the program with valgrind as a test wrapper.
 # And you of course may call with any generated file to create that file.
 
@@ -23,7 +23,7 @@ TST_EXE=run-tests
 
 
 # The base name of every code file used to create the binary.
-FILENAMES=main util/math.tst util/echo
+FILENAMES=main util/math.tst util/echo main.tst
 
 # The name of the directory that holds code.
 CODEDIR=src
@@ -42,7 +42,7 @@ CXXLIBS=-lsfml-graphics -lsfml-window -lsfml-system
 DEBUG=-ggdb -DDEBUG=true
 
 # Calculated as to allow the repository to be used multiple places.
-ROOT=$(shell ./here)
+ROOT=$(shell ./.here)
 
 ### End of Setup
 
@@ -77,8 +77,12 @@ TSTMAIN=src/main.tst.cpp
 # Calculated File Names
 SUBDIRS=$(DIRNAMES:%=$(TMPDIR)/%)
 
+# Functions: use with call.
 # As dir, but removes the trailing /
 getdir=$(patsubst %/,%,$(dir $(1)))
+
+# Get a list of the objects for the given cpp files.
+objsfor=$(1:$(CPP_PAT)=$(OBJ_PAT))
 
 # Extra flags for compilation and linking of the test harness.
 TSTFLAGS=-I$(ROOT)
@@ -91,7 +95,7 @@ endif
 # Special Rules
 
 # List of 'commands', which are implemented as PHONY rules.
-.PHONY : all clean deepclean test mem-test
+.PHONY : all clean deepclean step-test mem-test
 
 # File uses second expansion (one rule does).
 .SECONDEXPANSION :
@@ -101,22 +105,24 @@ endif
 all : $(EXE)
 
 # Rule for the binary
-$(EXE) : $(SRCFILES:$(CPP_PAT)=$(OBJ_PAT)) $(SRCMAIN:$(CPP_PAT)=$(OBJ_PAT))
+$(EXE) : $(call objsfor,$(SRCFILES) $(SRCMAIN))
 	$(CXX) $(CXXFLAGS) $(CXXLIBS) $^ -o $@
 
 # Rule for test binary
-$(TST_EXE) : $(patsubst $(CPP_PAT),$(OBJ_PAT),$(TSTFILES) $(SRCFILES) $(TESTMAIN))
+$(TST_EXE) : $(call objsfor,$(TSTFILES) $(SRCFILES) $(TSTMAIN))
 	$(CXX) $(CXXFLAGS) $(TSTFLAGS) $(CXXLIBS) $^ -o $@
 
-# Rule for object files
-# ! This is going to have to be rules for object files.
-#$(OBJFILES) : $(OBJ_PAT) : $(CPP_PAT) | $$(call getdir,$$@)
+# Rules for object files
+# Object depencancy rule, gives the dependancies that always apply.
+$(OBJFILES) : $(OBJ_PAT) : $(CPP_PAT) | $$(call getdir,$$@)
 
-$(OBJFILES) : $(TMPDIR)/%.o : $(CODEDIR)/%.cpp | $$(call getdir,$$@)
+# Object compilation for regular (non-testing) objects
+$(call objsfor,$(SRCFILES) $(SRCMAIN)) :
 	$(CXX) $(CXXFLAGS) -MMD -c $< -o $@
 
-#$(OBJFILES) : $(OBJ_PAT) : $(CPP_PAT) | $$(call getdir,$$@)
-#	$(CXX) $(CXXFLAGS) $(TSTFLAGS) -MMD -c $< -o $@
+# Object compilation for testing objects
+$(call objsfor,$(TSTFILES) $(TSTMAIN)) :
+	$(CXX) $(CXXFLAGS) $(TSTFLAGS) -MMD -c $< -o $@
 
 # Rule for the temperary directory
 $(TMPDIR) :
@@ -137,10 +143,11 @@ clean :
 
 # Phony rule for cleaning generated files
 deepclean : clean
-	-rm $(EXE)
+	-[ -e $(EXE) ] && rm $(EXE)
+	-[ -e $(TST_EXE) ] && rm $(TST_EXE)
 
 # Phony rules for running the test wrappers
-test : $(EXE)
+step-test : $(EXE)
 	gdb ./$(EXE)
 
 mem-test : $(EXE)
