@@ -9,7 +9,7 @@
  * return imediately, not wait for the end of the next increment. The next
  * increment will start counting from here, instead of when the last increment
  * ended. A time increment of 0 will cause it to return imediately every time.
- *   Also a constaint LoopClock is still parshally mutable to allow the change
+ *   Also a constaint LoopClock is still partially mutable to allow the change
  * of increments to be tracked, however the increment is now locked. Generally
  * one should pass around a reference to the increment itself instead of the
  * LoopClock if you wish to prevent the LoopClock from being used.
@@ -29,10 +29,14 @@ public:
   /* Construct a LoopClock with an increment equal to the given time.
    * Params: A reference to an sf::Time with the desired increment.
    */
+
   LoopClock (unsigned int ips);
   /* Construct a LoopClock with, about, ips increments in a second.
-   * Params: The number of "increment per second".
+   * Params: The number of increments per second.
+   *   The division of the second into increments is not perfect and
+   *   error on the side of being to short.
    */
+
   LoopClock ();
   /* Construct a LoopClock with an increment of 0 time passed.
    */
@@ -41,12 +45,22 @@ public:
 
   void wait () const;
   /* Wait for the rest of the time increment to pass.
+   *   If the entire increment has passed, the function returns without delay.
    */
 
   void setIncrement (sf::Time const &);
-  void setIncrement (unsigned int ips);
   /* Reset the LoopClock's increment.
-   * Params: See the matching constructor.
+   * Params: A reference to an sf::Time with the desired increment.
+   * Effect: Changes the LoopClock's increment. The end time of the last
+   *   increment remains unchanged and the currant increment will be
+   *   messured from there.
+   */
+
+  void setIncrementsPerSecond (unsigned int ips);
+  /* Reset the LoopClock's increment.
+   * Params: The number of increments per second.
+   *   The division of the second into increments is not perfect and
+   *   error on the side of being to short.
    * Effect: Changes the LoopClock's increment. The end time of the last
    *   increment remains unchanged and the currant increment will be
    *   messured from there.

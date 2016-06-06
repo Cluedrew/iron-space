@@ -5,6 +5,19 @@
 #include <thread>
 #include <chrono>
 
+
+
+/* Divide a second into n pieces.
+ * This just exists to make sure the ips to time conversion always
+ * works the same way because I only have one place to update it.
+ */
+static sf::Time divideSecond (int n)
+{
+  return sf::milliseconds(1000 / n);
+}
+
+
+
 // Constructors and Deconstructor ===========================================
 // Construct a LoopClock with an increment equal to the given time.
 LoopClock::LoopClock (sf::Time const & increment_) :
@@ -13,7 +26,7 @@ LoopClock::LoopClock (sf::Time const & increment_) :
 
 // Construct a LoopClock with, about, ips increments in a second.
 LoopClock::LoopClock (unsigned int ips) :
-  clock(), increment(sf::milliseconds(1000 / ips))
+  clock(), increment(divideSecond(ips))
 {}
 
 // Construct a LoopClock with an increment of 0 time passed.
@@ -54,9 +67,9 @@ void LoopClock::setIncrement (sf::Time const & increment_)
 }
 
 // Reset the LoopClock's increment.
-void LoopClock::setIncrement (unsigned int ips)
+void LoopClock::setIncrementsPerSecond (unsigned int ips)
 {
-  increment = sf::milliseconds(1000 / ips);
+  increment = divideSecond(ips);
 }
 
 // Get the currant time increment.

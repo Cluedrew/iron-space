@@ -3,6 +3,7 @@
 # Call without target to make the executable.
 #      with clean to remove intermediate files.
 #      with deepclean to remove all generated files.
+#      with test to make and run the test executable.
 #      with step-test to run the program with gdb as a test wrapper.
 #      with mem-test to run the program with valgrind as a test wrapper.
 # And you of course may call with any generated file to create that file.
@@ -22,15 +23,14 @@ EXE=iron-space
 TST_EXE=run-tests
 
 
-# The base name of every code file used to create the binary.
-FILENAMES=main util/math.tst util/echo main.tst
-
+# The following directories are searched for code.
 # The name of the directory that holds code.
 CODEDIR=src
-# The name of the temperary directory for object and dependancy files.
-TMPDIR=.tmp
 # The name of every sub directory of CODEDIR.
 DIRNAMES=util
+
+# The name of the temperary directory for object and dependancy files.
+TMPDIR=.tmp
 
 # C++ Compiler
 CXX=g++
@@ -56,7 +56,8 @@ OBJ_PAT=$(TMPDIR)/%.o
 DEP_PAT=$(TMPDIR)/%.d
 
 # List of all cpp files. These are the files complied to objects.
-CPPFILES=$(FILENAMES:%=$(CODEDIR)/%.cpp)
+CPPFILES=$(wildcard $(CODEDIR)/*.cpp $(CODEDIR)/*/*.cpp)
+#$(FILENAMES:%=$(CODEDIR)/%.cpp)
 
 # List of all object and depends files, one each for each cpp.
 OBJFILES=$(CPPFILES:$(CPP_PAT)=$(OBJ_PAT))
@@ -95,7 +96,7 @@ endif
 # Special Rules
 
 # List of 'commands', which are implemented as PHONY rules.
-.PHONY : all clean deepclean step-test mem-test
+.PHONY : all clean deepclean test step-test mem-test
 
 # File uses second expansion (one rule does).
 .SECONDEXPANSION :
@@ -136,8 +137,6 @@ $(SUBDIRS) : | $(TMPDIR)
 clean :
 	-rm $(TMPDIR)/*/*.[do]
 	-rm $(TMPDIR)/*.[do]
-#	-rm $(OBJFILES)
-#	-rm $(DEPFILES)
 	-rmdir $(SUBDIRS)
 	-rmdir $(TMPDIR)
 
@@ -145,6 +144,10 @@ clean :
 deepclean : clean
 	-[ -e $(EXE) ] && rm $(EXE)
 	-[ -e $(TST_EXE) ] && rm $(TST_EXE)
+
+# Phony rules for running the test executable.
+test : $(TST_EXE)
+	./$<
 
 # Phony rules for running the test wrappers
 step-test : $(EXE)
