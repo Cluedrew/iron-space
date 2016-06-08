@@ -11,6 +11,7 @@
  */
 
 #include "util/loop-clock.hpp"
+#include "util/logger.hpp"
 
 
 
@@ -18,11 +19,9 @@ class Engine
 {
 private:
   LoopClock clock;
+  Logger log;
 
-  Plane gui;
-  Plane map;
-
-  void /*bool*/ pollInput ();
+  bool pollInput ();
   void updateAi (sf::Time const &);
   void updatePhysics (sf::Time const &);
   void resolveCollisions ();
@@ -31,7 +30,7 @@ private:
 
 protected:
 public:
-  Engine (/*Settings*/);
+  Engine (LoggerDetailLevel logdl = LoggerDetailLevel::Quiet);
   virtual ~Engine ();
 
   int runLoop ();

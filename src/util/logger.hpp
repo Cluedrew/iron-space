@@ -13,17 +13,12 @@
  * Normal : data messages are excluded.
  * Quiet : data and note messages are excluded.
  *
- * fail messages are special in that after desplaying the message the program
- * will quit (probably by exit, might use LoggerQuitException).
+ * Not that fail (as well as any invalid use of the logger) will result in
+ * exit() being called. You are not allowed to mess this one up.
  *
  * TODO: LoggerDetailLevel -> Logger::DetailLevel ?
  *  Support for other types of streams for output.
- *  Collection of existing loggers. Maybe just their names?
- *
- * OK, yes, I don't know enough about what the logger should look like right
- * now. I think I will try having the logger enforce unique names. The user
- * has to hold it themselves. I use exit on error instead of throwing an
- * exception (for now) to force one to fix the problem.
+ *  Improve the interface for input.
  */
 
 #include <string>
@@ -42,6 +37,11 @@ private:
 protected:
 public:
   Logger (std::string const & name, LoggerDetailLevel detail);
+  /* Create a new Logger.
+   * Params: A string that repersents the name of the logger (no existing
+   *   logger can have that name) and the detail level of the logger.
+   * Effect: The Logger's name is resurved until it is distroyed.
+   */
 
   Logger (Logger const &) = delete;
   Logger (Logger &&);
