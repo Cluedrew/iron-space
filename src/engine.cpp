@@ -2,16 +2,13 @@
 
 // Implementation of the games internal Engine.
 
-#include <thread>
-#include <chrono>
+#include <SFML/Window/Event.hpp>
 
 
 
 Engine::Engine (LoggerDetailLevel logdl) :
-  clock(60), log("Engine", logdl)
-{
-
-}
+  window(), clock(60), log("Engine", logdl)
+{}
 
 Engine::~Engine ()
 {}
@@ -20,6 +17,12 @@ Engine::~Engine ()
 int Engine::runLoop ()
 {
   log.note("Begin runLoop");
+
+  window.create(sf::VideoMode(800, 600), "iron-space");//,
+//                sf::Style::Titlebar | sf::Style::Close);
+  // For now it is not sf::Style::Resize-able.
+
+  log.note("Finished runLoop init");
 
   bool running = true;
   while (running)
@@ -32,6 +35,7 @@ int Engine::runLoop ()
     wait();
   }
 
+  window.close();
   log.note("End runLoop");
   return 0;
 }
@@ -43,8 +47,25 @@ bool Engine::pollInput ()
  * Return: Should the program continue running?
  */
 {
-  log.data("Called pollInput");
-  return false;
+  log.data("Begin pollInput");
+
+  bool running = true;
+  sf::Event event;
+
+  while (window.pollEvent(event))
+  {
+    switch (event.type)
+    {
+    case sf::Event::Closed:
+      running = false;
+      break;
+    default:
+      break;
+    }
+  }
+
+  log.data("End pollInput");
+  return running;
 }
 
 void Engine::updateAi (sf::Time const & deltaT)
@@ -53,7 +74,8 @@ void Engine::updateAi (sf::Time const & deltaT)
  * Effect: TODO
  */
 {
-  log.data("Called updateAi");
+  log.data("Begin updateAi");
+  log.data("End updateAi");
 }
 
 void Engine::updatePhysics (sf::Time const & deltaT)
@@ -62,7 +84,8 @@ void Engine::updatePhysics (sf::Time const & deltaT)
  * Effect: TODO
  */
 {
-  log.data("Called updatePhysics");
+  log.data("Begin updatePhysics");
+  log.data("End updatePhysics");
 }
 
 void Engine::resolveCollisions ()
@@ -70,7 +93,8 @@ void Engine::resolveCollisions ()
  * Effect: TODO
  */
 {
-  log.data("Called resolveCollisions");
+  log.data("Begin resolveCollisions");
+  log.data("End resolveCollisions");
 }
 
 void Engine::render ()
@@ -78,7 +102,8 @@ void Engine::render ()
  * Effect: TODO
  */
 {
-  log.data("Called render");
+  log.data("Begin render");
+  log.data("End render");
 }
 
 /* wait()

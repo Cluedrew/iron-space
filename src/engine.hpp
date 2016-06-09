@@ -10,6 +10,7 @@
  * the global interface.
  */
 
+#include <SFML/Graphics/RenderWindow.hpp>
 #include "util/loop-clock.hpp"
 #include "util/logger.hpp"
 
@@ -18,6 +19,7 @@
 class Engine
 {
 private:
+  sf::RenderWindow window;
   LoopClock clock;
   Logger log;
 
