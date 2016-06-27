@@ -11,6 +11,6 @@
 
 int main (int argc, char * argv[])
 {
-  Engine gameEngine(LoggerDetailLevel::Verbose);
+  Engine gameEngine(LoggerDetailLevel::Quiet);
   return gameEngine.runLoop();
 }

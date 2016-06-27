@@ -18,8 +18,8 @@ int Engine::runLoop ()
 {
   log.note("Begin runLoop");
 
-  window.create(sf::VideoMode(800, 600), "iron-space");//,
-//                sf::Style::Titlebar | sf::Style::Close);
+  window.create(sf::VideoMode(800, 600), "iron-space",
+                sf::Style::Titlebar | sf::Style::Close);
   // For now it is not sf::Style::Resize-able.
 
   log.note("Finished runLoop init");
@@ -103,6 +103,8 @@ void Engine::render ()
  */
 {
   log.data("Begin render");
+  window.clear(sf::Color::Black);
+  window.display();
   log.data("End render");
 }
 

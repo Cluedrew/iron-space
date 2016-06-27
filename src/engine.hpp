@@ -7,7 +7,7 @@
  *
  * This class exists to break up the main loop across more functions, while
  * still keeping them all in the same scope, but not opening the scope up to
- * the global interface.
+ * the global level.
  */
 
 #include <SFML/Graphics/RenderWindow.hpp>

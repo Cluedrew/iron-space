@@ -1,6 +1,7 @@
 # Makefile for InkV8.0: compiles iron-space executable and dependances.
 
 # Call without target to make the executable.
+#      with run to make & run the exectutable.
 #      with clean to remove intermediate files.
 #      with deepclean to remove all generated files.
 #      with test to make and run the test executable.
@@ -96,7 +97,7 @@ endif
 # Special Rules
 
 # List of 'commands', which are implemented as PHONY rules.
-.PHONY : all clean deepclean test step-test mem-test
+.PHONY : all run clean deepclean test step-test mem-test
 
 # File uses second expansion (one rule does).
 .SECONDEXPANSION :
@@ -104,6 +105,9 @@ endif
 ### Recipes and Rules
 
 all : $(EXE)
+
+run : $(EXE)
+	./$(EXE)
 
 # Rule for the binary
 $(EXE) : $(call objsfor,$(SRCFILES) $(SRCMAIN))
