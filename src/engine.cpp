@@ -3,6 +3,7 @@
 // Implementation of the games internal Engine.
 
 #include <SFML/Window/Event.hpp>
+#include "event-handler.hpp"
 
 
 
@@ -49,6 +50,7 @@ bool Engine::pollInput ()
 {
   log.data("Begin pollInput");
 
+/*
   bool running = true;
   sf::Event event;
 
@@ -63,6 +65,10 @@ bool Engine::pollInput ()
       break;
     }
   }
+*/
+  // This is not going to be static forever.
+  static EventHandler eventHandler;
+  bool running = eventHandler.pollEvents(window);
 
   log.data("End pollInput");
   return running;
