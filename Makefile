@@ -28,7 +28,9 @@ TST_EXE=run-tests
 # The name of the directory that holds code.
 CODEDIR=src
 # The name of every sub directory of CODEDIR.
-DIRNAMES=util
+DIRNAMES=util event
+#   It is defined as all files in CODEDIR that do not contain a '.'
+#DIRNAMES ::= $(shell ls -1 $(CODEDIR) | grep '^[^.]*$' -)
 
 # The name of the temperary directory for object and dependancy files.
 TMPDIR=.tmp
