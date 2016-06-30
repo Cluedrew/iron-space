@@ -28,9 +28,8 @@ TST_EXE=run-tests
 # The name of the directory that holds code.
 CODEDIR=src
 # The name of every sub directory of CODEDIR.
-DIRNAMES=util event
 #   It is defined as all files in CODEDIR that do not contain a '.'
-#DIRNAMES ::= $(shell ls -1 $(CODEDIR) | grep '^[^.]*$' -)
+DIRNAMES ::= $(shell ls -1 $(CODEDIR) | grep '^[^.]*$$' -)
 
 # The name of the temperary directory for object and dependancy files.
 TMPDIR=.tmp
@@ -60,7 +59,6 @@ DEP_PAT=$(TMPDIR)/%.d
 
 # List of all cpp files. These are the files complied to objects.
 CPPFILES=$(wildcard $(CODEDIR)/*.cpp $(CODEDIR)/*/*.cpp)
-#$(FILENAMES:%=$(CODEDIR)/%.cpp)
 
 # List of all object and depends files, one each for each cpp.
 OBJFILES=$(CPPFILES:$(CPP_PAT)=$(OBJ_PAT))
@@ -69,6 +67,10 @@ DEPFILES=$(CPPFILES:$(CPP_PAT)=$(DEP_PAT))
 # List of normal cpp files that do not contain main functions.
 NRMFILES=$(filter-out $(MAIN_PAT),$(CPPFILES))
 
+# List of all cpp files that contain main functions.
+# I don't actually use this, but here is how you would find it.
+MAINFILES=$(filter $(MAIN_PAT),$(CPPFILES))
+
 # List of source cpp files, those used for the final executable.
 SRCFILES=$(filter-out $(TST_PAT),$(NRMFILES))
 SRCMAIN=src/main.cpp
@@ -76,7 +78,6 @@ SRCMAIN=src/main.cpp
 # List of test cpp files, those used for the test executable.
 TSTFILES=$(filter $(TST_PAT),$(NRMFILES))
 TSTMAIN=src/main.tst.cpp
-# ! Should probably generate the various mains.
 
 # Calculated File Names
 SUBDIRS=$(DIRNAMES:%=$(TMPDIR)/%)
