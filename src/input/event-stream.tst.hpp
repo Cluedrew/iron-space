@@ -13,6 +13,21 @@
 #include <vector>
 #include <SFML/Window/Event.hpp>
 
+/* The EventStream acts as an alternate source of events for the EventHandler
+ * (or GenEventHandler). Instead of looking for actual input it simply gives
+ * out the events that have been loaded into it already. This allows for both
+ * predictable and automated input, which is used in testing.
+ *
+ * The class uses a lot of asserts because it is used in testing where knowing
+ * something went wrong right away is more important than any error recovery.
+ *
+ * TODO: Finish adding the limits on the number and size of frames.
+ *  Then create some centinal values that can be given to addEvent to
+ *  specifiy the default locations. The reason for that is to fold the 3
+ *  signatures for addEvent into one, which will mean 1 signature instead of
+ *  3 for add<particular event> functions.
+ */
+
 
 
 class EventStream
@@ -33,6 +48,11 @@ private:
 
 protected:
 public:
+  // The maximum number of frames in the stream. frame=[0..FRAME_TOP)
+  static size_t const FRAME_TOP;
+  // The maximum number of events in a frame. pos=[0..POS_TOP)
+  static size_t const POS_TOP;
+
   EventStream();
   /* Construct a new EventStream with a single empty frame.
    */
@@ -85,7 +105,7 @@ public:
   bool addEvent (sf::Event const & event, size_t frame, size_t pos);
   /* Add a new event to the stream.
    * Params: A reference to the event to copy in.
-   * Effect:
+   * Effect: Add a new event
    * Return: True if event was added, false on error.
    */
 

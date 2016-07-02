@@ -4,6 +4,9 @@
 /* The EventHandler is responsible for getting events from the window as well
  * as translating them and dispatching them to the rest of the code base. It
  * is the core of the Interface layer, at least for input.
+ *
+ * It is simply a specialization of the GenEventHandler that gets real input
+ * from the SFML Window.
  */
 
 namespace sf

@@ -2,12 +2,17 @@
 #define GEN_EVENT_HANDLER_HPP
 
 /* The generic event handler, it can draw and process events from any base
- * class that implements: `bool SourceT::pollEvent(sf::Event)`. This generic
- * form is used so I can rewire it for testing, the game itself only uses
- * the EventHandler, which takes events from the window.
+ * class that implements: `Responce SourceT::pollEvent(sf::Event)`. This
+ * generic form is used so I can rewire it for testing, the game itself only
+ * uses the EventHandler, which takes events from the window.
  *
  * I have no idea if this is a good idea or not, but I'm going to try.
  */
+
+#include "response.hpp"
+
+
+
 template<typename SourceT>
 class GenEventHandler
 {
@@ -18,7 +23,7 @@ public:
 
   virtual ~GenEventHandler ();
 
-  bool pollEvents (SourceT & window);
+  Response pollEvents (SourceT & window);
   /* Poll all events from the window and dispatch them.
    * Params: A mutable reference to the window to poll from.
    * Return: The (should we continue) running value, which is false if

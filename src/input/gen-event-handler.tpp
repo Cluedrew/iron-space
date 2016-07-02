@@ -14,20 +14,25 @@ GenEventHandler<SourceT>::~GenEventHandler ()
 {}
 
 template<typename SourceT>
-bool GenEventHandler<SourceT>::pollEvents(SourceT & window)
+Response GenEventHandler<SourceT>::pollEvents(SourceT & window)
 {
   sf::Event event;
+
+  Response fin;
+
   while (window.pollEvent(event))
   {
     switch (event.type)
     {
     case sf::Event::Closed:
-      return false;
+      fin.type = Response::Quit;
+      return fin;
     default:
       break;
     }
   }
-  return true;
+  fin.type = Response::Done;
+  return fin;
 }
 
 #endif//GEN_EVENT_HANDLER_TPP

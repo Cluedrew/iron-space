@@ -44,40 +44,43 @@ int Engine::runLoop ()
 
 bool Engine::pollInput ()
 /* Collect and distribut all input over the last frame.
- * Effect: TODO
+ * Effect: Collects input from the window the the EventHandler and processes
+ *   them.
  * Return: Should the program continue running?
  */
 {
   log.data("Begin pollInput");
 
-/*
-  bool running = true;
-  sf::Event event;
+  // This is not going to be static forever.
+  static EventHandler eventHandler;
 
-  while (window.pollEvent(event))
+  while (true)
   {
-    switch (event.type)
+    Response re = eventHandler.pollEvents(window);
+    switch (re.type)
     {
-    case sf::Event::Closed:
-      running = false;
-      break;
+    case Response::Done:
+      log.data("End pollInput");
+      return true;
+
+    case Response::Quit:
+      log.data("End pollInput");
+      return false;
+
     default:
+      log.warn("Uncaught Response in pollInput");
       break;
     }
   }
-*/
-  // This is not going to be static forever.
-  static EventHandler eventHandler;
-  bool running = eventHandler.pollEvents(window);
 
-  log.data("End pollInput");
-  return running;
+  log.warn("Reached end of pollInput body.");
+  return true;
 }
 
 void Engine::updateAi (sf::Time const & deltaT)
 /* Gets all GameObjects to update their AI.
  * Params: Length of the current frame.
- * Effect: TODO
+ * Effect: Updates AI according to the time passed and the recent input.
  */
 {
   log.data("Begin updateAi");
@@ -87,7 +90,8 @@ void Engine::updateAi (sf::Time const & deltaT)
 void Engine::updatePhysics (sf::Time const & deltaT)
 /* Gets all GameObjects to update their physics.
  * Params: Length of the current frame.
- * Effect: TODO
+ * Effect: Updates Physics according to the time passed and the recent
+ *   AI decisions.
  */
 {
   log.data("Begin updatePhysics");
@@ -96,7 +100,8 @@ void Engine::updatePhysics (sf::Time const & deltaT)
 
 void Engine::resolveCollisions ()
 /* Checks for collisions, that is any overlapping objects.
- * Effect: TODO
+ * Effect: Triggers collision resloving code for any collisions (overlap)
+ *   that are occuring.
  */
 {
   log.data("Begin resolveCollisions");
@@ -105,7 +110,7 @@ void Engine::resolveCollisions ()
 
 void Engine::render ()
 /* Draw everything too the screen and preform the frame swap.
- * Effect: TODO
+ * Effect: Draws to the window.
  */
 {
   log.data("Begin render");
@@ -114,13 +119,12 @@ void Engine::render ()
   log.data("End render");
 }
 
-/* wait()
- * Wait until one interements of time has passed since the last call to wait,
+void Engine::wait ()
+/* Wait until one interements of time has passed since the last call to wait,
  *   or since the object was constructed. If more than that amount of time has
  *   passed return quickly.
  * Effect: Resets the timer.
  */
-void Engine::wait ()
 {
   log.data("Begin wait");
   clock.wait();

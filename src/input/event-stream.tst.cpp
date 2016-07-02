@@ -8,10 +8,17 @@
 
 
 
+// Static Member Declaration
+size_t const FRAME_MAX = std::numeric_limits<size_t>::max();
+size_t const POS_MAX = std::numeric_limits<size_t>::max();
+
 // Constructors and Deconstructor
 EventStream::EventStream () :
   frames(), frame(0), fpos(0)
 {
+  // Just make sure that numeric_limits does not give garbage.
+  assert(std::numeric_limits<size_t>::is_specialized);
+
   addFrame();
 }
 
@@ -121,7 +128,6 @@ bool EventStream::addEvent (sf::Event const & event, size_t frame, size_t pos)
 
 
 // Even the testing tools must be tested.
-// switch to REQUIRE( ... ) instead of REQUIRE(...)?
 TEST_CASE("EventStream test", "[input]")
 {
   sf::Event event;
@@ -132,57 +138,57 @@ TEST_CASE("EventStream test", "[input]")
 
   SECTION("No events")
   {
-    CHECK(1 == stream.numOfFrames());
-    CHECK(0 == stream.sizeOfFrame(0));
-    CHECK(0 == stream.sizeOfFrame(1));
-    CHECK(0 == stream.sizeOfFrame(2));
+    CHECK( 1 == stream.numOfFrames() );
+    CHECK( 0 == stream.sizeOfFrame(0) );
+    CHECK( 0 == stream.sizeOfFrame(1) );
+    CHECK( 0 == stream.sizeOfFrame(2) );
 
-    REQUIRE_FALSE(stream.pollEvent(event));
+    REQUIRE_FALSE( stream.pollEvent(event) );
   }
 
   SECTION("Frame Adding")
   {
     stream.addFrame();
-    REQUIRE(2 == stream.numOfFrames());
+    REQUIRE( 2 == stream.numOfFrames() );
 
     stream.addEvent(closeEvent, 2);
-    REQUIRE(3 == stream.numOfFrames());
+    REQUIRE( 3 == stream.numOfFrames() );
   }
 
   SECTION("Event Adding Locations")
   {
     stream.addEvent(closeEvent);
-    REQUIRE(1 == stream.sizeOfFrame(0));
+    REQUIRE( 1 == stream.sizeOfFrame(0) );
 
     stream.addEvent(closeEvent, 1);
-    REQUIRE(1 == stream.sizeOfFrame(1));
+    REQUIRE( 1 == stream.sizeOfFrame(1) );
 
     sf::Event gFocusEvent = {.type = sf::Event::GainedFocus};
     sf::Event lFocusEvent = {.type = sf::Event::LostFocus};
     stream.addEvent(gFocusEvent);
     stream.addEvent(lFocusEvent, 1 , 0);
-    REQUIRE(3 == stream.sizeOfFrame(1));
-    CHECK(sf::Event::GainedFocus == stream.getEvent(1, 2).type);
-    CHECK(sf::Event::Closed == stream.getEvent(1, 1).type);
-    CHECK(sf::Event::LostFocus == stream.getEvent(1, 0).type);
+    REQUIRE( 3 == stream.sizeOfFrame(1) );
+    CHECK( sf::Event::GainedFocus == stream.getEvent(1, 2).type );
+    CHECK( sf::Event::Closed == stream.getEvent(1, 1).type );
+    CHECK( sf::Event::LostFocus == stream.getEvent(1, 0).type );
   }
 
   SECTION("Steaming Events")
   {
     stream.addEvent(closeEvent);
-    CHECK(stream.pollEvent(event));
-    CHECK_FALSE(stream.pollEvent(event));
+    CHECK( stream.pollEvent(event) );
+    CHECK_FALSE( stream.pollEvent(event) );
 
-    CHECK_FALSE(stream.pollEvent(event));
-    CHECK_FALSE(stream.pollEvent(event));
+    CHECK_FALSE( stream.pollEvent(event) );
+    CHECK_FALSE( stream.pollEvent(event) );
 
     stream.reset();
     stream.addEvent(closeEvent);
     stream.addEvent(closeEvent, 1);
-    CHECK(stream.pollEvent(event));
-    CHECK(stream.pollEvent(event));
-    CHECK_FALSE(stream.pollEvent(event));
-    CHECK(stream.pollEvent(event));
-    CHECK_FALSE(stream.pollEvent(event));
+    CHECK( stream.pollEvent(event) );
+    CHECK( stream.pollEvent(event) );
+    CHECK_FALSE( stream.pollEvent(event) );
+    CHECK( stream.pollEvent(event) );
+    CHECK_FALSE( stream.pollEvent(event) );
   }
 }
