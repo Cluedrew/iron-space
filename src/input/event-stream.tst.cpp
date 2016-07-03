@@ -9,8 +9,10 @@
 
 
 // Static Member Declaration
-size_t const FRAME_MAX = std::numeric_limits<size_t>::max();
-size_t const POS_MAX = std::numeric_limits<size_t>::max();
+size_t const EventStream::FRAME_MAX = std::numeric_limits<size_t>::max() - 2;
+size_t const EventStream::POS_MAX = std::numeric_limits<size_t>::max() - 2;
+size_t const EventStream::FRAME_TOP = std::numeric_limits<size_t>::max();
+size_t const EventStream::POS_TOP = std::numeric_limits<size_t>::max();
 
 // Constructors and Deconstructor
 EventStream::EventStream () :
@@ -67,23 +69,6 @@ sf::Event const & EventStream::getEvent (size_t frame, size_t pos) const
   return frames[frame][pos];
 }
 
-
-
-// Set-Up Functions
-sf::Event & EventStream::readyEvent(size_t frame, size_t pos)
-{
-  assert(frame < numOfFrames());
-  assert(pos <= sizeOfFrame(frame));
-
-  std::vector<sf::Event> & curFrame = frames[frame];
-  std::vector<sf::Event>::iterator it = curFrame.begin();
-  curFrame.emplace(it);
-  return curFrame[pos];
-
-  //frames[frame].emplace(frames[frame].begin()[pos]);
-  //return frames[frame][pos];
-}
-
 size_t EventStream::numOfFrames () const
 {
   return frames.size();
@@ -91,38 +76,67 @@ size_t EventStream::numOfFrames () const
 
 size_t EventStream::sizeOfFrame (size_t frameNum) const
 {
+  assert(frameNum <= FRAME_MAX);
   if (frames.size() <= frameNum)
     return 0;
   else
     return frames[frameNum].size();
 }
 
-void EventStream::addFrame ()
+
+
+// Defualt Calculators
+size_t EventStream::defaultFrame () const
 {
-  frames.push_back(std::vector<sf::Event>());
+  return frames.size() - 1;
 }
 
-// addEvent Set:
-bool EventStream::addEvent (sf::Event const & event)
+size_t EventStream::defaultPos (size_t frame) const
 {
-  return addEvent(event, frames.size() - 1);
+  assert(frame <= FRAME_MAX);
+  return sizeOfFrame(frame);
 }
-bool EventStream::addEvent (sf::Event const & event, size_t frame)
+
+
+
+// Set-Up Functions
+sf::Event & EventStream::readyEvent(size_t frame, size_t pos)
 {
-  return addEvent(event, frame, sizeOfFrame(frame));
-}
-bool EventStream::addEvent (sf::Event const & event, size_t frame, size_t pos)
-{
-  assert(frame <= numOfFrames());
+  assert(frame < numOfFrames());
   assert(pos <= sizeOfFrame(frame));
+  assert(sizeOfFrame(frame) < POS_MAX);
 
   // Add an extra frame if required.
   if (numOfFrames() == frame)
     addFrame();
 
+  // Actually add the blank event.
+  std::vector<sf::Event> & curFrame = frames[frame];
+  std::vector<sf::Event>::iterator it = curFrame.begin();
+  curFrame.emplace(it + pos);
+  return curFrame[pos];
+}
+
+void EventStream::addFrame ()
+{
+  assert(frames.size() < FRAME_MAX);
+  frames.push_back(std::vector<sf::Event>());
+}
+
+void EventStream::addEvent (sf::Event const & event, size_t frame, size_t pos)
+{
+  // Load defaults if applicable.
+  if (FRAME_TOP == frame)
+    frame = defaultFrame();
+  if (POS_TOP == pos)
+    pos = defaultPos(frame);
+
+  // Remaining Checks.
+  assert(frame <= numOfFrames());
+  assert(pos <= sizeOfFrame(frame));
+
   // Add it the event.
   readyEvent(frame, pos) = event;
-  return true;
 }
 
 
@@ -170,6 +184,10 @@ TEST_CASE("EventStream test", "[input]")
     REQUIRE( 3 == stream.sizeOfFrame(1) );
     CHECK( sf::Event::GainedFocus == stream.getEvent(1, 2).type );
     CHECK( sf::Event::Closed == stream.getEvent(1, 1).type );
+    CHECK( sf::Event::LostFocus == stream.getEvent(1, 0).type );
+
+    stream.addEvent(gFocusEvent, 1 , 1);
+    CHECK( sf::Event::GainedFocus == stream.getEvent(1, 1).type );
     CHECK( sf::Event::LostFocus == stream.getEvent(1, 0).type );
   }
 
