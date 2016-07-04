@@ -37,8 +37,8 @@ class EventStream
 {
 private:
   std::vector<std::vector<sf::Event> > frames;
-  size_t frame;
-  size_t fpos;
+  size_t curFrame;
+  size_t curPos;
 
   size_t defaultFrame () const;
   /* Get the default frame for the stream in its current state.
@@ -50,13 +50,22 @@ private:
    * Return: The index of the end of the frame.
    */
 
-  sf::Event & readyEvent (size_t frame, size_t pos);
+  sf::Event & loadEvent (size_t frame, size_t pos);
   /* Create space for an event at a given location in the stream and return
-   * a reference to it. (Which will be valid for a moment.)
+   *   a reference to it. (Which will be valid for a moment.)
    * Params: The frame to add the event to [0..numOfFrames] and the position
    *   in that frame to inseart the event at [0..sizeOfFrame(frame)].
    * Effect: Adds an uninitialized event to the stream.
-   * Return: A reference to the new event.
+   * Return: A reference to the new event. (May not stay valid for long)
+   */
+
+  sf::Event & readyEvent (size_t frame, size_t pos);
+  /* A wrapper for loadEvent that translates FRAME_TOP and POS_TOP to the
+   *   approprate values depending on the current state of the stream.
+   * Params: frame=[0..numOfFrames]|FRAME_TOP
+   *   pos=[0..sizeOfFrame(frame)]|POS_TOP
+   * Effect: Adds an uninitialized event to the stream.
+   * Return: A reference to the new event. (May not stay valid for long)
    */
 
 protected:
@@ -128,7 +137,7 @@ public:
    * Effect: Add a new event at the given spot in the stream.
    */
 
-  //bool addClosed (size_t frame = FRAME_TOP, size_t pos = POS_TOP);
+  void addClosed (size_t frame = FRAME_TOP, size_t pos = POS_TOP);
   /* Add a new Closed event to the stream.
    * Params: Optional frame and pos parameters as in addEvent.
    * Effect: Add a new Closed event at the given spot in the stream.

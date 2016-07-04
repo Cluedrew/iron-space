@@ -14,9 +14,11 @@ size_t const EventStream::POS_MAX = std::numeric_limits<size_t>::max() - 2;
 size_t const EventStream::FRAME_TOP = std::numeric_limits<size_t>::max();
 size_t const EventStream::POS_TOP = std::numeric_limits<size_t>::max();
 
+
+
 // Constructors and Deconstructor
 EventStream::EventStream () :
-  frames(), frame(0), fpos(0)
+  frames(), curFrame(0), curPos(0)
 {
   // Just make sure that numeric_limits does not give garbage.
   assert(std::numeric_limits<size_t>::is_specialized);
@@ -31,25 +33,25 @@ EventStream::~EventStream () {}
 // Steam Functions
 bool EventStream::pollEvent (sf::Event & event)
 {
-  if (frames.size() <= frame)
+  if (frames.size() <= curFrame)
     return false;
-  else if (frames[frame].size() <= fpos)
+  else if (frames[curFrame].size() <= curPos)
   {
-    ++frame;
-    fpos = 0;
+    ++curFrame;
+    curPos = 0;
     return false;
   }
   else
   {
-    event = frames[frame][fpos++];
+    event = frames[curFrame][curPos++];
     return true;
   }
 }
 
 void EventStream::reset ()
 {
-  frame = 0;
-  fpos = 0;
+  curFrame = 0;
+  curPos = 0;
 }
 
 
@@ -100,9 +102,9 @@ size_t EventStream::defaultPos (size_t frame) const
 
 
 // Set-Up Functions
-sf::Event & EventStream::readyEvent(size_t frame, size_t pos)
+sf::Event & EventStream::loadEvent (size_t frame, size_t pos)
 {
-  assert(frame < numOfFrames());
+  assert(frame <= numOfFrames());
   assert(pos <= sizeOfFrame(frame));
   assert(sizeOfFrame(frame) < POS_MAX);
 
@@ -117,6 +119,21 @@ sf::Event & EventStream::readyEvent(size_t frame, size_t pos)
   return curFrame[pos];
 }
 
+sf::Event & EventStream::readyEvent (size_t frame, size_t pos)
+{
+  // Check and load frame.
+  assert(frame == FRAME_TOP || frame <= numOfFrames());
+  if (FRAME_TOP == frame)
+    frame = defaultFrame();
+
+  // Check and load position within frame.
+  assert(pos == POS_TOP || pos <= sizeOfFrame(frame));
+  if (POS_TOP == pos)
+    pos = defaultPos(frame);
+
+  return loadEvent(frame, pos);
+}
+
 void EventStream::addFrame ()
 {
   assert(frames.size() < FRAME_MAX);
@@ -125,18 +142,13 @@ void EventStream::addFrame ()
 
 void EventStream::addEvent (sf::Event const & event, size_t frame, size_t pos)
 {
-  // Load defaults if applicable.
-  if (FRAME_TOP == frame)
-    frame = defaultFrame();
-  if (POS_TOP == pos)
-    pos = defaultPos(frame);
-
-  // Remaining Checks.
-  assert(frame <= numOfFrames());
-  assert(pos <= sizeOfFrame(frame));
-
   // Add it the event.
   readyEvent(frame, pos) = event;
+}
+
+void EventStream::addClosed (size_t frame, size_t pos)
+{
+  readyEvent(frame, pos).type = sf::Event::Closed;
 }
 
 
@@ -208,5 +220,12 @@ TEST_CASE("EventStream test", "[input]")
     CHECK_FALSE( stream.pollEvent(event) );
     CHECK( stream.pollEvent(event) );
     CHECK_FALSE( stream.pollEvent(event) );
+  }
+
+  SECTION("Added Event Types")
+  {
+    stream.addClosed();
+    stream.pollEvent(event);
+    CHECK( sf::Event::Closed == event.type );
   }
 }
