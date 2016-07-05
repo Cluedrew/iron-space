@@ -23,9 +23,12 @@ TEST_CASE("EventHandler test", "[input]")
     REQUIRE( Response::Done == re.type );
   }
 
-  /*SECTION("Closed to Quit")
+  SECTION("Closed to Quit")
   {
+    stream.addClosed();
     Response re = handler.pollEvents(stream);
     REQUIRE( Response::Quit == re.type );
-  }*/
+    re = handler.pollEvents(stream);
+    REQUIRE( Response::Done == re.type );
+  }
 }

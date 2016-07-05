@@ -25,6 +25,12 @@ protected:
    * If the pointer already points at something it is first unregestered.
    */
 
+  void takeRegester (GameObjectPtr && other);
+  /* takeRegester(other)
+   * Take the other GameObjectPtr's pointer, nulling it if it isn't already
+   * null.
+   */
+
 public:
   GameObjectPtr ();
   /* Default GameObjectPtr constructor, points at nothing.

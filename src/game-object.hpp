@@ -18,21 +18,25 @@
 #include <SFML/Graphics.hpp>
 class GameObjectPtr;
 
+
+
+
 class GameObject : public sf::Transformable, public sf::Drawable
 {
 private:
   std::vector<GameObjectPtr *> ptrsToThis;
   friend class GameObjectPtr;
 
-  AiComponent * ai;
-  PhysicsComponent * physics;
-  GraphicsComponent * graphics;
+  //AiComponent * ai;
+  //PhysicsComponent * physics;
+  //GraphicsComponent * graphics;
 
 protected:
 public:
-  GameObject (AiComponent * ai,
-              PhysicsComponent * physics,
-              GraphicsComponent * graphics);
+  GameObject ();
+  //GameObject (AiComponent * ai,
+  //            PhysicsComponent * physics,
+  //            GraphicsComponent * graphics);
   /* Create a new GameObject from its list of components.
    * Params: Pointers to the components, ownership of them is taken.
    */
@@ -53,59 +57,48 @@ public:
 
 
 
-  bool handleInput (InputEvent const & input)
+  //bool handleInput (InputEvent const & input)
   /* Called during Input Step:
    * Resive and store a piece of input for this class.
    * Params: Reference to InputEvent.
    * Effect: Varies on AIComponent.
    * Return: True if the input was captured.
    */
-  { return ai->handleInput(input); }
+  //{ return ai->handleInput(input); }
 
-  void updateAi (sf::Time const & deltaT)
+  //void updateAi (sf::Time const & deltaT)
   /* Called during AI Step:
    * Decide on actions to perform this turn.
    * Params: Time passed.
    * Effect: Varies with AIComponent.
    */
-  { ai->update(deltaT); }
+  //{ ai->update(deltaT); }
 
-  void handleMessage (MessageEvent const & msg)
+  //void handleMessage (MessageEvent const & msg)
   /* Called during AI Step (by other GameObjects):
    * Params: Message to be recived.
    * Effect: Varies with AIComponent.
    */
-  { ai->handleMessage(msg); }
+  //{ ai->handleMessage(msg); }
 
-  void updatePhysics (sf::Time const & deltaT)
+  //void updatePhysics (sf::Time const & deltaT)
   /* Called during Physics Step:
    * Move an object according to its internal physics.
    * Params: Time passed.
    * Effect: Moves the GameObject.
    */
-  { physics->update(this, deltaT); }
+  //{ physics->update(this, deltaT); }
 
-  void handleCollision (GameObjectPtr with)
+  //void handleCollision (GameObjectPtr with)
   /* Called during Collision Step:
    * Resolve a collision with another GameObject.
    * Params: The other GameObject collided with.
    * Effect: Varies with AIComponent.
    */
-  { ai->handleCollision(with); }
+  //{ ai->handleCollision(with); }
 
-  // Does the GameObject update during the draw state?
-  // YES:
-  void render (sf::RenderTarget & target, sf::RenderStates states)
-  /* Called during Render Step:
-   * Move and re-draw the object on the screen.
-   * Params:
-   * Effect: Updates object and draws to screen.
-   */
-  { graphics->render(/*view data*/); }
-
-  // NO:
   void draw (sf::RenderTarget & target, sf::RenderStates states) const;
-  /*
+  /* Draw the GameObject, in its current state, to the target.
    * Params: The draw target
    * Effect: Draws to screen.
    */

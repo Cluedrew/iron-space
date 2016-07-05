@@ -6,13 +6,14 @@
  */
 
 #include <iostream>
-#include <cstdlib.h>
+#include <cstdlib>
+#include <utility>
 #include "game-object.hpp"
 
 
 
 #define FOREACH_PTR(name) \
-  for (std::vector<GameObjectPtr>::iterator name = ptr->ptrsToThis.begin() ; \
+  for (std::vector<GameObjectPtr*>::iterator name = ptr->ptrsToThis.begin() ; \
        name != ptr->ptrsToThis.end() ; ++ name )
 
 // Internal operations:
@@ -30,15 +31,15 @@ void GameObjectPtr::unregester ()
   //for (it = ptr->ptrsToThis.begin() ; it != ptr->ptrsToThis.end() ; ++it)
   FOREACH_PTR(it)
   {
-    if (*it == ptr)
+    if (this == *it)
     {
-      ptrsToThis.erase(it);
-      ptr == nullptr;
+      ptr->ptrsToThis.erase(it);
+      ptr = nullptr;
       return;
     }
   }
 
-  std::cerr << "ERROR: GameObject does not have a back reference to" <<
+  std::cerr << "ERROR: GameObject does not have a back reference to"
     << " the GameObjectPtr." << std::endl;
   exit(EXIT_FAILURE);
 }
@@ -55,11 +56,11 @@ void GameObjectPtr::regesterTo (GameObject * obj)
   ptr = obj;
 }
 
-/* regesterSwitch(other)
+/* takeRegester(other)
  * Take the other GameObjectPtr's pointer, nulling it if it isn't already
  * null.
  */
-void GameObjectPtr::regesterSwitch (GameObjectPtr && other)
+void GameObjectPtr::takeRegester (GameObjectPtr && other)
 {
   unregester();
 
@@ -68,7 +69,7 @@ void GameObjectPtr::regesterSwitch (GameObjectPtr && other)
 
   FOREACH_PTR(it)
   {
-    if (*it == other.ptr)
+    if (&other == *it)
     {
       *it = this;
       ptr = other.ptr;
@@ -77,7 +78,7 @@ void GameObjectPtr::regesterSwitch (GameObjectPtr && other)
     }
   }
 
-  std::cerr << "ERROR: GameObject does not have a back reference to" <<
+  std::cerr << "ERROR: GameObject does not have a back reference to"
     << " the GameObjectPtr." << std::endl;
   exit(EXIT_FAILURE);
 }
@@ -102,7 +103,7 @@ GameObjectPtr::GameObjectPtr (GameObjectPtr const & other) :
 GameObjectPtr::GameObjectPtr (GameObjectPtr && other) :
   ptr(nullptr)
 {
-  regesterSwitch(other);
+  takeRegester(std::move(other));
 }
 
 
@@ -169,11 +170,13 @@ void GameObjectPtr::setTo (GameObject & object)
 GameObjectPtr & GameObjectPtr::operator= (GameObjectPtr const & other)
 {
   regesterTo(other.ptr);
+  return *this;
 }
 
 GameObjectPtr & GameObjectPtr::operator= (GameObjectPtr && other)
 {
-  regesterSwitch(other);
+  takeRegester(std::move(other));
+  return *this;
 }
 
 // Comparison Operators

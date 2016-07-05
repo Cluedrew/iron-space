@@ -19,16 +19,13 @@
  * predictable and automated input, which is used in testing.
  *
  * Normal/Basic usage of this class should just be a bunch of calls to addX
- * methods with some addFrame calls mixed in to mimic events over time. [...]
+ * methods with some addFrame calls mixed in to mimic events over time. Each
+ * frame will repersent the events polled in one iteration of the main loop.
+ * You may keep polling after all the frames have been used, but no more
+ * events will be generated.
  *
  * The class uses a lot of asserts because it is used in testing where knowing
  * something went wrong right away is more important than any error recovery.
- *
- * TODO: Finish adding the limits on the number and size of frames.
- *  Then create some centinal values that can be given to addEvent to
- *  specifiy the default locations. The reason for that is to fold the 3
- *  signatures for addEvent into one, which will mean 1 signature instead of
- *  3 for add<particular event> functions.
  */
 
 
@@ -125,7 +122,7 @@ public:
 
   void addFrame ();
   /* Add a new empty frame to the stream.
-   * Effect: New frame is added to frames.
+   * Effect: New frame is added at the end of frames.
    */
 
   void addEvent (sf::Event const & event, size_t frame = FRAME_TOP,
