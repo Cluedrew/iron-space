@@ -49,6 +49,7 @@ TEST_CASE("Tests for the GameObjectPtr", "")
     {
       GameObjectPtr ptr2(ptr1);
       CHECK( ptr2 );
+      CHECK( ptr2 == ptr1 );
     }
 
     SECTION("Move Constructor")
@@ -58,21 +59,62 @@ TEST_CASE("Tests for the GameObjectPtr", "")
     }
   }
 
-  //SECTION("Check assignment")
-
-  SECTION("Comparison")
+  SECTION("Check Comparison")
   {
-    // Equality
-    GameObject o1;
-    GameObject o2;
-    GameObjectPtr ptr1(o1);
-    GameObjectPtr ptr2(o2);
-    GameObjectPtr ptr3(o1);
-    REQUIRE( ptr1 != ptr2 );
-    REQUIRE( ptr1 == ptr3 );
-    REQUIRE_FALSE( ptr1 == ptr2 );
-    REQUIRE_FALSE( ptr1 != ptr3 );
+    GameObject objs[2] = {GameObject(), GameObject()};
+    GameObjectPtr ptr1(objs[0]);
+    GameObjectPtr ptr2(objs[1]);
+    GameObjectPtr ptr3(objs[0]);
+
+    // These in particular are used in other tests, so REQUIRE them.
+    SECTION("Check Equality")
+    {
+      REQUIRE( ptr1 != ptr2 );
+      REQUIRE( ptr1 == ptr3 );
+      REQUIRE_FALSE( ptr1 == ptr2 );
+      REQUIRE_FALSE( ptr1 != ptr3 );
+    }
+
+    SECTION("Check Ordering")
+    {
+      CHECK( ptr1 < ptr2 );
+      CHECK_FALSE( ptr1 < ptr3 );
+      CHECK_FALSE( ptr2 < ptr1 );
+
+      CHECK( ptr2 > ptr1 );
+      CHECK_FALSE( ptr3 > ptr1 );
+      CHECK_FALSE( ptr1 > ptr2 );
+
+      CHECK( ptr1 <= ptr2 );
+      CHECK( ptr1 <= ptr3 );
+      CHECK_FALSE( ptr2 <= ptr1 );
+
+      CHECK( ptr2 >= ptr1 );
+      CHECK( ptr3 >= ptr1 );
+      CHECK_FALSE( ptr1 >= ptr2 );
+    }
   }
 
-  //SECTION("Check access")
+  SECTION("Check access")
+  {
+    GameObject obj;
+    GameObjectPtr ptr(obj);
+    REQUIRE( &obj == &*ptr );
+  }
+
+  SECTION("Simple Deregester")
+  {
+    GameObject *dynobj = new GameObject();
+    GameObjectPtr ptr(*dynobj);
+    REQUIRE( ptr );
+    REQUIRE( &*ptr == &*dynobj );
+    delete dynobj;
+    REQUIRE_FALSE( ptr );
+  }
+
+  /*SECTION("Check assignment")
+  {
+    GameObject obj1;
+    GameObject obj2;
+  }*/
 }
