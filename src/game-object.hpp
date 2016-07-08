@@ -20,7 +20,6 @@ class GameObjectPtr;
 
 
 
-
 class GameObject : public sf::Transformable, public sf::Drawable
 {
 private:

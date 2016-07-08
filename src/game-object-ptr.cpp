@@ -12,9 +12,10 @@
 
 
 
-#define FOREACH_PTR(name) \
-  for (std::vector<GameObjectPtr*>::iterator name = ptr->ptrsToThis.begin() ; \
-       name != ptr->ptrsToThis.end() ; ++ name )
+#define FOREACH_PTR(name, objPtr) \
+  for (std::vector<GameObjectPtr*>::iterator name = \
+       objPtr->ptrsToThis.begin() ; \
+       name != objPtr->ptrsToThis.end() ; ++name )
 
 // Internal operations:
 
@@ -29,7 +30,7 @@ void GameObjectPtr::unregester ()
 
   //std::vector<GameObjectPtr>::iterator it;
   //for (it = ptr->ptrsToThis.begin() ; it != ptr->ptrsToThis.end() ; ++it)
-  FOREACH_PTR(it)
+  FOREACH_PTR(it, ptr)
   {
     if (this == *it)
     {
@@ -67,7 +68,7 @@ void GameObjectPtr::takeRegester (GameObjectPtr && other)
   if (nullptr == other.ptr)
     return;
 
-  FOREACH_PTR(it)
+  FOREACH_PTR(it, other.ptr)
   {
     if (&other == *it)
     {
@@ -178,6 +179,10 @@ GameObjectPtr & GameObjectPtr::operator= (GameObjectPtr && other)
   takeRegester(std::move(other));
   return *this;
 }
+
+// TODO? Add operator= (GameObject &|* object)?
+
+
 
 // Comparison Operators
 bool GameObjectPtr::operator== (GameObjectPtr const & other) const
