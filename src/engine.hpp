@@ -13,6 +13,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "util/loop-clock.hpp"
 #include "util/logger.hpp"
+#include "game-object.hpp"
 
 
 
@@ -29,6 +30,8 @@ private:
   void resolveCollisions ();
   void render ();
   void wait ();
+
+  GameObject testobject;
 
 protected:
 public:

@@ -8,7 +8,8 @@
 
 
 Engine::Engine (LoggerDetailLevel logdl) :
-  window(), clock(60), log("Engine", logdl)
+  window(), clock(60), log("Engine", logdl),
+  testobject()
 {}
 
 Engine::~Engine ()
@@ -115,6 +116,7 @@ void Engine::render ()
 {
   log.data("Begin render");
   window.clear(sf::Color::Black);
+  window.draw(testobject);
   window.display();
   log.data("End render");
 }

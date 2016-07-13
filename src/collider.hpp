@@ -24,6 +24,11 @@ public:
    *   the radius of the collider's body.
    */
 
+  Collider (Collider const & other) = default;
+  Collider (Collider && other) = default;
+  Collider & operator=(Collider const & other) = default;
+  Collider & operator=(Collider && other) = default;
+
   virtual ~Collider ();
 
   bool collides (Collider const & other) const;

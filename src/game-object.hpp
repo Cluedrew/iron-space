@@ -16,6 +16,7 @@
  */
 
 #include <SFML/Graphics.hpp>
+#include "collider.hpp"
 class GameObjectPtr;
 
 
@@ -29,6 +30,8 @@ private:
   //AiComponent * ai;
   //PhysicsComponent * physics;
   //GraphicsComponent * graphics;
+  Collider collider;
+  sf::CircleShape graphics;
 
 protected:
 public:
