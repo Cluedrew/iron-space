@@ -4,12 +4,13 @@
 
 #include <SFML/Window/Event.hpp>
 #include "input/event-handler.hpp"
+#include "game-object.hpp"
 
 
 
 Engine::Engine (LoggerDetailLevel logdl) :
   window(), clock(60), log("Engine", logdl),
-  testobject()
+  map()
 {}
 
 Engine::~Engine ()
@@ -23,6 +24,8 @@ int Engine::runLoop ()
   window.create(sf::VideoMode(800, 600), "iron-space",
                 sf::Style::Titlebar | sf::Style::Close);
   // For now it is not sf::Style::Resize-able.
+
+  map.insert(GameObject());
 
   log.note("Finished runLoop init");
 
@@ -116,7 +119,7 @@ void Engine::render ()
 {
   log.data("Begin render");
   window.clear(sf::Color::Black);
-  window.draw(testobject);
+  window.draw(map);
   window.display();
   log.data("End render");
 }

@@ -13,7 +13,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "util/loop-clock.hpp"
 #include "util/logger.hpp"
-#include "game-object.hpp"
+#include "plane.hpp"
 
 
 
@@ -31,7 +31,7 @@ private:
   void render ();
   void wait ();
 
-  GameObject testobject;
+  Plane map;
 
 protected:
 public:

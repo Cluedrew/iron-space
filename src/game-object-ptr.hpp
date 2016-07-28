@@ -67,19 +67,20 @@ public:
 
   void setNull ();
   /* Set the GameObjectPtr to point at nothing.
+   * Effect: Changes what this pointer is pointing at.
    */
 
   void setTo (GameObject & object);
-  /*
+  /* Set the GameObjectPtr to point at object.
    * Params: A reference/pointer to a GameObject.
-   * Effect:
+   * Effect: Changes what this pointer is pointing at.
    */
 
   GameObjectPtr & operator= (GameObjectPtr const & other);
   GameObjectPtr & operator= (GameObjectPtr && other);
   /* Copy/Move assignment, this pointer points
    * Params: A reference to another GameObjectPtr.
-   * Effect:
+   * Effect: This pointer now points at the other pointer.
    * Return: Mutable refence to this.
    */
 
@@ -90,8 +91,9 @@ public:
   bool operator>= (GameObjectPtr const & other) const;
   bool operator<= (GameObjectPtr const & other) const;
   /* Comparison operators.
-   * Params:
-   * Return:
+   * Params: A constant reference to a different game-object ptr.
+   * Return: True if the given comparison is true. Ordering uses
+   *   the object's address in memory.
    */
 
   friend class GameObject;
