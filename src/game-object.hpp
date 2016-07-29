@@ -17,15 +17,17 @@
 
 #include <SFML/Graphics.hpp>
 #include "collider.hpp"
+#include "util/nulling-target.hpp"
 class GameObjectPtr;
 
 
 
-class GameObject : public sf::Transformable, public sf::Drawable
+class GameObject :
+    public NullingTarget,
+    public sf::Transformable,
+    public sf::Drawable
 {
 private:
-  std::vector<GameObjectPtr *> ptrsToThis;
-  friend class GameObjectPtr;
 
   //AiComponent * ai;
   //PhysicsComponent * physics;

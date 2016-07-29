@@ -5,7 +5,20 @@
  * destroyed. It is rather coupled with the GameObject itself.
  */
 
+class NullingTarget;
 class GameObject;
+
+/* Some additions that might let me move all the pointer stuff into one class.
+public:
+  typedef std::vector<GameObject*> ptr_container;
+  typedef typename ptr_container::iterator ptr_iterator;
+  static void preDistroy(ptr_container & );
+  static void move(... ??? ...);
+  static void merge(... ??? ...);
+
+Essentually, move all the code from the other classes that work with these
+pointers into this class,
+*/
 
 
 
@@ -13,8 +26,11 @@ class GameObjectPtr
 {
 private:
   GameObject * ptr;
+  friend class NullingTarget;
 
 protected:
+  void assignPtr(NullingTarget *);
+
   void unregester ();
   /* Internal function for setting the pointer to point at nothing.
    * If the pointer already points at nothing than nothing is done.

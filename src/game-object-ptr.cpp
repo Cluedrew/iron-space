@@ -12,6 +12,22 @@
 
 
 
+/* The dynamic_cast should never fail as the NullingTarget only reassigns
+ * pointing at it, and that is gated by the game object type.
+ */
+void GameObjectPtr::assignPtr(NullingTarget * to)
+{
+  GameObject * tmp = dynamic_cast<GameObject*>(to);
+  if (nullptr == tmp) {
+    std::cerr << "Invalid assignment to GameObjectPtr." << std::endl;
+    exit(EXIT_FAILURE);
+  } else {
+    ptr = tmp;
+  }
+}
+
+
+
 #define FOREACH_PTR(name, objPtr) \
   for (std::vector<GameObjectPtr*>::iterator name = \
        objPtr->ptrsToThis.begin() ; \

@@ -9,10 +9,16 @@
 
 TEST_CASE("Collider Tests")
 {
+  sf::Transformable root;
+
   Collider cA(10, 10, 5);
+  cA.update(root);
   Collider dot(13, 6, 0);
+  dot.update(root);
   Collider cB(0, 10, 10);
+  cB.update(root);
   Collider cC(20, 10, 5);
+  cC.update(root);
 
   SECTION("Overlaps")
   {

@@ -35,10 +35,12 @@ public:
 
   virtual ~Collider ();
 
-  void update (sf::Transformable const & root);
+  void update (sf::Transformable const & root);// = sf::Transform::Identity);
   /* Update the absolute transform of this collider in the world by messuring
    *   by the relative transform of this collider from root.
    * Params: The root location that this collider's location is messured from.
+   *   If omitted the identity matrix is used, which means it is relative
+   *   to the global space.
    * Effect: Changes the value of the absolutePosition of this collider.
    */
 
