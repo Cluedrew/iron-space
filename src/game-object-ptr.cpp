@@ -12,26 +12,12 @@
 
 
 
-/* The dynamic_cast should never fail as the NullingTarget only reassigns
- * pointing at it, and that is gated by the game object type.
- */
-void GameObjectPtr::assignPtr(NullingTarget * to)
-{
-  GameObject * tmp = dynamic_cast<GameObject*>(to);
-  if (nullptr == tmp) {
-    std::cerr << "Invalid assignment to GameObjectPtr." << std::endl;
-    exit(EXIT_FAILURE);
-  } else {
-    ptr = tmp;
-  }
-}
-
-
+#define FOREACH(iterator_type, iterator_name, container_name) \
+  for (iterator_type iterator_name = container_name.begin() ; \
+       iterator_name != container_name.end() ; ++iterator_name)
 
 #define FOREACH_PTR(name, objPtr) \
-  for (std::vector<GameObjectPtr*>::iterator name = \
-       objPtr->ptrsToThis.begin() ; \
-       name != objPtr->ptrsToThis.end() ; ++name )
+FOREACH(back_ptr_iterator, name, objPtr->ptrsToThis)
 
 // Internal operations:
 
@@ -44,8 +30,6 @@ void GameObjectPtr::unregester ()
   if (nullptr == ptr)
     return;
 
-  //std::vector<GameObjectPtr>::iterator it;
-  //for (it = ptr->ptrsToThis.begin() ; it != ptr->ptrsToThis.end() ; ++it)
   FOREACH_PTR(it, ptr)
   {
     if (this == *it)
@@ -229,4 +213,16 @@ bool GameObjectPtr::operator>= (GameObjectPtr const & other) const
 bool GameObjectPtr::operator<= (GameObjectPtr const & other) const
 {
   return ptr <= other.ptr;
+}
+
+
+
+// Provided Static ===========================================================
+
+void GameObjectPtr::setAll(GameObject * to, back_ptr_container & in)
+{
+  FOREACH(back_ptr_iterator, it, in)
+  {
+    (**it).ptr = to;
+  }
 }
