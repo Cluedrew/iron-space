@@ -26,9 +26,9 @@ public:
 
   virtual ~RelativeTransformable ();
 
-  void update (sf::Transformable const & root);
-  /* Update the absolute transform, which caches the mesurement from root.
-   * Params: Reference to root transformable, which is what this tranform
+  void update (sf::Transformable const & parent);
+  /* Update the absolute transform, which caches the mesurement from parent.
+   * Params: Reference to parent transformable, which is what this tranform
    *   is relative to.
    */
 
