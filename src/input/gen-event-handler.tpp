@@ -3,7 +3,11 @@
 
 // Implementation of the GenEventHandler Template, a testing tool.
 
+#include <iostream>
 #include <SFML/Window/Event.hpp>
+#include "input-event.hpp"
+
+
 
 template<typename SourceT>
 GenEventHandler<SourceT>::GenEventHandler ()
@@ -27,6 +31,13 @@ Response GenEventHandler<SourceT>::pollEvents(SourceT & window)
     case sf::Event::Closed:
       fin.type = Response::Quit;
       return fin;
+    case sf::Event::MouseButtonPressed:
+      InputEvent ievent;
+      ievent.type = InputEvent::Select;
+      ievent.pos.x = event.mouseButton.x;
+      ievent.pos.y = event.mouseButton.y;
+      std::cerr << ievent << std::endl;
+      break;
     default:
       break;
     }

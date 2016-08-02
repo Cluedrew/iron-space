@@ -7,6 +7,9 @@
  * transform (in world space) by measuring relative to the given root.
  *
  * TODO Figure out what the relative and absolute origin actually means.
+ *      Problem: does not actually do a relative transformation,
+ *      or rather does it by component, instead of all being messured from the
+ *      new origin.
  */
 
 #include <SFML/Graphics/Transformable.hpp>
