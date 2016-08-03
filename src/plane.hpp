@@ -14,6 +14,7 @@ namespace sf
   class Drawable;
 }
 #include "game-object.hpp"
+class InputEvent;
 
 
 
@@ -34,6 +35,13 @@ public:
    */
 
   // I think I might need a way to search the plane.
+
+  bool handleInput (InputEvent const & ievent);
+  /* Give an event to a GameObject to be handled.
+   * Params: An InputEvent (TODO what types)
+   * Effect: Event is handled (may result in additional changes in updates).
+   * Return: True if the event was handled, false otherwise.
+   */
 
   // The loop functions will have to be filled in.
   //void /*bool*/ handleInput ();

@@ -3,6 +3,8 @@
 // Implementation of GameObject.
 
 #include <cassert>
+#include <iostream>
+#include "input/input-event.hpp"
 
 
 
@@ -15,6 +17,7 @@ GameObject::GameObject () :
   sf::Transformable(), sf::Drawable(), ptrsToThis(),
   collider(300, 300, 25), graphics(25)
 {
+  collider.update(*this);
   graphics.move(300 - 25, 300 - 25);
 }
 
@@ -35,13 +38,25 @@ GameObject::~GameObject ()
 
 
 
-#if 0
 // see header
 bool GameObject::handleInput (InputEvent const & input)
 {
-  return ai->handleInput(input);
+  std::cout << "GameObject: " << input << std::endl;
+  return true;
+  //return ai->handleInput(input);
 }
 
+// This way is definatly going to have to change.
+bool GameObject::collides (GameObject const & other)
+{
+  return collider.collides(other.collider);
+}
+bool GameObject::collides (Collider const & other)
+{
+  return collider.collides(collider);
+}
+
+#if 0
 // see header
 void GameObject::updateAi (sf::Time const & deltaT)
 {
@@ -70,7 +85,6 @@ void GameObject::handleCollision (GameObjectPtr with)
 // see header
 void GameObject::draw (sf::RenderTarget & target, sf::RenderStates states) const
 {
-  target.draw(graphics, states);
   //states.transform *= getTransform();
-  //target.draw(*graphics, states);
+  target.draw(graphics, states);
 }

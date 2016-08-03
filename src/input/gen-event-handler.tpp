@@ -5,7 +5,9 @@
 
 #include <iostream>
 #include <SFML/Window/Event.hpp>
+#include "response.hpp"
 #include "input-event.hpp"
+#include "../plane.hpp"
 
 
 
@@ -18,7 +20,7 @@ GenEventHandler<SourceT>::~GenEventHandler ()
 {}
 
 template<typename SourceT>
-Response GenEventHandler<SourceT>::pollEvents(SourceT & window)
+Response GenEventHandler<SourceT>::pollEvents(SourceT & window, Plane & plane)
 {
   sf::Event event;
 
@@ -37,6 +39,7 @@ Response GenEventHandler<SourceT>::pollEvents(SourceT & window)
       ievent.pos.x = event.mouseButton.x;
       ievent.pos.y = event.mouseButton.y;
       std::cerr << ievent << std::endl;
+      plane.handleInput(ievent);
       break;
     default:
       break;

@@ -9,7 +9,9 @@
  * I have no idea if this is a good idea or not, but I'm going to try.
  */
 
-#include "response.hpp"
+//#include "response.hpp"
+class Response;
+class Plane;
 
 
 
@@ -23,7 +25,8 @@ public:
 
   virtual ~GenEventHandler ();
 
-  Response pollEvents (SourceT & window);
+  // Plane is temperary. State?
+  Response pollEvents (SourceT & window, Plane & plane);
   /* Poll all events from the window and dispatch them.
    * Params: A mutable reference to the window to poll from.
    * Return: The (should we continue) running value, which is false if

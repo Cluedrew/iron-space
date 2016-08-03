@@ -18,6 +18,7 @@
 #include <SFML/Graphics.hpp>
 #include "collider.hpp"
 #include "game-object-ptr.hpp"
+class InputEvent;
 
 
 
@@ -61,7 +62,7 @@ public:
 
 
 
-  //bool handleInput (InputEvent const & input)
+  bool handleInput (InputEvent const & input);
   /* Called during Input Step:
    * Resive and store a piece of input for this class.
    * Params: Reference to InputEvent.
@@ -69,6 +70,12 @@ public:
    * Return: True if the input was captured.
    */
   //{ return ai->handleInput(input); }
+
+  bool collides (GameObject const & other);
+  bool collides (Collider const & other);
+  /* Possibly will have to be overhaulted.
+   * Check if this object collides with another.
+   */
 
   //void updateAi (sf::Time const & deltaT)
   /* Called during AI Step:

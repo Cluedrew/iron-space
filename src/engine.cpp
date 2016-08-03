@@ -60,7 +60,7 @@ bool Engine::pollInput ()
 
   while (true)
   {
-    Response re = eventHandler.pollEvents(window);
+    Response re = eventHandler.pollEvents(window, map);
     switch (re.type)
     {
     case Response::Done:
