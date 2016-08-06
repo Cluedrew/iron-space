@@ -34,7 +34,11 @@ bool Collider::collides (Collider const & other) const
   float distSqr = sqr<float>(run) + sqr<float>(rise);
   float combinedRSqr = sqr<float>(radius + other.radius);
 
-  std::cout << "Collider: " << distSqr << " <= " << combinedRSqr << std::endl;
+  /*
+  std::cout << "Collider: myPos(" << myPos.x << "," << myPos.y << ") otherPos("
+            << otherPos.x << "," << otherPos.y << ")\n"
+            << "Collider: " << distSqr << " <= " << combinedRSqr << std::endl;
+  */
 
   return (distSqr <= combinedRSqr);
 }

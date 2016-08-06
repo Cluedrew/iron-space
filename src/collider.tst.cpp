@@ -22,18 +22,21 @@ TEST_CASE("Collider Tests")
 
   SECTION("Overlaps")
   {
-    CHECK(cA.collides(cB));
-    CHECK(dot.collides(dot));
+    CHECK( cA.collides(cB) );
+    CHECK( dot.collides(dot) );
   }
 
   SECTION("Edges")
   {
-    CHECK(cA.collides(dot));
-    CHECK(cC.collides(cA));
+    CHECK( cA.collides(dot) );
+    CHECK( cC.collides(cA) );
   }
 
   SECTION("Seperate")
   {
-    CHECK_FALSE(cB.collides(cC));
+    CHECK_FALSE( cB.collides(cC));
+    Collider dot2(9, 9, 0);
+    dot2.update(root);
+    CHECK_FALSE( dot.collides(dot2) );
   }
 }

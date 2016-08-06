@@ -19,6 +19,7 @@
 #include "collider.hpp"
 #include "game-object-ptr.hpp"
 class InputEvent;
+class AiComponent;
 
 
 
@@ -30,7 +31,7 @@ private:
   GameObjectPtr::back_ptr_container ptrsToThis;
   friend class GameObjectPtr;
 
-  //AiComponent * ai;
+  AiComponent * ai;
   //PhysicsComponent * physics;
   //GraphicsComponent * graphics;
   Collider collider;
@@ -39,7 +40,11 @@ private:
 protected:
 public:
   GameObject ();
-  //GameObject (AiComponent * ai,
+  /* A blank constructor. Used mostly for testing the containers and pointers
+   * that work with GameObjects.
+   */
+
+  GameObject (AiComponent * ai);//,
   //            PhysicsComponent * physics,
   //            GraphicsComponent * graphics);
   /* Create a new GameObject from its list of components.
@@ -69,7 +74,6 @@ public:
    * Effect: Varies on AIComponent.
    * Return: True if the input was captured.
    */
-  //{ return ai->handleInput(input); }
 
   bool collides (GameObject const & other);
   bool collides (Collider const & other);
