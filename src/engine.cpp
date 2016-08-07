@@ -9,12 +9,13 @@
 
 
 Engine::Engine (LoggerDetailLevel logdl) :
-  window(), clock(60), log("Engine", logdl),
-  map()
+  window(), state(new WorldState()), clock(60), log("Engine", logdl)
 {}
 
 Engine::~Engine ()
-{}
+{
+  delete state;
+}
 
 // see header
 int Engine::runLoop ()
@@ -24,8 +25,6 @@ int Engine::runLoop ()
   window.create(sf::VideoMode(800, 600), "iron-space",
                 sf::Style::Titlebar | sf::Style::Close);
   // For now it is not sf::Style::Resize-able.
-
-  map.insert(GameObject());
 
   log.note("Finished runLoop init");
 
@@ -60,7 +59,7 @@ bool Engine::pollInput ()
 
   while (true)
   {
-    Response re = eventHandler.pollEvents(window, map);
+    Response re = eventHandler.pollEvents(window, *state);
     switch (re.type)
     {
     case Response::Done:
@@ -119,7 +118,7 @@ void Engine::render ()
 {
   log.data("Begin render");
   window.clear(sf::Color::Black);
-  window.draw(map);
+  window.draw(*state);
   window.display();
   log.data("End render");
 }

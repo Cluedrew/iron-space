@@ -7,7 +7,7 @@
 
 #include "event-stream.tst.hpp"
 #include "gen-event-handler.hpp"
-#include "../plane.hpp"
+#include "../world-state.hpp"
 
 typedef GenEventHandler<EventStream> TestEventHandler;
 
@@ -17,20 +17,20 @@ TEST_CASE("EventHandler test", "[input]")
 {
   TestEventHandler handler;
   EventStream stream;
-  Plane blankplane;
+  WorldState state;
 
   SECTION("No Events")
   {
-    Response re = handler.pollEvents(stream, blankplane);
+    Response re = handler.pollEvents(stream, state);
     REQUIRE( Response::Done == re.type );
   }
 
   SECTION("Closed to Quit")
   {
     stream.addClosed();
-    Response re = handler.pollEvents(stream, blankplane);
+    Response re = handler.pollEvents(stream, state);
     REQUIRE( Response::Quit == re.type );
-    re = handler.pollEvents(stream, blankplane);
+    re = handler.pollEvents(stream, state);
     REQUIRE( Response::Done == re.type );
   }
 }

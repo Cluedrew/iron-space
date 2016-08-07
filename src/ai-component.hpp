@@ -20,9 +20,9 @@ public:
 
   virtual ~AiComponent ();
 
-  bool handleInput (InputEvent const & ievent);
+  bool handleInput (/*GameObject & parent,*/ InputEvent const & ievent);
 
-  void update (sf::Time const & deltaT);
+  void update (/*GameObject & parent,*/ sf::Time const & deltaT);
 };
 
 #endif//AI_COMPONENT

@@ -11,7 +11,7 @@
 
 //#include "response.hpp"
 class Response;
-class Plane;
+class WorldState;
 
 
 
@@ -26,7 +26,7 @@ public:
   virtual ~GenEventHandler ();
 
   // Plane is temperary. State?
-  Response pollEvents (SourceT & window, Plane & plane);
+  Response pollEvents (SourceT & window, WorldState & state);
   /* Poll all events from the window and dispatch them.
    * Params: A mutable reference to the window to poll from.
    * Return: The (should we continue) running value, which is false if

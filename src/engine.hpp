@@ -14,6 +14,7 @@
 #include "util/loop-clock.hpp"
 #include "util/logger.hpp"
 #include "plane.hpp"
+#include "world-state.hpp"
 
 
 
@@ -21,6 +22,8 @@ class Engine
 {
 private:
   sf::RenderWindow window;
+  WorldState * state;
+
   LoopClock clock;
   Logger log;
 
@@ -30,8 +33,6 @@ private:
   void resolveCollisions ();
   void render ();
   void wait ();
-
-  Plane map;
 
 protected:
 public:
