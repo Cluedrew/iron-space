@@ -41,6 +41,8 @@ First a bit about the layout of the code base.
 + *util* is for other files, those that don't have a particlar place, are used
   accross the code base but are not core.
 + *input* contains code that handles input from the user.
++ *states* has the WorldState base class and it's subclasses that define the
+  game's global state.
 + *physics* is for code that runs the physics simulation part of the game.
   Things moving over time, resolving colitions and similar.
 + *graphics* is for image loading and rendering code.

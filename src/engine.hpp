@@ -14,7 +14,7 @@
 #include "util/loop-clock.hpp"
 #include "util/logger.hpp"
 #include "plane.hpp"
-#include "world-state.hpp"
+class WorldState;
 
 
 

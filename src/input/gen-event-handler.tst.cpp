@@ -7,7 +7,7 @@
 
 #include "event-stream.tst.hpp"
 #include "gen-event-handler.hpp"
-#include "../world-state.hpp"
+#include "../states/null-world-state.hpp"
 
 typedef GenEventHandler<EventStream> TestEventHandler;
 
@@ -17,7 +17,7 @@ TEST_CASE("EventHandler test", "[input]")
 {
   TestEventHandler handler;
   EventStream stream;
-  WorldState state;
+  NullWorldState state;
 
   SECTION("No Events")
   {

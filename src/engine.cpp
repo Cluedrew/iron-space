@@ -2,14 +2,14 @@
 
 // Implementation of the games internal Engine.
 
-#include <SFML/Window/Event.hpp>
+//#include <SFML/Window/Event.hpp>
 #include "input/event-handler.hpp"
-#include "game-object.hpp"
+#include "states/running-state.hpp"
 
 
 
 Engine::Engine (LoggerDetailLevel logdl) :
-  window(), state(new WorldState()), clock(60), log("Engine", logdl)
+  window(), state(new RunningState()), clock(60), log("Engine", logdl)
 {}
 
 Engine::~Engine ()

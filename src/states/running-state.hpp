@@ -1,32 +1,34 @@
-#ifndef WORLD_STATE_HPP
-#define WORLD_STATE_HPP
+#ifndef RUNNING_STATE_HPP
+#define RUNNING_STATE_HPP
 
-/* A class that repersents the current state of the world. It itself is a
- * state, mantained by the engine. Or will be, the state-machine part of the
- * Engine is not complete yet so there is one non-abstract state for now.
+/* Class that repersents the world in its basic running state.
+ * Almost all functionality is distributed to the next state.
  */
 
-#include <SFML/Graphics/Drawable.hpp>
-namespace sf
-{
-  class Time;
-  class RenderTarget;
-  class RenderStates;
-}
-class InputEvent;
-#include "plane.hpp"
+#include "world-state.hpp"
+#include "../plane.hpp"
 
 
 
-class WorldState : public sf::Drawable
+class RunningState : public WorldState
 {
 private:
   Plane map;
 
 protected:
 public:
-  WorldState ();
-  virtual ~WorldState ();
+  RunningState ();
+  virtual ~RunningState ();
+
+
+
+  //static WorldState * start (...);
+  /* Possible alternate way to create initial states.
+   */
+
+  //void transition (WorldState * from);
+  /* Pass this state the previous state.
+   */
 
   void handleInput (InputEvent const & ievent);
   /* Handles InputEvents.
