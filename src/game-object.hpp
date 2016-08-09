@@ -81,7 +81,8 @@ public:
    * Check if this object collides with another.
    */
 
-  //void updateAi (sf::Time const & deltaT)
+  // Rather temp at this time.
+  void updateAi (sf::Time const & deltaT);
   /* Called during AI Step:
    * Decide on actions to perform this turn.
    * Params: Time passed.

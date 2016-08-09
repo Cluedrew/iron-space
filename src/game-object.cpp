@@ -12,20 +12,20 @@
 GameObject::GameObject () :
   sf::Transformable(), sf::Drawable(), ptrsToThis(),
   ai(nullptr), //physics(nullptr), graphics(nullptr)
-  collider(300, 300, 25), graphics(25)
+  collider(0, 0, 25), graphics(25)
 {
   collider.update(*this);
-  graphics.move(300 - 25, 300 - 25);
+  graphics.setOrigin(25, 25);
 }
 
 GameObject::GameObject (AiComponent * ai) ://, PhysicsComponent * physics,
     //GraphicsComponent * graphics) :
   sf::Transformable(), sf::Drawable(), ptrsToThis(),
   ai(ai), //physics(physics), graphics(graphics)
-  collider(300, 300, 25), graphics(25)
+  collider(0, 0, 25), graphics(25)
 {
   collider.update(*this);
-  graphics.move(300 - 25, 300 - 25);
+  graphics.setOrigin(25, 25);
 }
 
 GameObject::GameObject (GameObject && other) :
@@ -50,7 +50,7 @@ bool GameObject::handleInput (InputEvent const & input)
 {
   //std::cout << "GameObject: " << input << std::endl;
   //return true;
-  return ai->handleInput(input);
+  return ai->handleInput(*this, input);
 }
 
 // This way is definatly going to have to change.
@@ -63,13 +63,15 @@ bool GameObject::collides (Collider const & other)
   return collider.collides(other);
 }
 
-#if 0
 // see header
 void GameObject::updateAi (sf::Time const & deltaT)
 {
-  ai->update(deltaT);
+  ai->update(*this, deltaT);
+  // quick fix
+  collider.update(*this);
 }
 
+#if 0
 // see header
 void GameObject::handleMessage (MessageEvent const & msg)
 {
@@ -92,6 +94,6 @@ void GameObject::handleCollision (GameObjectPtr with)
 // see header
 void GameObject::draw (sf::RenderTarget & target, sf::RenderStates states) const
 {
-  //states.transform *= getTransform();
+  states.transform *= getTransform();
   target.draw(graphics, states);
 }

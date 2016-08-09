@@ -27,7 +27,9 @@ void RunningState::handleInput (InputEvent const & ievent)
 
 // see header
 void RunningState::update (sf::Time const & deltaT)
-{}
+{
+  map.updateAi(deltaT);
+}
 
 // see header
 void RunningState::draw (sf::RenderTarget & target,

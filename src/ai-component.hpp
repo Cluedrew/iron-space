@@ -7,6 +7,7 @@
  */
 
 namespace sf { class Time; }
+class GameObject;
 class InputEvent;
 
 
@@ -20,9 +21,9 @@ public:
 
   virtual ~AiComponent ();
 
-  bool handleInput (/*GameObject & parent,*/ InputEvent const & ievent);
+  bool handleInput (GameObject & container, InputEvent const & ievent);
 
-  void update (/*GameObject & parent,*/ sf::Time const & deltaT);
+  void update (GameObject & container, sf::Time const & deltaT);
 };
 
 #endif//AI_COMPONENT

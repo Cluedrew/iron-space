@@ -87,6 +87,7 @@ void Engine::updateAi (sf::Time const & deltaT)
  */
 {
   log.data("Begin updateAi");
+  state->update(deltaT);
   log.data("End updateAi");
 }
 

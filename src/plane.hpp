@@ -12,6 +12,7 @@ namespace sf
   class RenderTarget;
   class RenderStates;
   class Drawable;
+  class Time;
 }
 #include "game-object.hpp"
 class InputEvent;
@@ -20,6 +21,12 @@ class InputEvent;
 
 class Plane : public sf::Drawable
 {
+public:
+  // A "for each" interface might be better than having all of these interface
+  // functions, at least for the ones that do nothing other than distribute
+  // the call. I would also need a begin and end function.
+  typedef typename std::vector<GameObject>::iterator iterator;
+
 private:
   std::vector<GameObject> objects;
   sf::View view;
@@ -45,7 +52,7 @@ public:
 
   // The loop functions will have to be filled in.
   //void /*bool*/ handleInput ();
-  //void updateAi (sf::Time const &);
+  void updateAi (sf::Time const &);
   //void updatePhysics (sf::Time const &);
   //void resolveCollisions ();
 
