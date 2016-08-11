@@ -10,17 +10,44 @@
 
 
 Plane::Plane () :
-    objects(), view()
+    objects()
 {}
 
 Plane::~Plane ()
 {}
 
 // see header
-void Plane::insert(GameObject && object)
+Plane::iterator Plane::begin ()
 {
-  objects.emplace_back(std::move(object));
+  return objects.begin();
 }
+
+// see header
+Plane::const_iterator Plane::cbegin () const
+{
+  return objects.cbegin();
+}
+
+// see header
+Plane::iterator Plane::end ()
+{
+  return objects.end();
+}
+
+// see header
+Plane::const_iterator Plane::cend () const
+{
+  return objects.cend();
+}
+
+/*
+bool Plane::nextAt (iterator & curBegin, Collider const & location)
+{
+  std
+}
+
+bool Plane::nextAt (const_iterator & curBegin, Collider const & location)
+*/
 
 // see header
 bool Plane::handleInput (InputEvent const & ievent)
@@ -52,16 +79,4 @@ void Plane::draw (sf::RenderTarget & target, sf::RenderStates states) const
   {
     target.draw(objects[i], states);
   }
-}
-
-void Plane::updateAi (sf::Time const & deltaT)
-{
-  std::vector<GameObject>::iterator it;
-  for (it = objects.begin() ; it != objects.end() ; ++it)
-    it->updateAi(deltaT);
-
-  //for (unsigned int i = 0 ; i < objects.size() ; ++i)
-  //{
-  //  objects[i].updateAi(deltaT);
-  //}
 }

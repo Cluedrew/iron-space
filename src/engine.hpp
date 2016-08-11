@@ -13,7 +13,6 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "util/loop-clock.hpp"
 #include "util/logger.hpp"
-#include "plane.hpp"
 class WorldState;
 
 

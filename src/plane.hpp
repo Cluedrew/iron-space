@@ -2,11 +2,11 @@
 #define PLANE_HPP
 
 /* Implements a "plane" in the game world. Planes are a 2D world that contains
- * GameObjects.
+ * GameObjects. This 2D Plane is not relative to anything, however objects
+ * inside the Plane do have spacial positioning.
  */
 
 #include <vector>
-#include <SFML/Graphics/View.hpp>
 namespace sf
 {
   class RenderTarget;
@@ -22,26 +22,37 @@ class InputEvent;
 class Plane : public sf::Drawable
 {
 public:
-  // A "for each" interface might be better than having all of these interface
-  // functions, at least for the ones that do nothing other than distribute
-  // the call. I would also need a begin and end function.
   typedef typename std::vector<GameObject>::iterator iterator;
+  typedef typename std::vector<GameObject>::const_iterator const_iterator;
 
 private:
   std::vector<GameObject> objects;
-  sf::View view;
 
 protected:
 public:
   Plane ();
   virtual ~Plane ();
 
-  void insert(GameObject && object);
-  /* Insert a GameObject to this plane.
-   * Params: object to be added, must be moved in.
+  template<typename... Args>
+  void emplace (Args&&... args);
+  /* Construct a new GameObject in place within the Plane.
+   * Params: Constructor arguments for the Plane.
+   * Effect: Increases the number of objects in the Plane by 1.
+   *   Constructs a GameObject.
    */
 
-  // I think I might need a way to search the plane.
+  iterator begin ();
+  const_iterator cbegin () const;
+  /* Get an iterator to the beginning of the Plane.
+   * Return: An iterator for the first object in the Plane,
+   *    unless the Plane is empty, then an end iterator is retuned.
+   */
+
+  iterator end ();
+  const_iterator cend () const;
+  /* Get an iterator to the end of the Plane.
+   * Return: The iterator to (one past) the end of the Plane.
+   */
 
   bool handleInput (InputEvent const & ievent);
   /* Give an event to a GameObject to be handled.
@@ -50,17 +61,20 @@ public:
    * Return: True if the event was handled, false otherwise.
    */
 
-  // The loop functions will have to be filled in.
-  //void /*bool*/ handleInput ();
-  void updateAi (sf::Time const &);
-  //void updatePhysics (sf::Time const &);
-  //void resolveCollisions ();
-
   void draw (sf::RenderTarget & target, sf::RenderStates states) const;
   /* Draw all game objects within this plane.
    * Params: target to draw to plus the states that repersent the options.
    * Effect: Draw
    */
 };
+
+
+
+// The one single-line function is not worth the tpp file.
+template<typename... Args>
+inline void Plane::emplace (Args&&... args)
+{
+  objects.emplace_back(std::forward<Args>(args)...);
+}
 
 #endif//PLANE_HPP

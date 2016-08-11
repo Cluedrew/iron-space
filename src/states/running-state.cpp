@@ -11,7 +11,7 @@
 RunningState::RunningState () :
   map()
 {
-  map.insert(GameObject());
+  map.emplace(GameObject());
 }
 
 RunningState::~RunningState ()
@@ -28,7 +28,8 @@ void RunningState::handleInput (InputEvent const & ievent)
 // see header
 void RunningState::update (sf::Time const & deltaT)
 {
-  map.updateAi(deltaT);
+  for (Plane::iterator it = map.begin() ; it != map.end() ; ++it)
+    it->updateAi(deltaT);
 }
 
 // see header
