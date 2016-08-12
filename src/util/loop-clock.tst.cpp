@@ -12,12 +12,12 @@
 #include <chrono>
 #include <thread>
 
-// Sleep for a given time, messured in milliseconds.
+/* Sleep for a given time, messured in milliseconds.
 static void sleepForTime (sf::Time const & time)
 {
   std::chrono::duration<int, std::milli> sleepTime(time.asMilliseconds());
   std::this_thread::sleep_for<int, std::milli>(sleepTime);
-}
+}*/
 
 
 

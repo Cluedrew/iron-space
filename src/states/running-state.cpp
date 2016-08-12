@@ -5,13 +5,18 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Time.hpp>
 #include "../input/input-event.hpp"
+#include "../ai/ai-component.hpp"
+#include "../physics/physics-component.hpp"
+#include "../graphics/graphics-component.hpp"
 
 
 
 RunningState::RunningState () :
   map()
 {
-  map.emplace(GameObject());
+  map.emplace(GameObject(new AiComponent(),
+                new PhysicsComponent(),
+                new GraphicsComponent()));
 }
 
 RunningState::~RunningState ()

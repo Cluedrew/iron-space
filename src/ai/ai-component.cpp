@@ -5,8 +5,8 @@
 #include <iostream>
 #include <cmath>
 #include <SFML/System/Time.hpp>
-#include "input/input-event.hpp"
-#include "game-object.hpp"
+#include "../input/input-event.hpp"
+#include "../game-object.hpp"
 
 
 
@@ -15,6 +15,14 @@ AiComponent::AiComponent ()
 
 AiComponent::~AiComponent ()
 {}
+
+
+
+void AiComponent::init (GameObject & container)
+{
+  container.setPosition(450, 300);
+  //std::cout << "AiComponent::init" << std::endl;
+}
 
 bool AiComponent::handleInput
     (GameObject & container, InputEvent const & ievent)

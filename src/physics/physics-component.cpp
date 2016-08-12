@@ -6,12 +6,31 @@
 
 // see header
 PhysicsComponent::PhysicsComponent () :
-  dx(0), dy(0), spin(0)
+//  dx(0), dy(0), spin(0)
+  collider(0, 0, 25)
 {}
 
 PhysicsComponent::~PhysicsComponent ()
 {}
 
+void PhysicsComponent::updatePosition (sf::Transformable const & parent)
+{
+  collider.update(parent);
+}
+
+bool PhysicsComponent::collides (PhysicsComponent const & other)
+{
+  return collider.collides(other.collider);
+}
+
+bool PhysicsComponent::collides (Collider const & other)
+{
+  return collider.collides(other);
+}
+
+
+
+#if 0
 // see header
 void PhysicsComponent::update (GameObject & obj, sf::Time const & deltaT)
 {
@@ -25,3 +44,4 @@ bool PhysicsComponent::collidesWith (PhysicsComponent &)
 {
   return body.overlaps(other.body);
 }
+#endif

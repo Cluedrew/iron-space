@@ -13,6 +13,9 @@
  * If you are keeping a pointer (or reference) to a GameObject around for a
  * longer time, accross function calls or iterations of the main loop, use a
  * GameObjectPtr. (See its header.)
+ *
+ * TODO Once the class settles down the functions that are just forwarding
+ *   should probably be moved here so they can be inlined.
  */
 
 #include <SFML/Graphics.hpp>
@@ -20,6 +23,8 @@
 #include "game-object-ptr.hpp"
 class InputEvent;
 class AiComponent;
+class PhysicsComponent;
+class GraphicsComponent;
 
 
 
@@ -32,10 +37,8 @@ private:
   friend class GameObjectPtr;
 
   AiComponent * ai;
-  //PhysicsComponent * physics;
-  //GraphicsComponent * graphics;
-  Collider collider;
-  sf::CircleShape graphics;
+  PhysicsComponent * physics;
+  GraphicsComponent * graphics;
 
 protected:
 public:
@@ -44,9 +47,9 @@ public:
    * that work with GameObjects.
    */
 
-  GameObject (AiComponent * ai);//,
-  //            PhysicsComponent * physics,
-  //            GraphicsComponent * graphics);
+  GameObject (AiComponent * ai,
+              PhysicsComponent * physics,
+              GraphicsComponent * graphics);
   /* Create a new GameObject from its list of components.
    * Params: Pointers to the components, ownership of them is taken.
    */
@@ -88,14 +91,12 @@ public:
    * Params: Time passed.
    * Effect: Varies with AIComponent.
    */
-  //{ ai->update(deltaT); }
 
   //void handleMessage (MessageEvent const & msg)
   /* Called during AI Step (by other GameObjects):
    * Params: Message to be recived.
    * Effect: Varies with AIComponent.
    */
-  //{ ai->handleMessage(msg); }
 
   //void updatePhysics (sf::Time const & deltaT)
   /* Called during Physics Step:
@@ -103,7 +104,6 @@ public:
    * Params: Time passed.
    * Effect: Moves the GameObject.
    */
-  //{ physics->update(this, deltaT); }
 
   //void handleCollision (GameObjectPtr with)
   /* Called during Collision Step:
@@ -111,7 +111,6 @@ public:
    * Params: The other GameObject collided with.
    * Effect: Varies with AIComponent.
    */
-  //{ ai->handleCollision(with); }
 
   void draw (sf::RenderTarget & target, sf::RenderStates states) const;
   /* Draw the GameObject, in its current state, to the target.

@@ -3,10 +3,45 @@
 
 /* A physics component, determains if there was a collision and moves the
  * object forward through space.
+ *
+ * WIP Very Work in Progress. Will be an abstract base at some time but I
+ * will probably try to figure out the standard for this component first.
  */
 
+#include "../collider.hpp"
+namespace sf
+{
+  class Transformable;
+}
 
 
+
+class PhysicsComponent
+{
+private:
+  Collider collider;
+
+protected:
+public:
+  PhysicsComponent ();
+  virtual ~PhysicsComponent ();
+
+  void updatePosition (sf::Transformable const & parent);
+  /* Update the position of the internal collider.
+   * WIP
+   */
+
+  bool collides (PhysicsComponent const & other);
+  bool collides (Collider const & other);
+  /* Check for a collision between this class and another.
+   * WIP
+   */
+};
+
+
+
+#if 0
+// OK, I ported over my planed version but it is going to get hacked appart.
 class PhysicsComponent
 {
 private:
@@ -37,5 +72,6 @@ public:
    * ! Still can't get positional data.
    */
 };
+#endif
 
 #endif//PHYSICS_COMPONENT_HPP
