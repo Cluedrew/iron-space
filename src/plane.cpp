@@ -2,10 +2,12 @@
 
 // Implementation of the plane.
 
+#include <iostream>
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include "input/input-event.hpp"
+#include "physics/circle-collider.hpp"
 
 
 
@@ -55,7 +57,7 @@ bool Plane::handleInput (InputEvent const & ievent)
   std::vector<GameObject>::iterator it;
   if (InputEvent::Select == ievent.type)
   {
-    Collider click(ievent.pos.x, ievent.pos.y, 0);
+    CircleCollider click(ievent.pos.x, ievent.pos.y, 0);
     click.update(sf::Transformable());
 
     for (it = objects.begin() ; it != objects.end() ; ++it)

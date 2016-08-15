@@ -1,5 +1,5 @@
-#ifndef COLLIDER_HPP
-#define COLLIDER_HPP
+#ifndef CIRCLE_COLLIDER_HPP
+#define CIRCLE_COLLIDER_HPP
 
 /* A minimal implementation of a collider. It is a circlurlar collider with
  * a defined radius and position.
@@ -7,33 +7,37 @@
 
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/System/Vector2.hpp>
+#include "collider.hpp"
 
 
 
-
-class Collider
+class CircleCollider : public Collider
 {
 private:
   sf::Transformable relativePosition;
   sf::Transformable absolutePosition;
   float radius;
+
+  //bool collidesWith (CircleCollider const & other) const
+  //{ return collides(other); }
+
 protected:
 public:
-  Collider (float x, float y, float r);
-  /* Create a new Collider, giving both the position and radius.
-   * Params: The position of the collider's center in x,y coordinates and
-   *   the radius of the collider's body.
+  CircleCollider (float x, float y, float r);
+  /* Create a new CircleCollider, giving both the position and radius.
+   * Params: The position of the CircleCollider's center in x,y coordinates
+   *   and the radius of the CircleCollider's body.
    *
-   * Note: You should always call update on a collider between its
+   * Note: You should always call update on a (circle) collider between its
    *   construction and any calls to collides.
    */
 
-  Collider (Collider const & other) = default;
-  Collider (Collider && other) = default;
-  Collider & operator=(Collider const & other) = default;
-  Collider & operator=(Collider && other) = default;
+  CircleCollider (CircleCollider const & other) = default;
+  CircleCollider (CircleCollider && other) = default;
+  CircleCollider & operator=(CircleCollider const & other) = default;
+  CircleCollider & operator=(CircleCollider && other) = default;
 
-  virtual ~Collider ();
+  virtual ~CircleCollider ();
 
   void update (sf::Transformable const & root);// = sf::Transform::Identity);
   /* Update the absolute transform of this collider in the world by messuring
@@ -45,6 +49,7 @@ public:
    */
 
   bool collides (Collider const & other) const;
+  bool collidesWith (CircleCollider const & other) const;
   /* Check to see if the two colliders are colliding.
    *   This is 'inclusive' so if they are exactly on the line it counts.
    * Params: A reference to another Collider to check against.
@@ -57,5 +62,5 @@ public:
    */
 };
 
-#endif//COLLIDER_HPP
+#endif//CircleCollider_HPP
 

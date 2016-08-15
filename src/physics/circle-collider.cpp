@@ -1,28 +1,38 @@
-#include "collider.hpp"
+#include "circle-collider.hpp"
 
 // Implementation of the temperary collider.
 // Vector2 is actually included through Transformable.
 
 #include <iostream>
-#include "util/math.hpp"
+#include "../util/math.hpp"
 
 
 
 // Constructors and Deconstructor:
-Collider::Collider (float x, float y, float r) :
+CircleCollider::CircleCollider (float x, float y, float r) :
   relativePosition(), absolutePosition(), radius(r)
 {
   relativePosition.setPosition(x, y);
 }
 
-Collider::~Collider ()
+CircleCollider::~CircleCollider ()
 {}
 
 
 
 // Implementation Functions:
+
+bool CircleCollider::collides (Collider const & other) const
+{
+  CircleCollider const * othis = dynamic_cast<const CircleCollider*>(&other);
+  if (nullptr == othis)
+    return other.collides(*this);
+  else
+    return collidesWith(*othis);
+}
+
 // see header
-bool Collider::collides (Collider const & other) const
+bool CircleCollider::collidesWith (CircleCollider const & other) const
 {
   // I use the squared values because (unless we start dealing with overflow)
   // that should be slightly more accurate.
@@ -35,27 +45,27 @@ bool Collider::collides (Collider const & other) const
   float combinedRSqr = sqr<float>(radius + other.radius);
 
   /*
-  std::cout << "Collider: myPos(" << myPos.x << "," << myPos.y << ") otherPos("
+  std::cout << "CircleCollider: myPos(" << myPos.x << "," << myPos.y << ") otherPos("
             << otherPos.x << "," << otherPos.y << ")\n"
-            << "Collider: " << distSqr << " <= " << combinedRSqr << std::endl;
+            << "CircleCollider: " << distSqr << " <= " << combinedRSqr << std::endl;
   */
 
   return (distSqr <= combinedRSqr);
 }
 
 // see header file
-void Collider::setPos (float x, float y)
+void CircleCollider::setPos (float x, float y)
 {
   relativePosition.setPosition(x, y);
 }
 
 // see header file
-void Collider::setPos (sf::Vector2f const & xy)
+void CircleCollider::setPos (sf::Vector2f const & xy)
 {
   relativePosition.setPosition(xy);
 }
 
-void Collider::update(sf::Transformable const & root)
+void CircleCollider::update(sf::Transformable const & root)
 {
   // I'm not sure how to handle origin.
 

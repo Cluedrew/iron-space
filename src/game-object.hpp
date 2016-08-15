@@ -19,7 +19,8 @@
  */
 
 #include <SFML/Graphics.hpp>
-#include "collider.hpp"
+//#include "physics/collider.hpp"
+class Collider;
 #include "game-object-ptr.hpp"
 class InputEvent;
 class AiComponent;
@@ -31,6 +32,8 @@ class GraphicsComponent;
 class GameObject :
     public sf::Transformable,
     public sf::Drawable
+//,
+//    public Collider
 {
 private:
   GameObjectPtr::back_ptr_container ptrsToThis;
@@ -78,8 +81,8 @@ public:
    * Return: True if the input was captured.
    */
 
-  bool collides (GameObject const & other);
-  bool collides (Collider const & other);
+  bool collides (GameObject const & other) const;
+  bool collides (Collider const & other) const;
   /* Possibly will have to be overhaulted.
    * Check if this object collides with another.
    */

@@ -57,11 +57,11 @@ bool GameObject::handleInput (InputEvent const & input)
 }
 
 // This way is definatly going to have to change.
-bool GameObject::collides (GameObject const & other)
+bool GameObject::collides (GameObject const & other) const
 {
   return physics->collides(*other.physics);
 }
-bool GameObject::collides (Collider const & other)
+bool GameObject::collides (Collider const & other) const
 {
   return physics->collides(other);
 }

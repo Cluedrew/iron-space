@@ -1,23 +1,25 @@
-#include "collider.hpp"
+#include "circle-collider.hpp"
 
-/* Tests for the Collider. It may be temperary, but it is also tested.
+/* Tests for the CircleCollider.
+ *
+ * TODO Go over all of this and adjust it for the new final collider format.
  */
 
 #include <catch.hpp>
 
 
 
-TEST_CASE("Collider Tests")
+TEST_CASE("CircleCollider Tests")
 {
   sf::Transformable root;
 
-  Collider cA(10, 10, 5);
+  CircleCollider cA(10, 10, 5);
   cA.update(root);
-  Collider dot(13, 6, 0);
+  CircleCollider dot(13, 6, 0);
   dot.update(root);
-  Collider cB(0, 10, 10);
+  CircleCollider cB(0, 10, 10);
   cB.update(root);
-  Collider cC(20, 10, 5);
+  CircleCollider cC(20, 10, 5);
   cC.update(root);
 
   SECTION("Overlaps")
@@ -35,7 +37,7 @@ TEST_CASE("Collider Tests")
   SECTION("Seperate")
   {
     CHECK_FALSE( cB.collides(cC));
-    Collider dot2(9, 9, 0);
+    CircleCollider dot2(9, 9, 0);
     dot2.update(root);
     CHECK_FALSE( dot.collides(dot2) );
   }

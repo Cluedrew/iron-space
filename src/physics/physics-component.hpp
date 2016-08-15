@@ -8,7 +8,7 @@
  * will probably try to figure out the standard for this component first.
  */
 
-#include "../collider.hpp"
+#include "circle-collider.hpp"
 namespace sf
 {
   class Transformable;
@@ -19,7 +19,8 @@ namespace sf
 class PhysicsComponent
 {
 private:
-  Collider collider;
+//  Collider collider;
+  CircleCollider collider;
 
 protected:
 public:
