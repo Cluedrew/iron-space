@@ -1,4 +1,4 @@
-#include "ai-component.hpp"
+#include "orbit-ai.hpp"
 
 // Implementation of the AI Component block.
 
@@ -10,34 +10,34 @@
 
 
 
-AiComponent::AiComponent ()
+OrbitAi::OrbitAi () :
+  progress(sf::seconds(0)),
+  xCenter(400), yCenter(300), radius(50)
 {}
 
-AiComponent::~AiComponent ()
+OrbitAi::~OrbitAi ()
 {}
 
 
 
-void AiComponent::init (GameObject & container)
+void OrbitAi::init (GameObject & container)
 {
   container.setPosition(450, 300);
-  //std::cout << "AiComponent::init" << std::endl;
+  //std::cout << "OrbitAi::init" << std::endl;
 }
 
-bool AiComponent::handleInput
+bool OrbitAi::handleInput
     (GameObject & container, InputEvent const & ievent)
 {
-  std::cout << "AiComponent: " << ievent << std::endl;
+  std::cout << "OrbitAi: " << ievent << std::endl;
   return true;
 }
 
-void AiComponent::update
+void OrbitAi::update
     (GameObject & container, sf::Time const & deltaT)
 {
-  static sf::Time progress = sf::seconds(0);
-  //std::cout << "AiComponent Update: " << progress.asSeconds() << std::endl;
+  //std::cout << "OrbitAi Update: " << progress.asSeconds() << std::endl;
 
-  int xCenter = 400, yCenter = 300, radius = 50;
   progress += deltaT;
   float x = xCenter + radius * cos(progress.asSeconds());
   float y = yCenter + radius * sin(progress.asSeconds());

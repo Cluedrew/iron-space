@@ -5,18 +5,18 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Time.hpp>
 #include "../input/input-event.hpp"
-#include "../ai/ai-component.hpp"
+#include "../ai/orbit-ai.hpp"
 #include "../physics/physics-component.hpp"
-#include "../graphics/graphics-component.hpp"
+#include "../graphics/circle-graphics.hpp"
 
 
 
 RunningState::RunningState () :
   map()
 {
-  map.emplace(GameObject(new AiComponent(),
+  map.emplace(GameObject(new OrbitAi(),
                 new PhysicsComponent(),
-                new GraphicsComponent()));
+                new CircleGraphics(25)));
 }
 
 RunningState::~RunningState ()

@@ -7,21 +7,18 @@
  */
 
 #include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Graphics/CircleShape.hpp>
 
 
 
 class GraphicsComponent : public sf::Drawable
 {
 private:
-  sf::CircleShape circle;
-
 protected:
 public:
-  GraphicsComponent ();
-  virtual ~GraphicsComponent ();
+  virtual ~GraphicsComponent () {}
 
-  void draw (sf::RenderTarget & target, sf::RenderStates states) const;
+  virtual void
+  draw (sf::RenderTarget & target, sf::RenderStates states) const = 0;
   /* Draw this object to target.
    * Params: Mutable refence to target to draw to and the states to effect
    *   the draw, including the tranform of the coordinate space.
