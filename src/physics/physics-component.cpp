@@ -20,12 +20,12 @@ void PhysicsComponent::updatePosition (sf::Transformable const & parent)
 
 bool PhysicsComponent::collides (PhysicsComponent const & other)
 {
-  return collider.collides(other.collider);
+  return collider.collidesWith(other.collider);
 }
 
 bool PhysicsComponent::collides (Collider const & other)
 {
-  return collider.collides(other);
+  return other.collides(collider);
 }
 
 

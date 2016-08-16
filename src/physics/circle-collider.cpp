@@ -3,8 +3,9 @@
 // Implementation of the temperary collider.
 // Vector2 is actually included through Transformable.
 
-#include <iostream>
 #include "../util/math.hpp"
+#include "point-collider.hpp"
+#include "align-rect-collider.hpp"
 
 
 
@@ -20,15 +21,15 @@ CircleCollider::~CircleCollider ()
 
 
 
-// Implementation Functions:
-
-bool CircleCollider::collides (Collider const & other) const
+bool CircleCollider::collides (ColliderLeaf const & other) const
 {
-  CircleCollider const * othis = dynamic_cast<const CircleCollider*>(&other);
-  if (nullptr == othis)
-    return other.collides(*this);
-  else
-    return collidesWith(*othis);
+  return other.collidesWith(*this);
+}
+
+static float distSquared(sf::Vector2f const & lhs, sf::Vector2f const & rhs)
+{
+  return sqr<float>( diff<float>(lhs.x, rhs.x) )
+       + sqr<float>( diff<float>(lhs.y, rhs.y) );
 }
 
 // see header
@@ -52,6 +53,30 @@ bool CircleCollider::collidesWith (CircleCollider const & other) const
 
   return (distSqr <= combinedRSqr);
 }
+
+bool CircleCollider::collidesWith (PointCollider const & other) const
+{
+  float distSqr = distSquared(absolutePosition.getPosition(),
+                              other.getPoint());
+  float combinedRSqr = sqr<float>(radius);
+
+  return (distSqr <= combinedRSqr);
+}
+
+bool CircleCollider::collidesWith (AlignRectCollider const & other) const
+{
+  sf::Vector2f center = absolutePosition.getPosition();
+  sf::FloatRect rect = other.getWorldRect();
+  sf::Vector2f closest(
+      limitValue<float>(rect.left, center.x, rect.left + rect.width),
+      limitValue<float>(rect.top,  center.y, rect.top + rect.height));
+
+  float distSqr = distSquared(absolutePosition.getPosition(), closest);
+  float combinedRSqr = sqr<float>(radius);
+
+  return (distSqr <= combinedRSqr);
+}
+
 
 // see header file
 void CircleCollider::setPos (float x, float y)

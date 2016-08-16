@@ -7,19 +7,16 @@
 
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/System/Vector2.hpp>
-#include "collider.hpp"
+#include "collider-leaf.hpp"
 
 
 
-class CircleCollider : public Collider
+class CircleCollider : public ColliderLeaf
 {
 private:
   sf::Transformable relativePosition;
   sf::Transformable absolutePosition;
   float radius;
-
-  //bool collidesWith (CircleCollider const & other) const
-  //{ return collides(other); }
 
 protected:
 public:
@@ -48,8 +45,8 @@ public:
    * Effect: Changes the value of the absolutePosition of this collider.
    */
 
-  bool collides (Collider const & other) const;
-  bool collidesWith (CircleCollider const & other) const;
+  //bool collides (Collider const & other) const;
+  bool collides (ColliderLeaf const & other) const;
   /* Check to see if the two colliders are colliding.
    *   This is 'inclusive' so if they are exactly on the line it counts.
    * Params: A reference to another Collider to check against.
@@ -60,7 +57,14 @@ public:
   /* Move the collider to the given location, relative to its root.
    * Params: The x & y coordinates or a Vector2 with x, then y.
    */
+
+  bool collidesWith (CircleCollider const & other) const;
+  bool collidesWith (PointCollider const & other) const;
+  bool collidesWith (AlignRectCollider const & other) const;
+  /* Check for a collision between two leaves of particular types.
+   * Params: Reference to the other ColliderLeaf childtype.
+   * Return: True if there is a collision, false otherwise.
+   */
 };
 
-#endif//CircleCollider_HPP
-
+#endif//CIRCLE_COLLIDER_HPP
