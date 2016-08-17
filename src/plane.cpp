@@ -45,10 +45,28 @@ Plane::const_iterator Plane::cend () const
 /*
 bool Plane::nextAt (iterator & curBegin, Collider const & location)
 {
-  std
+  iterator curEnd = objects.end();
+
+#define NEXT_AT_BODY				\
+  if (curEnd == curBegin)			\
+    return false;				\
+						\
+  do {						\
+    ++curBegin;					\
+						\
+    if (curEnd == curBegin)			\
+      return false;				\
+  }						\
+  while (curBegin->collides(location));		\
+  return true;
 }
 
-bool Plane::nextAt (const_iterator & curBegin, Collider const & location)
+bool Plane::nextAt (const_iterator & curBegin, Collider const & location) const
+{
+  const_iterator curEnd = objects.cend();
+
+  NEXT_AT_BODY
+}
 */
 
 // see header
@@ -82,3 +100,27 @@ void Plane::draw (sf::RenderTarget & target, sf::RenderStates states) const
     target.draw(objects[i], states);
   }
 }
+
+
+#if 0
+// Thoughts on what might be TODO
+
+template<typename Object2D>
+class Plane
+/* I am considering changing the Plane class to be a template. Moves of the
+ * GameObject actually has nothing to do with how it is stored in the Plane
+ * and so I could save myself some effort on testing this way.
+ *
+ * Object2D must implement a function to get its 2D position (probably as
+ * a sf::Vector2f) and another that checks for collisions between two
+ * instances of that class.
+ *
+ * Being Drawable might actually be drawn out into a seperate class. */
+template<typename Drawable2D>
+class PlaneDrawable : public Plane<Drawable2D>, public sf::Drawable
+/* Again mostly for seperation of conserns. Being Drawable doesn't have
+ * anything to do with the 2D shape rules that define how something is
+ * stored in the plane. Also compartamentalizes testing.
+ */
+
+#endif

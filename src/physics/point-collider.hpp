@@ -23,6 +23,11 @@ protected:
 public:
   PointCollider (float x, float y);
   PointCollider (sf::Vector2<float> xy);
+  /* Define a PointCollider by its 2d coordinates.
+   *   The given location is in local space, which is assumed to be the
+   *   same as world space initally (call update to change that.
+   * Params: Either the local x & y coordinates or a Vector2f with both.
+   */
 
   virtual ~PointCollider ();
 

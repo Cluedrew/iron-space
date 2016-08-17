@@ -7,9 +7,13 @@
  * Classes that inherites directly from Collider, without going through
  * ColliderLeaf, is tested elsewhere as they (should not be) part of this
  * interlocked group.
+ *
+ * TODO Test all six combinations, with and without transformations.
  */
 
 #include "circle-collider.hpp"
+#include "point-collider.hpp"
+#include "align-rect-collider.hpp"
 
 
 
@@ -50,13 +54,43 @@ TEST_CASE("Testing ColliderLeaf and child-classes", "[physics]")
   }
 
   SECTION("Check Circle/Point")
-  {}
+  {
+    CircleCollider cA(10, 10, 5);
+    cA.update(root);
+    PointCollider pA(10, 10);
+    CHECK( cA.collides(pA) );
+  }
+
   SECTION("Check Circle/AlignRect")
   {}
+
   SECTION("Check Point/Point")
-  {}
+  {
+    PointCollider pA(1, 3);
+    PointCollider pB(3, 1);
+    PointCollider pC(1, 3);
+    CHECK_FALSE( pA.collides(pB) );
+    CHECK( pA.collides(pC) );
+  }
+
   SECTION("Check Point/AlignRect")
-  {}
+  {
+    AlignRectCollider rect(10, 10, 10, 10);
+    PointCollider pA(15, 15);
+    CHECK( rect.collides(rect) );
+  }
+
   SECTION("Check AlignRect/AlignRect")
   {}
+}
+
+TEST_CASE("Testing sf::Rect::overlap", "[physics][sfml]")
+{
+  sf::FloatRect rectA(10, 10, 10, 10);
+  sf::FloatRect rectB(15, 15, 10, 10);
+  sf::FloatRect rectC(20, 10, 10, 10);
+  sf::FloatRect rectD(20, 20, 10, 10);
+  REQUIRE( rectA.intersects(rectB) );
+  REQUIRE_FALSE( rectA.intersects(rectC) );
+  REQUIRE_FALSE( rectA.intersects(rectD) );
 }

@@ -24,6 +24,12 @@ protected:
 public:
   AlignRectCollider (float left, float top, float width, float height);
   AlignRectCollider (sf::FloatRect const & rect);
+  /* Create a collider from the coordinates given or a rect.
+   *   Coordinates are given in local space, which is 1to1 to world space
+   *   until update is called.
+   * Params: The position and size of the rect, position is messured from
+   *   the top left of the screen.
+   */
 
   virtual ~AlignRectCollider ();
 

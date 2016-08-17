@@ -10,11 +10,12 @@
 
 AlignRectCollider::AlignRectCollider
     (float left, float top, float width, float height) :
-  absRect(), left(left), top(top), width(width), height(height)
+  absRect(left, top, width, height),
+  left(left), top(top), width(width), height(height)
 {}
 
 AlignRectCollider::AlignRectCollider (sf::FloatRect const & rect) :
-  absRect(), left(rect.left), top(rect.top),
+  absRect(rect), left(rect.left), top(rect.top),
   width(rect.width), height(rect.height)
 {}
 

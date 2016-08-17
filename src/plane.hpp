@@ -4,21 +4,26 @@
 /* Implements a "plane" in the game world. Planes are a 2D world that contains
  * GameObjects. This 2D Plane is not relative to anything, however objects
  * inside the Plane do have spacial positioning.
+ *
+ * template<typename Object2D> class Plane
+ * Where Object2D has a: sf::Vector2f getPosition() function, collides and
+ * Drawable. Drawable I could cut out, because it is not part of the main
+ * purpose, but everything I would use this template for uses it.
  */
 
 #include <vector>
+#include <SFML/Graphics/Drawable.hpp>
 namespace sf
 {
   class RenderTarget;
   class RenderStates;
-  class Drawable;
-  class Time;
 }
 #include "game-object.hpp"
 class InputEvent;
 
 
 
+//template<typename Object2D>
 class Plane : public sf::Drawable
 {
 public:
@@ -64,7 +69,7 @@ public:
   void draw (sf::RenderTarget & target, sf::RenderStates states) const;
   /* Draw all game objects within this plane.
    * Params: target to draw to plus the states that repersent the options.
-   * Effect: Draw
+   * Effect: Draw all the objects in the Plane.
    */
 };
 

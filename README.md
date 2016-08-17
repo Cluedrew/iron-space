@@ -48,9 +48,23 @@ First a bit about the layout of the code base.
 + *graphics* is for image loading and rendering code.
 + *audio* is for sound loading and playing code.
 
+### Testing ###
+
+As mentioned previously testing for this project is done by *Catch.hpp*, with
+all tests and extra testing code put in *.tst* files (which goes before the
+file type extention.
+
+Tags:
++   [util], [input], [states], [physics], [graphics], [audio]: Tags that show
+    which sub-directory the test came from.
++   [@lib], [sfml]: Tags for marking tests on external dependances. [@lib]
+    refers to all of them. The others refer to a particular library. These are
+    not ment to be complete, but rather to check assumptions.
+
 ### Main Loop ###
 The main loop is the heart of the program, with each iteration of the loop
-another beat. The highest level of the game looks like this:
+another beat. It is encoded in the `Engine` class. The highest level of the
+game looks like this:
 
 1. Set Up
 2. Main Loop
@@ -60,33 +74,38 @@ And comparitively, not a lot happens in steps 1 & 3. The main loop itself can
 be divided into several parts:
 
 1. Poll Input
-2. Update AI
-3. Update Physics
-4. Collisions
-5. Render
-6. Wait
+2. Update
+3. Render
+4. Wait
 
-Input is distributed at the time of polling, but any serious computation
-from it should be resolved during AI.
+The `Engine` controls the timing of these steps. Actually handling them is
+delegated. Most often to a `WorldState`, which repersents the current state
+of the program. The `Engine` itself is a state machine for the `WorldState`s.
 
-AI is where most of the thinking occures, given the input and the time passed
-(that is, internal changes) each GameObject decides what it is going to do.
+Poll Input grabs all the input that has occured over the last frame,
+translates it into the internal events used by the game and then distributes
+them. The `InputHandler` is responsible for the translation, as well as
+skimming off events some of the high level messages. The current `WorldState`
+distributes or discards the rest of the input.
 
-AI is seperated from Physics for two reasons: first they are going in
-different components, secondly it creates a pesudo-double buffer as all AI
-looks at the physical world of the last frame before the physics updates.
+Update moves everything forward in time, by the amount of time a single frame
+reperents. How this is handled entirely by the current `WorldState`.
+The current convention is:
 
-Physics is when all of the transforms get updated.
+1. Update AI
+2. Update Physics
+3. Collisions
 
-Collisions scans for things that are overlapping and tells them about that.
-Because we are in space things can move over and under each other, but
-reaching each other may repersent something.
+That is everything decides what they do and how to move in AI. Then they do it
+in Physics for a pesudo double buffer. Than collisions are detected and
+resolved. Objects never actually bump into each other, as the game is in space
+but overlapping is still a trigger.
 
-Render simply goes through all the GameObjects (in draw order) and gets
-them to draw themselves on screen. Also here the audio service resolves any
-requests that have been made to it over the frame.
+Render clears, redraws and updates the screen. The draw part of this is
+delegated to the `WorldState`.
 
-Wait causes the program to rest for the remaining time in this frame.
+Wait causes the program to rest for the remaining time in this frame. It is
+handled with a `LoopClock`.
 
 ### Services ###
 Services are systems that cut accross the code base. They generally exist to

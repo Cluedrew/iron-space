@@ -11,11 +11,11 @@
 
 
 PointCollider::PointCollider (float x, float y) :
-  absX(0), absY(0), relX(x), relY(y)
+  absX(x), absY(y), relX(x), relY(y)
 {}
 
 PointCollider::PointCollider (sf::Vector2f xy) :
-  absX(0), absY(0), relX(xy.x), relY(xy.y)
+  absX(xy.x), absY(xy.y), relX(xy.x), relY(xy.y)
 {}
 
 PointCollider::~PointCollider ()

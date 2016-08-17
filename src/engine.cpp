@@ -32,9 +32,9 @@ int Engine::runLoop ()
   while (running)
   {
     running = pollInput();
-    updateAi(clock.getIncrement());
-    updatePhysics(clock.getIncrement());
-    resolveCollisions();
+    log.data("Begin update");
+    state->update(clock.getIncrement());
+    log.data("End update");
     render();
     wait();
   }
@@ -78,38 +78,6 @@ bool Engine::pollInput ()
 
   log.warn("Reached end of pollInput body.");
   return true;
-}
-
-void Engine::updateAi (sf::Time const & deltaT)
-/* Gets all GameObjects to update their AI.
- * Params: Length of the current frame.
- * Effect: Updates AI according to the time passed and the recent input.
- */
-{
-  log.data("Begin updateAi");
-  state->update(deltaT);
-  log.data("End updateAi");
-}
-
-void Engine::updatePhysics (sf::Time const & deltaT)
-/* Gets all GameObjects to update their physics.
- * Params: Length of the current frame.
- * Effect: Updates Physics according to the time passed and the recent
- *   AI decisions.
- */
-{
-  log.data("Begin updatePhysics");
-  log.data("End updatePhysics");
-}
-
-void Engine::resolveCollisions ()
-/* Checks for collisions, that is any overlapping objects.
- * Effect: Triggers collision resloving code for any collisions (overlap)
- *   that are occuring.
- */
-{
-  log.data("Begin resolveCollisions");
-  log.data("End resolveCollisions");
 }
 
 void Engine::render ()

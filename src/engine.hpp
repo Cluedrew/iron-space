@@ -27,15 +27,16 @@ private:
   Logger log;
 
   bool pollInput ();
-  void updateAi (sf::Time const &);
-  void updatePhysics (sf::Time const &);
-  void resolveCollisions ();
   void render ();
   void wait ();
 
 protected:
 public:
   Engine (LoggerDetailLevel logdl = LoggerDetailLevel::Quiet);
+  /* Create an Engine.
+   * Params: The LoggerDetailLevel for the Engine's own Logger.
+   */
+
   virtual ~Engine ();
 
   int runLoop ();

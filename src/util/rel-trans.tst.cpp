@@ -12,7 +12,7 @@
 
 
 // I think I should get another tag for this one, but I'm not sure what.
-TEST_CASE("Confirm RelativeTransformable::identity", "[util]")
+TEST_CASE("Confirm RelativeTransformable::identity", "[util][sfml]")
 {
   sf::Transformable const & identity = RelativeTransformable::identity;
 

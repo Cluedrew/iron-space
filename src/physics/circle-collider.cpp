@@ -27,29 +27,23 @@ bool CircleCollider::collides (ColliderLeaf const & other) const
 }
 
 static float distSquared(sf::Vector2f const & lhs, sf::Vector2f const & rhs)
+/* Calculate the square distance between two points.
+ *   This saves us the more complex square root operation.
+ * Params: Two 2d points, order does not matter.
+ * Return: The distance between them squared.
+ */
 {
-  return sqr<float>( diff<float>(lhs.x, rhs.x) )
-       + sqr<float>( diff<float>(lhs.y, rhs.y) );
+  return sqr<float>(lhs.x - rhs.x) + sqr<float>(lhs.y - rhs.y);
 }
 
 // see header
 bool CircleCollider::collidesWith (CircleCollider const & other) const
 {
-  // I use the squared values because (unless we start dealing with overflow)
-  // that should be slightly more accurate.
   sf::Vector2f myPos = absolutePosition.getPosition();
   sf::Vector2f otherPos = other.absolutePosition.getPosition();
-  float run = myPos.x - otherPos.x;
-  float rise = myPos.y - otherPos.y;
 
-  float distSqr = sqr<float>(run) + sqr<float>(rise);
+  float distSqr = distSquared(myPos, otherPos);
   float combinedRSqr = sqr<float>(radius + other.radius);
-
-  /*
-  std::cout << "CircleCollider: myPos(" << myPos.x << "," << myPos.y << ") otherPos("
-            << otherPos.x << "," << otherPos.y << ")\n"
-            << "CircleCollider: " << distSqr << " <= " << combinedRSqr << std::endl;
-  */
 
   return (distSqr <= combinedRSqr);
 }

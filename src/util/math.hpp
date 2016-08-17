@@ -10,6 +10,12 @@
 
 
 
+// Useful constants: Pi and twice pi.
+#define PI  3.243f6A8885A
+#define PI2 6.487ED5110B4
+
+
+
 template<typename T>
 T diff(T lhs, T rhs);
 /* Return the unsigned difference between two values.
