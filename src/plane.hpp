@@ -23,15 +23,15 @@ class InputEvent;
 
 
 
-//template<typename Object2D>
-class Plane : public sf::Drawable
+template<typename Object2D>
+class Plane// : public sf::Drawable
 {
 public:
-  typedef typename std::vector<GameObject>::iterator iterator;
-  typedef typename std::vector<GameObject>::const_iterator const_iterator;
+  typedef typename std::vector<Object2D>::iterator iterator;
+  typedef typename std::vector<Object2D>::const_iterator const_iterator;
 
 private:
-  std::vector<GameObject> objects;
+  std::vector<Object2D> objects;
 
 protected:
 public:
@@ -40,10 +40,10 @@ public:
 
   template<typename... Args>
   void emplace (Args&&... args);
-  /* Construct a new GameObject in place within the Plane.
+  /* Construct a new Object2D in place within the Plane.
    * Params: Constructor arguments for the Plane.
    * Effect: Increases the number of objects in the Plane by 1.
-   *   Constructs a GameObject.
+   *   Constructs a Object2D.
    */
 
   iterator begin ();
@@ -60,13 +60,15 @@ public:
    */
 
   bool handleInput (InputEvent const & ievent);
-  /* Give an event to a GameObject to be handled.
+  /* Give an event to a GameObject* to be handled.
+   *   * This one needs a GameObject until I have a better solution.
+   *     The handle input function is part of the Object2D requirents.
    * Params: An InputEvent (TODO what types)
    * Effect: Event is handled (may result in additional changes in updates).
    * Return: True if the event was handled, false otherwise.
    */
 
-  void draw (sf::RenderTarget & target, sf::RenderStates states) const;
+  //void draw (sf::RenderTarget & target, sf::RenderStates states) const;
   /* Draw all game objects within this plane.
    * Params: target to draw to plus the states that repersent the options.
    * Effect: Draw all the objects in the Plane.
@@ -75,11 +77,6 @@ public:
 
 
 
-// The one single-line function is not worth the tpp file.
-template<typename... Args>
-inline void Plane::emplace (Args&&... args)
-{
-  objects.emplace_back(std::forward<Args>(args)...);
-}
+#include "plane.tpp"
 
 #endif//PLANE_HPP

@@ -6,14 +6,14 @@
  */
 
 #include "world-state.hpp"
-#include "../plane.hpp"
+#include "../plane-drawable.hpp"
 
 
 
 class RunningState : public WorldState
 {
 private:
-  Plane map;
+  PlaneDrawable<GameObject> map;
 
 protected:
 public:

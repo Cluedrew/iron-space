@@ -10,8 +10,10 @@
  * nanoseconds on each call, by the time there are enough calls for it to
  * be a problem pruning calls should be sufficant.
  *
- * TODO It is working, and a lot better than it was before. Now I just have
- *   to see about getting a standard update protocall in and working.
+ * TODO Create a standard way of getting them position, because they are
+ *   can be checked against multiple times before moving I would like to use
+ *   an cash and update model. I just have to find one that works for all
+ *   colliders. Also I have some problems with rotation and scale.
  */
 
 class ColliderLeaf;

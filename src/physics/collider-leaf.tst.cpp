@@ -62,7 +62,33 @@ TEST_CASE("Testing ColliderLeaf and child-classes", "[physics]")
   }
 
   SECTION("Check Circle/AlignRect")
-  {}
+  {
+    CircleCollider cLeft(0, 5, 1);
+    cLeft.update(root);
+    AlignRectCollider rSquare(1, 4, 4, 4);
+    CircleCollider cTopRight(-2, 12, 5);
+    cTopRight.update(root);
+    CircleCollider cBottom(2, 9.5, 1.5);
+    cBottom.update(root);
+    AlignRectCollider rTall(2, 0, 1, 10);
+
+    SECTION("Overlaps")
+    {
+      CHECK( rTall.collides(cBottom) );
+    }
+
+    SECTION("Edges")
+    {
+      CHECK_FALSE( rSquare.collides(cLeft) );
+      CHECK_FALSE( rSquare.collides(cTopRight) );
+      CHECK_FALSE( cBottom.collides(rSquare) );
+    }
+
+    SECTION("Seperate")
+    {
+      CHECK_FALSE( cLeft.collides(rTall) );
+    }
+  }
 
   SECTION("Check Point/Point")
   {
@@ -81,7 +107,28 @@ TEST_CASE("Testing ColliderLeaf and child-classes", "[physics]")
   }
 
   SECTION("Check AlignRect/AlignRect")
-  {}
+  {
+    AlignRectCollider rLeft(10, 5, 5, 5);
+    AlignRectCollider rMid(10, 7, 5, 5);
+    AlignRectCollider rRight(7, 12, 5, 5);
+    AlignRectCollider rDown(12, 11, 5, 5);
+
+    SECTION("Overlaps")
+    {
+      CHECK( rLeft.collides(rMid) );
+    }
+
+    SECTION("Edges")
+    {
+      CHECK_FALSE( rMid.collides(rRight) );
+      CHECK_FALSE( rDown.collides(rRight) );
+    }
+
+    SECTION("Seperate")
+    {
+      CHECK_FALSE( rDown.collides(rLeft) );
+    }
+  }
 }
 
 TEST_CASE("Testing sf::Rect::overlap", "[physics][sfml]")

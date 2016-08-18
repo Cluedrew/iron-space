@@ -33,7 +33,8 @@ void RunningState::handleInput (InputEvent const & ievent)
 // see header
 void RunningState::update (sf::Time const & deltaT)
 {
-  for (Plane::iterator it = map.begin() ; it != map.end() ; ++it)
+  PlaneDrawable<GameObject>::iterator it;
+  for (it = map.begin() ; it != map.end() ; ++it)
     it->updateAi(deltaT);
 }
 
@@ -41,5 +42,5 @@ void RunningState::update (sf::Time const & deltaT)
 void RunningState::draw (sf::RenderTarget & target,
     sf::RenderStates states) const
 {
-  target.draw(map);
+  target.draw(map, states);
 }

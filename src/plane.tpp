@@ -1,3 +1,6 @@
+#ifndef PLANE_TPP
+#define PLANE_TPP
+
 #include "plane.hpp"
 
 // Implementation of the plane.
@@ -11,39 +14,53 @@
 
 
 
-Plane::Plane () :
+template<typename Object2D>
+Plane<Object2D>::Plane () :
     objects()
 {}
 
-Plane::~Plane ()
+template<typename Object2D>
+Plane<Object2D>::~Plane ()
 {}
 
 // see header
-Plane::iterator Plane::begin ()
+template<typename Object2D>
+template<typename... Args>
+void Plane<Object2D>::emplace (Args&&... args)
+{
+  objects.emplace_back(std::forward<Args>(args)...);
+}
+
+// see header
+template<typename Object2D>
+typename Plane<Object2D>::iterator Plane<Object2D>::begin ()
 {
   return objects.begin();
 }
 
 // see header
-Plane::const_iterator Plane::cbegin () const
+template<typename Object2D>
+typename Plane<Object2D>::const_iterator Plane<Object2D>::cbegin () const
 {
   return objects.cbegin();
 }
 
 // see header
-Plane::iterator Plane::end ()
+template<typename Object2D>
+typename Plane<Object2D>::iterator Plane<Object2D>::end ()
 {
   return objects.end();
 }
 
 // see header
-Plane::const_iterator Plane::cend () const
+template<typename Object2D>
+typename Plane<Object2D>::const_iterator Plane<Object2D>::cend () const
 {
   return objects.cend();
 }
 
 /*
-bool Plane::nextAt (iterator & curBegin, Collider const & location)
+bool Plane<Object2D>::nextAt (iterator & curBegin, Collider const & location)
 {
   iterator curEnd = objects.end();
 
@@ -61,7 +78,8 @@ bool Plane::nextAt (iterator & curBegin, Collider const & location)
   return true;
 }
 
-bool Plane::nextAt (const_iterator & curBegin, Collider const & location) const
+bool Plane<Object2D>::nextAt
+    (const_iterator & curBegin, Collider const & location) const
 {
   const_iterator curEnd = objects.cend();
 
@@ -70,7 +88,8 @@ bool Plane::nextAt (const_iterator & curBegin, Collider const & location) const
 */
 
 // see header
-bool Plane::handleInput (InputEvent const & ievent)
+template<typename Object2D>
+bool Plane<Object2D>::handleInput (InputEvent const & ievent)
 {
   std::vector<GameObject>::iterator it;
   if (InputEvent::Select == ievent.type)
@@ -92,14 +111,15 @@ bool Plane::handleInput (InputEvent const & ievent)
   return false;
 }
 
-// see header
-void Plane::draw (sf::RenderTarget & target, sf::RenderStates states) const
+/* see header
+template<typename Object2D>
+void Plane<Object2D>::draw (sf::RenderTarget & target, sf::RenderStates states) const
 {
   for (unsigned int i = 0 ; i < objects.size() ; ++i)
   {
     target.draw(objects[i], states);
   }
-}
+}*/
 
 
 #if 0
@@ -124,3 +144,5 @@ class PlaneDrawable : public Plane<Drawable2D>, public sf::Drawable
  */
 
 #endif
+
+#endif//PLANE_TPP
