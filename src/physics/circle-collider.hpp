@@ -16,6 +16,9 @@ class CircleCollider : public ColliderLeaf
 private:
   sf::Transformable relativePosition;
   sf::Transformable absolutePosition;
+
+  //sf::Vector2f localCenter;
+  //sf::Vector2f worldCenter;
   float radius;
 
 protected:

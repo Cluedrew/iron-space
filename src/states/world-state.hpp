@@ -14,7 +14,6 @@ namespace sf
   class RenderStates;
 }
 class InputEvent;
-#include "../plane.hpp"
 
 
 

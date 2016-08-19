@@ -1,5 +1,5 @@
 #include "loop-clock.hpp"
-#include "catch.hpp"
+#include <catch.hpp>
 
 /* Testing with the LoopClock.
  * Checks the Increments Per Second calculation, as well as some of the timing

@@ -8,6 +8,10 @@
  * This is a class that is dependant on it is child-classes and things are
  * very interdependant. Every child-class must have a collidesWith that all
  * child-classes must implement.
+ *
+ * If two ColliderLeaves are exactly on each others edge that does not make a
+ * collision (the exception is between to PointColliders). So if you have a
+ * 50 wide block, the next block over can just be 50 over.
  */
 
 #include "collider.hpp"

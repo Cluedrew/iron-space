@@ -1,12 +1,12 @@
+#include "gen-event-handler.hpp"
+#include <catch.hpp>
+
 /* Tests the GenEventHandler with an EventStream. Because the EventHandler is
  * wired up to the SFML Window we can't test it automatically, so this is used
  * instead and the EventHandler itself is kept as thin as possible.
  */
 
-#include <catch.hpp>
-
 #include "event-stream.tst.hpp"
-#include "gen-event-handler.hpp"
 #include "../states/null-world-state.hpp"
 
 typedef GenEventHandler<EventStream> TestEventHandler;

@@ -1,10 +1,43 @@
 #include "plane.hpp"
+#include <catch.hpp>
 
 /* Tests for the Plane Container.
  * Currently there is not a lot to test, but I'm getting started.
  */
 
-#include <catch.hpp>
+
+
+// Replacement for the GameObject for testing the Plane.
+class TestObject
+{
+private:
+  Collider * body;
+
+protected:
+public:
+  TestObject() :
+  /* Create a new TestObject with no body, it will never collide.
+   */
+      body(nullptr)
+  {}
+
+  TestObject(Collider * body) :
+  /* Create a new TestObject with a body.
+   * Params: Pointer to Collider, TestObject takes ownership.
+   */
+      body(body)
+  {}
+
+  bool collides (TestObject const & other) const
+  {
+    return body && other.body && body->collides(*other.body);
+  }
+
+  bool collides (Collider const & other) const
+  {
+    return body && body->collides(other);
+  }
+};
 
 
 

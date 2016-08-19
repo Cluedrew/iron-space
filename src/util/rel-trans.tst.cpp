@@ -1,4 +1,5 @@
 #include "rel-trans.hpp"
+#include <catch.hpp>
 
 /* Tests for the RelativeTransformable class. The first TEST_CASE is also
  * a bit of a sanity check, making sure that the identity Transformable
@@ -6,8 +7,6 @@
  * not define what the default transformable is, so I want to make sure it
  * never changes. The second is actually tests about relative transformation.
  */
-
-#include <catch.hpp>
 
 
 

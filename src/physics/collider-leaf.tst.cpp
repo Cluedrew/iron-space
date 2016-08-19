@@ -35,13 +35,12 @@ TEST_CASE("Testing ColliderLeaf and child-classes", "[physics]")
     SECTION("Overlaps")
     {
       CHECK( cA.collides(cB) );
-      CHECK( dot.collides(dot) );
     }
 
     SECTION("Edges")
     {
-      CHECK( cA.collides(dot) );
-      CHECK( cC.collides(cA) );
+      CHECK_FALSE( cA.collides(dot) );
+      CHECK_FALSE( cC.collides(cA) );
     }
 
     SECTION("Seperate")
@@ -51,14 +50,35 @@ TEST_CASE("Testing ColliderLeaf and child-classes", "[physics]")
       dot2.update(root);
       CHECK_FALSE( dot.collides(dot2) );
     }
+
+    SECTION("Zero Size Circle")
+    {
+      CHECK_FALSE( dot.collides(dot) );
+    }
   }
 
   SECTION("Check Circle/Point")
   {
     CircleCollider cA(10, 10, 5);
     cA.update(root);
-    PointCollider pA(10, 10);
-    CHECK( cA.collides(pA) );
+
+    SECTION("Overlaps")
+    {
+      PointCollider pA(10, 10);
+      CHECK( cA.collides(pA) );
+    }
+
+    SECTION("Edges")
+    {
+      PointCollider pB(10, 15);
+      CHECK_FALSE( cA.collides(pB) );
+    }
+
+    SECTION("Seperate")
+    {
+      PointCollider pC(15, 15);
+      CHECK_FALSE( cA.collides(pC) );
+    }
   }
 
   SECTION("Check Circle/AlignRect")

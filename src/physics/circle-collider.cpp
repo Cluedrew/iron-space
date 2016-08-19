@@ -45,7 +45,7 @@ bool CircleCollider::collidesWith (CircleCollider const & other) const
   float distSqr = distSquared(myPos, otherPos);
   float combinedRSqr = sqr<float>(radius + other.radius);
 
-  return (distSqr <= combinedRSqr);
+  return (distSqr < combinedRSqr);
 }
 
 bool CircleCollider::collidesWith (PointCollider const & other) const
@@ -54,7 +54,7 @@ bool CircleCollider::collidesWith (PointCollider const & other) const
                               other.getPoint());
   float combinedRSqr = sqr<float>(radius);
 
-  return (distSqr <= combinedRSqr);
+  return (distSqr < combinedRSqr);
 }
 
 bool CircleCollider::collidesWith (AlignRectCollider const & other) const
@@ -65,10 +65,10 @@ bool CircleCollider::collidesWith (AlignRectCollider const & other) const
       limitValue<float>(rect.left, center.x, rect.left + rect.width),
       limitValue<float>(rect.top,  center.y, rect.top + rect.height));
 
-  float distSqr = distSquared(absolutePosition.getPosition(), closest);
+  float distSqr = distSquared(center, closest);
   float combinedRSqr = sqr<float>(radius);
 
-  return (distSqr <= combinedRSqr);
+  return (distSqr < combinedRSqr);
 }
 
 

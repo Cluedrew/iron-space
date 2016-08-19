@@ -1,10 +1,10 @@
 #include "event-stream.tst.hpp"
+#include <catch.hpp>
 
 // Implementation of the event stream testing tool.
 
 #include <cassert>
 #include <limits>
-#include <catch.hpp>
 
 
 

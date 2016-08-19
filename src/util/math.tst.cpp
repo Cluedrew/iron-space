@@ -1,5 +1,5 @@
 #include "math.hpp"
-#include "catch.hpp"
+#include <catch.hpp>
 
 /* Some trivial tests for util/math.
  * Although the tests have some value it is mostly an experament with catch.
