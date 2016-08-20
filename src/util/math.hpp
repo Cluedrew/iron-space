@@ -11,8 +11,8 @@
 
 
 // Useful constants: Pi and twice pi.
-#define PI  3.243f6A8885A
-#define PI2 6.487ED5110B4
+#define PI  0x3.243F6A8885Ap0
+#define PI2 0x6.487ED5110B4p0
 
 
 

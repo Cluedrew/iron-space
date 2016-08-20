@@ -2,7 +2,6 @@
 
 // Implementation of Point Collider
 
-#include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Transform.hpp>
 #include "circle-collider.hpp"
 #include "align-rect-collider.hpp"
@@ -11,15 +10,20 @@
 
 
 PointCollider::PointCollider (float x, float y) :
-  absX(x), absY(y), relX(x), relY(y)
+  localPos(x, y), worldPos(x, y)
 {}
 
 PointCollider::PointCollider (sf::Vector2f xy) :
-  absX(xy.x), absY(xy.y), relX(xy.x), relY(xy.y)
+  localPos(xy), worldPos(xy)
 {}
 
 PointCollider::~PointCollider ()
 {}
+
+void PointCollider::update (sf::Transform const & root)
+{
+  worldPos = root.transformPoint(localPos);
+}
 
 bool PointCollider::collides (ColliderLeaf const & other) const
 {
@@ -33,15 +37,15 @@ bool PointCollider::collidesWith (CircleCollider const & other) const
 
 bool PointCollider::collidesWith (PointCollider const & other) const
 {
-  return (absX == other.absX) && (absY == other.absY);
+  return worldPos == other.worldPos;
 }
 
 bool PointCollider::collidesWith (AlignRectCollider const & other) const
 {
-  return other.getWorldRect().contains(absX, absY);
+  return other.getWorldRect().contains(worldPos);
 }
 
-sf::Vector2f PointCollider::getPoint () const
+sf::Vector2f PointCollider::getWorldPoint () const
 {
-  return sf::Vector2f(absX, absY);
+  return worldPos;
 }

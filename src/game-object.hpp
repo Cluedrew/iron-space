@@ -16,10 +16,12 @@
  *
  * TODO Once the class settles down the functions that are just forwarding
  *   should probably be moved here so they can be inlined.
+ * TODO Get rid of the zero argument constructor. A GameObject should never
+ *   exist without being wired up in the actual program. Now it is an easy
+ *   fix when testing, but if I can find another solution for that.
  */
 
 #include <SFML/Graphics.hpp>
-//#include "physics/collider.hpp"
 class Collider;
 #include "game-object-ptr.hpp"
 class InputEvent;

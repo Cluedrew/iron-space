@@ -34,7 +34,7 @@ bool AlignRectCollider::collidesWith (CircleCollider const & other) const
 
 bool AlignRectCollider::collidesWith (PointCollider const & other) const
 {
-  return absRect.contains(other.getPoint());
+  return absRect.contains(other.getWorldPoint());
 }
 
 bool AlignRectCollider::collidesWith (AlignRectCollider const & other) const

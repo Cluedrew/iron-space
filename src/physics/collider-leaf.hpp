@@ -14,6 +14,7 @@
  * 50 wide block, the next block over can just be 50 over.
  */
 
+namespace sf { class Transform; }
 #include "collider.hpp"
 class CircleCollider;
 class PointCollider;
@@ -34,6 +35,8 @@ public:
    * Return: True if there is a collision, false otherwise.
    */
   { return other.collides(*this); }
+
+  virtual void update (sf::Transform const & root) = 0;
 
   virtual bool collides (ColliderLeaf const & other) const = 0;
   /* Check for a collision between two leaves.

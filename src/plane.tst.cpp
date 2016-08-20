@@ -43,7 +43,21 @@ public:
 
 TEST_CASE("Testing for the Plane container.", "")
 {
-  SECTION("Checking emplace")
+  SECTION("Checking emplace (TestObject)")
+  {
+    Plane<TestObject> plane;
+    plane.emplace(TestObject());
+    plane.emplace();
+    Plane<TestObject>::iterator it = plane.begin();
+    Plane<TestObject>::iterator endOfPlane = plane.end();
+    REQUIRE( it != endOfPlane );
+    ++it;
+    REQUIRE( it != endOfPlane );
+    ++it;
+    REQUIRE( it == endOfPlane );
+  }
+
+  SECTION("Checking emplace (GameObject)")
   {
     Plane<GameObject> plane;
     plane.emplace(GameObject());

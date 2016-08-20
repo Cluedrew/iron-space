@@ -11,6 +11,7 @@
  * TODO Test all six combinations, with and without transformations.
  */
 
+#include <SFML/Graphics/Transform.hpp>
 #include "circle-collider.hpp"
 #include "point-collider.hpp"
 #include "align-rect-collider.hpp"
@@ -19,7 +20,7 @@
 
 TEST_CASE("Testing ColliderLeaf and child-classes", "[physics]")
 {
-  sf::Transformable root;
+  sf::Transform root;
 
   SECTION("Check Circle/Circle")
   {

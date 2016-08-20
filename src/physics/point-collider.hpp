@@ -4,11 +4,8 @@
 /* A collider that repersents an single point.
  */
 
-namespace sf
-{
-  template<typename T> class Vector2;
-  class Transform;
-}
+#include <SFML/System/Vector2.hpp>
+namespace sf { class Transform; }
 #include "collider-leaf.hpp"
 
 
@@ -16,13 +13,13 @@ namespace sf
 class PointCollider : public ColliderLeaf
 {
 private:
-  float absX, absY;
-  float relX, relY;
+  sf::Vector2f localPos;
+  sf::Vector2f worldPos;
 
 protected:
 public:
   PointCollider (float x, float y);
-  PointCollider (sf::Vector2<float> xy);
+  PointCollider (sf::Vector2f xy);
   /* Define a PointCollider by its 2d coordinates.
    *   The given location is in local space, which is assumed to be the
    *   same as world space initally (call update to change that.
@@ -43,7 +40,7 @@ public:
    * Return: True if there is a collision, false otherwise.
    */
 
-  sf::Vector2<float> getPoint () const;
+  sf::Vector2f getWorldPoint () const;
   /* Get the point in world space.
    * Params: The point's xy coordinates relative to the world.
    */

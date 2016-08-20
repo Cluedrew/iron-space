@@ -3,6 +3,8 @@
 // Implementation of the temperary collider.
 // Vector2 is actually included through Transformable.
 
+#include <cmath>
+#include <SFML/Graphics/Transform.hpp>
 #include "../util/math.hpp"
 #include "point-collider.hpp"
 #include "align-rect-collider.hpp"
@@ -10,11 +12,10 @@
 
 
 // Constructors and Deconstructor:
+// see header
 CircleCollider::CircleCollider (float x, float y, float r) :
-  relativePosition(), absolutePosition(), radius(r)
-{
-  relativePosition.setPosition(x, y);
-}
+  localCenter(x, y), worldCenter(x, y), localRadius(r), worldRadius(r)
+{}
 
 CircleCollider::~CircleCollider ()
 {}
@@ -39,34 +40,30 @@ static float distSquared(sf::Vector2f const & lhs, sf::Vector2f const & rhs)
 // see header
 bool CircleCollider::collidesWith (CircleCollider const & other) const
 {
-  sf::Vector2f myPos = absolutePosition.getPosition();
-  sf::Vector2f otherPos = other.absolutePosition.getPosition();
-
-  float distSqr = distSquared(myPos, otherPos);
-  float combinedRSqr = sqr<float>(radius + other.radius);
+  float distSqr = distSquared(worldCenter, other.worldCenter);
+  float combinedRSqr = sqr<float>(worldRadius + other.worldRadius);
 
   return (distSqr < combinedRSqr);
 }
 
 bool CircleCollider::collidesWith (PointCollider const & other) const
 {
-  float distSqr = distSquared(absolutePosition.getPosition(),
-                              other.getPoint());
-  float combinedRSqr = sqr<float>(radius);
+  float distSqr = distSquared(worldCenter, other.getWorldPoint());
+  float combinedRSqr = sqr<float>(worldRadius);
 
   return (distSqr < combinedRSqr);
 }
 
 bool CircleCollider::collidesWith (AlignRectCollider const & other) const
 {
-  sf::Vector2f center = absolutePosition.getPosition();
+  sf::Vector2f center = worldCenter;
   sf::FloatRect rect = other.getWorldRect();
   sf::Vector2f closest(
       limitValue<float>(rect.left, center.x, rect.left + rect.width),
       limitValue<float>(rect.top,  center.y, rect.top + rect.height));
 
   float distSqr = distSquared(center, closest);
-  float combinedRSqr = sqr<float>(radius);
+  float combinedRSqr = sqr<float>(worldRadius);
 
   return (distSqr < combinedRSqr);
 }
@@ -75,24 +72,23 @@ bool CircleCollider::collidesWith (AlignRectCollider const & other) const
 // see header file
 void CircleCollider::setPos (float x, float y)
 {
-  relativePosition.setPosition(x, y);
+  localCenter.x = x;
+  localCenter.y = y;
 }
 
 // see header file
 void CircleCollider::setPos (sf::Vector2f const & xy)
 {
-  relativePosition.setPosition(xy);
+  localCenter = xy;
 }
 
-void CircleCollider::update(sf::Transformable const & root)
+void CircleCollider::update(sf::Transform const & root)
 {
-  // I'm not sure how to handle origin.
+  worldCenter = root.transformPoint(localCenter);
 
-  absolutePosition.setPosition(root.getPosition());
-  absolutePosition.setRotation(root.getRotation());
-  absolutePosition.setScale(root.getScale());
+  sf::Vector2f localEdge(localCenter.x + localRadius, localCenter.y);
+  sf::Vector2f worldEdge = root.transformPoint(localEdge);
 
-  absolutePosition.move(relativePosition.getPosition());
-  absolutePosition.rotate(relativePosition.getRotation());
-  absolutePosition.scale(relativePosition.getScale());
+  float wRSqr = distSquared(worldCenter, worldEdge);
+  worldRadius = sqrt(wRSqr);
 }

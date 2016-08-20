@@ -2,6 +2,8 @@
 
 // Implementation of the base PhysicsComponent
 
+#include <SFML/Graphics/Transformable.hpp>
+
 
 
 // see header
@@ -15,7 +17,7 @@ PhysicsComponent::~PhysicsComponent ()
 
 void PhysicsComponent::updatePosition (sf::Transformable const & parent)
 {
-  collider.update(parent);
+  collider.update(parent.getTransform());
 }
 
 bool PhysicsComponent::collides (PhysicsComponent const & other)

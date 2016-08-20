@@ -10,7 +10,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include "input/input-event.hpp"
-#include "physics/circle-collider.hpp"
+#include "physics/point-collider.hpp"
 
 
 
@@ -94,8 +94,7 @@ bool Plane<Object2D>::handleInput (InputEvent const & ievent)
   std::vector<GameObject>::iterator it;
   if (InputEvent::Select == ievent.type)
   {
-    CircleCollider click(ievent.pos.x, ievent.pos.y, 0);
-    click.update(sf::Transformable());
+    PointCollider click(ievent.pos.x, ievent.pos.y);
 
     for (it = objects.begin() ; it != objects.end() ; ++it)
     {
