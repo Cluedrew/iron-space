@@ -204,22 +204,22 @@ A Plane object repersents a layer of reality. Currently there are two, the Map
 which repersents the game world and the Gui which is between that and the
 user.
 
-Each maintains the collection of objects within it, finds collisions between
-those objects (collisions to not occur between objects in different planes)
-and distributs input to them. Or mouse actions at least, as those have to
-be translated from screen coordinates to the coordinates of the plane. The
-planes also maintain the draw order of objects within them (between planes
-must be handled by outside code) and maintains the view into the plane that
-appears on screen.
+Currently Planes are the highest level of coordinate space, so each defines
+its own world space. Objects within that space may further define there own
+local coordinates. Also the Plane may define how its world space differs from
+the screen space, if at all.
+
+Each maintains the collection of objects within its world space. It is
+responsible for finding collisions between objects within that space and
+checking what shapes are in a given area. This is for checking for clicks
+on screen and so on.
+
+The PlaneDrawable class also adds a draw function. The both Plane classes
+(should) maintain the draw order of their contents.
 
 Movement is on a 2d plane, so it can be handled with x, y & rotation.
 Collition on the other hand requires a bit more detail, a shape is required on
 both ends so they can hit each other.
-
-Clicks are collitions as well, a click is a point that collides with things
-on screen. A click (or other input) can be sent into the Plane and it will be
-passed on to one of the objects. Or not, as clicks can fall through Planes if
-there is nothing in them at that point.
 
 ### Components ###
 The GameObjects are collections of components, I am considering if there is

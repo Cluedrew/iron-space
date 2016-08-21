@@ -5,26 +5,22 @@
  * GameObjects. This 2D Plane is not relative to anything, however objects
  * inside the Plane do have spacial positioning.
  *
- * template<typename Object2D> class Plane
- * Where Object2D has a: sf::Vector2f getPosition() function, collides and
- * Drawable. Drawable I could cut out, because it is not part of the main
- * purpose, but everything I would use this template for uses it.
+ * The filter_it from the ABCToolBox would actually fix in really well here.
+ * Maybe I should go back to that.
+ *
+ * Object2D must have defined on it:
+ * bool collides (Collider const &) const;
+ * bool collides (Object2D const &) const;
  */
 
 #include <vector>
-#include <SFML/Graphics/Drawable.hpp>
-namespace sf
-{
-  class RenderTarget;
-  class RenderStates;
-}
-#include "game-object.hpp"
 class InputEvent;
+class Collider;
 
 
 
 template<typename Object2D>
-class Plane// : public sf::Drawable
+class Plane
 {
 public:
   typedef typename std::vector<Object2D>::iterator iterator;
@@ -66,12 +62,6 @@ public:
    * Params: An InputEvent (TODO what types)
    * Effect: Event is handled (may result in additional changes in updates).
    * Return: True if the event was handled, false otherwise.
-   */
-
-  //void draw (sf::RenderTarget & target, sf::RenderStates states) const;
-  /* Draw all game objects within this plane.
-   * Params: target to draw to plus the states that repersent the options.
-   * Effect: Draw all the objects in the Plane.
    */
 };
 

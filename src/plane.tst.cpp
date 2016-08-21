@@ -3,7 +3,13 @@
 
 /* Tests for the Plane Container.
  * Currently there is not a lot to test, but I'm getting started.
+ *
+ * TODO I would like to remove the GameObject from the tests here but first
+ * I should find a way to make sure that the GameObject ant the TestObject
+ * have the same behaviour, where relativant.
  */
+
+#include "game-object.hpp"
 
 
 

@@ -16,6 +16,7 @@
  *   colliders. Also I have some problems with rotation and scale.
  */
 
+namespace sf { class Transform; }
 class ColliderLeaf;
 
 
@@ -26,6 +27,8 @@ private:
 protected:
 public:
   virtual ~Collider () {}
+
+  virtual void update (sf::Transform const & root) = 0;
 
   virtual bool collides (Collider const & other) const = 0;
   virtual bool collides (ColliderLeaf const & other) const = 0;

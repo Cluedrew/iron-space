@@ -4,11 +4,13 @@
 /* A physics component, determains if there was a collision and moves the
  * object forward through space.
  *
+ * Unlike the other components it is not abstract. All the logic is identical
+ * except for the part in the collider, and that part swaps out.
  * WIP Very Work in Progress. Will be an abstract base at some time but I
  * will probably try to figure out the standard for this component first.
  */
 
-#include "circle-collider.hpp"
+#include "collider.hpp"
 namespace sf
 {
   class Transformable;
@@ -19,8 +21,7 @@ namespace sf
 class PhysicsComponent
 {
 private:
-//  Collider collider;
-  CircleCollider collider;
+  Collider * collider;
 
 protected:
 public:
@@ -30,6 +31,7 @@ public:
   void updatePosition (sf::Transformable const & parent);
   /* Update the position of the internal collider.
    * WIP
+   * Perhaps it should also be responsible for moving the object as well.
    */
 
   bool collides (PhysicsComponent const & other);

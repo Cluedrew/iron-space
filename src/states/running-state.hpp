@@ -7,6 +7,7 @@
 
 #include "world-state.hpp"
 #include "../plane-drawable.hpp"
+#include "../game-object.hpp"
 
 
 
