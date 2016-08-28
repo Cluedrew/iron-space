@@ -25,16 +25,11 @@ public:
 
   virtual ~GenEventHandler ();
 
-  // Plane is temperary. State?
   Response pollEvents (SourceT & window, WorldState & state);
   /* Poll all events from the window and dispatch them.
-   * Params: A mutable reference to the window to poll from.
-   * Return: The (should we continue) running value, which is false if
-   *   a Close event was found, true otherwise.
-   *
-   * Currently there is no actually dispatching means nor is there a way to
-   * get data back to the engine beyond that one boolean, which probably be
-   * outstripped as time goes on.
+   * Params: A mutable references to the source 'window' to poll from and
+   *   the state to dispatch the events to.
+   * Return: The Response value for the polled Events.
    */
 };
 

@@ -32,9 +32,7 @@ int Engine::runLoop ()
   while (running)
   {
     running = pollInput();
-    log.data("Begin update");
-    state->update(clock.getIncrement());
-    log.data("End update");
+    update();
     render();
     wait();
   }
@@ -78,6 +76,13 @@ bool Engine::pollInput ()
 
   log.warn("Reached end of pollInput body.");
   return true;
+}
+
+void Engine::update ()
+{
+    log.data("Begin update");
+    state->update(clock.getIncrement());
+    log.data("End update");
 }
 
 void Engine::render ()

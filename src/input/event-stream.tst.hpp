@@ -139,6 +139,15 @@ public:
    * Params: Optional frame and pos parameters as in addEvent.
    * Effect: Add a new Closed event at the given spot in the stream.
    */
+
+  void addMouseLeftPress (int x, int y,
+      size_t frame = FRAME_TOP, size_t pos = POS_TOP);
+  /* Add a new left MouseButtonPressed event to the stream.
+   * Params: The x & y location of the mouse click.
+   *   Optional frame and pos parameters as in addEvent.
+   * Effect: Add a new MouseButtonPressed event to the stream, its button
+   *   field will be set to Mouse::Button::Left.
+   */
 };
 
 #endif//EVENT_STREAM_TST_HPP

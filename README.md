@@ -60,6 +60,8 @@ Tags:
 +   [@lib], [sfml]: Tags for marking tests on external dependances. [@lib]
     refers to all of them. The others refer to a particular library. These are
     not ment to be complete, but rather to check assumptions.
++   [testing]: Tag for tests on extra code writen for testing. If these are
+    not working than some other tests are invalid.
 
 ### Main Loop ###
 The main loop is the heart of the program, with each iteration of the loop

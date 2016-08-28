@@ -28,6 +28,7 @@ private:
 
   bool pollInput ();
   void render ();
+  void update ();
   void wait ();
 
 protected:
