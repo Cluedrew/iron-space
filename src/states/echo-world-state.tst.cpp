@@ -3,27 +3,41 @@
 
 // Implement the Echo (text output) WorldState
 
+#include <cassert>
+#include <sstream>
 #include <ostream>
 #include <SFML/System/Time.hpp>
 #include "../input/input-event.hpp"
 
 
 
-EchoWorldState::EchoWorldState (std::ostream & out) :
-    out(out)
+EchoWorldState::EchoWorldState () :
+    echoes()
 {}
 
 EchoWorldState::~EchoWorldState ()
 {}
 
+
+void EchoWorldState::storeEcho (std::string const & newEcho)
+/* Add an echo to the internal list of stored echoes.
+ * Params: String repersenting new echo.
+ */
+{
+  echoes.push_back(newEcho);
+}
+
+
 void EchoWorldState::handleInput (InputEvent const & ievent)
 {
-  out << ievent << std::endl;
+  storeEcho(toString(ievent));
 }
 
 void EchoWorldState::update (sf::Time const & deltaT)
 {
-  out << deltaT.asMilliseconds() << " milliseconds" << std::endl;
+  std::ostringstream out;
+  out << deltaT.asMilliseconds() << " milliseconds";
+  storeEcho(out.str());
 }
 
 void EchoWorldState::draw
@@ -31,13 +45,29 @@ void EchoWorldState::draw
 {}
 
 
+bool EchoWorldState::hasEchoes () const
+{
+  return !echoes.empty();
+}
 
-#include <sstream>
+std::string const & EchoWorldState::peekEcho () const
+{
+  assert(!echoes.empty());
+  return echoes.front();
+}
+
+std::string EchoWorldState::popEcho ()
+{
+  assert(!echoes.empty());
+  std::string fin = echoes.front();
+  echoes.pop_front();
+  return fin;
+}
+
 
 TEST_CASE("Testing the EchoWorldState", "[states][testing]")
 {
-  std::ostringstream echoed;
-  EchoWorldState state(echoed);
+  EchoWorldState state;
 
   SECTION("Check handleInput")
   {
@@ -45,15 +75,15 @@ TEST_CASE("Testing the EchoWorldState", "[states][testing]")
     ievent.pos.x = 10;
     ievent.pos.y = 100;
     state.handleInput(ievent);
-    REQUIRE( "Select(x=10 y=100)\n" == echoed.str() );
+    REQUIRE( "Select(x=10 y=100)" == state.peekEcho() );
   }
 
   SECTION("Check update")
   {
     sf::Time tenth = sf::milliseconds(100);
     state.update(tenth);
-    REQUIRE( "100 milliseconds\n" == echoed.str() );
+    REQUIRE( "100 milliseconds" == state.peekEcho() );
   }
 
-  //SECTION("Check draw") {}
+  //SECTION("Check draw") ... Except there is nothing to test.
 }

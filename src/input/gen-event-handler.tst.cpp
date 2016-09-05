@@ -8,12 +8,13 @@
 
 #include "event-stream.tst.hpp"
 #include "../states/null-world-state.hpp"
+#include "../states/echo-world-state.tst.hpp"
 
 typedef GenEventHandler<EventStream> TestEventHandler;
 
 
 
-TEST_CASE("EventHandler test", "[input]")
+TEST_CASE("EventHandler tests", "[input]")
 {
   TestEventHandler handler;
   EventStream stream;
@@ -31,6 +32,25 @@ TEST_CASE("EventHandler test", "[input]")
     Response re = handler.pollEvents(stream, state);
     REQUIRE( Response::Quit == re.type );
     re = handler.pollEvents(stream, state);
+  }
+
+  EchoWorldState echoes;
+
+  SECTION("Event Translation Checks")
+  {
+    stream.addMouseLeftPress(10, 15);
+    Response re = handler.pollEvents(stream, echoes);
     REQUIRE( Response::Done == re.type );
+    REQUIRE( "Select(x=10 y=15)" == echoes.popEcho() );
+  }
+
+  SECTION("Multible Event Translation")
+  {
+    stream.addMouseLeftPress(10, 15);
+    stream.addMouseLeftPress(15, -5);
+    Response re = handler.pollEvents(stream, echoes);
+    REQUIRE( Response::Done == re.type );
+    REQUIRE( "Select(x=10 y=15)" == echoes.popEcho() );
+    REQUIRE( "Select(x=15 y=-5)" == echoes.popEcho() );
   }
 }

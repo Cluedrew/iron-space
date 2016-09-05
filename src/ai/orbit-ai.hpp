@@ -19,6 +19,7 @@ class OrbitAi : public AiComponent
 {
 private:
   sf::Time progress;
+  bool moving;
   int xCenter;
   int yCenter;
   int radius;

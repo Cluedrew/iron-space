@@ -5,6 +5,7 @@
  */
 
 #include <ostream>
+#include <sstream>
 
 
 
@@ -41,4 +42,11 @@ std::ostream & operator<< (std::ostream & out, InputEvent const & ievent)
     break;
   };
   return out << ")";
+}
+
+std::string toString (InputEvent const & ievent)
+{
+  std::ostringstream out;
+  out << ievent;
+  return out.str();
 }

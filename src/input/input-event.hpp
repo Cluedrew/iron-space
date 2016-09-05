@@ -10,6 +10,7 @@
  */
 
 #include <iosfwd>
+#include <string>
 
 
 
@@ -35,5 +36,6 @@ struct InputEvent
 };
 
 std::ostream & operator<< (std::ostream & out, InputEvent const & ievent);
+std::string toString (InputEvent const & ievent);
 
 #endif//INPUT_EVENT_HPP

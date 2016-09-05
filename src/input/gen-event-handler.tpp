@@ -39,7 +39,6 @@ Response GenEventHandler<SourceT>::pollEvents
       ievent.type = InputEvent::Select;
       ievent.pos.x = event.mouseButton.x;
       ievent.pos.y = event.mouseButton.y;
-      std::cerr << ievent << std::endl;
       state.handleInput(ievent);
       break;
     default:

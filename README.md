@@ -18,9 +18,10 @@ of everything running.
 + There should be collisions between GameObjects, and some noticable reaction
   to the collisions.
 + At least one sound effect and one piece of music should be played.
++ Have at least two WorldStates and the ability to transition between them.
 + Select and install a test harness, get some basic tests up.
 
-All 7 of these points have to be completed before moving on (a few other
+All 8 of these points have to be completed before moving on (a few other
 points may join this list). This should ensure that all parts of the engine
 have some working base. It should not actually resemple a game in this stage.
 

@@ -114,11 +114,11 @@ run : $(EXE)
 
 # Rule for the binary
 $(EXE) : $(call objsfor,$(SRCFILES) $(SRCMAIN))
-	$(CXX) $(CXXFLAGS) $(CXXLIBS) $^ -o $@
+	$(CXX) $(CXXFLAGS) $^ $(CXXLIBS) -o $@
 
 # Rule for test binary
 $(TST_EXE) : $(call objsfor,$(TSTFILES) $(SRCFILES) $(TSTMAIN))
-	$(CXX) $(CXXFLAGS) $(TSTFLAGS) $(CXXLIBS) $^ -o $@
+	$(CXX) $(CXXFLAGS) $(TSTFLAGS) $^ $(CXXLIBS) -o $@
 
 # Rules for object files
 # Object depencancy rule, gives the dependancies that always apply.
