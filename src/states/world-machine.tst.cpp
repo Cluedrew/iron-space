@@ -22,6 +22,10 @@ TEST_CASE("Testing for the WorldMachine", "[states]")
     NullWorldState * state = new NullWorldState();
     machine.update(state);
     REQUIRE( &*machine == state );
+
+    state = new NullWorldState();
+    machine.changeState(state);
+    REQUIRE( machine.get() == state );
   }
 
   SECTION("Remain in same state with nullptr")
