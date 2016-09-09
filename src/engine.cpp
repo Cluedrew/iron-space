@@ -2,7 +2,6 @@
 
 // Implementation of the games internal Engine.
 
-//#include <SFML/Window/Event.hpp>
 #include "input/event-handler.hpp"
 #include "states/running-state.hpp"
 
@@ -13,9 +12,7 @@ Engine::Engine (LoggerDetailLevel logdl) :
 {}
 
 Engine::~Engine ()
-{
-  delete state;
-}
+{}
 
 // see header
 int Engine::runLoop ()
