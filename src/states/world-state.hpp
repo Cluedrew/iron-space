@@ -49,7 +49,7 @@ public:
   virtual void update (sf::Time const & deltaT) = 0;
   /* Updates the World's State depending on the recent input and time passed.
    * Params: A reference to the amount of real time passed.
-   * Effect:
+   * Effect: Move the state forward in time.
    */
 
   virtual void draw (sf::RenderTarget & target,
