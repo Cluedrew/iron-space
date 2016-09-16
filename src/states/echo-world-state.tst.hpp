@@ -27,13 +27,13 @@ public:
 
   virtual ~EchoWorldState ();
 
-  void handleInput (InputEvent const & ievent);
+  WorldState * handleInput (InputEvent const & ievent);
   /* Handles an InputEvent.
    * Params: The ievent to handle.
    * Effect: Prints a line to out, giving the ievent.
    */
 
-  void update (sf::Time const & deltaT);
+  WorldState * update (sf::Time const & deltaT);
   /* Echo that the update function has been called.
    * Params: The amount of time that has passed.
    * Effect: Prints a line to out, giving the deltaT value in milliseconds.

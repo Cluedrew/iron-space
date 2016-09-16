@@ -31,7 +31,7 @@ public:
   /* Pass this state the previous state.
    */
 
-  void handleInput (InputEvent const & ievent);
+  WorldState * handleInput (InputEvent const & ievent);
   /* Handles InputEvents.
    * Params: A reference to the event to be handled.
    * Effect: Input is either handled or discarded.
@@ -39,7 +39,7 @@ public:
    *   not handle an Input Event, it is discarded.
    */
 
-  void update (sf::Time const & deltaT);
+  WorldState * update (sf::Time const & deltaT);
   /* Updates the World's State depending on the recent input and time passed.
    * Params: A reference to the amount of real time passed.
    * Effect:

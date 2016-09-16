@@ -7,6 +7,10 @@
  * to test.
  */
 
+class WorldState;
+
+
+
 struct Response
 {
   enum ResponseType
@@ -15,11 +19,16 @@ struct Response
     Done,
     // Tell the engine to quit.
     Quit,
+    // Tell the engine to switch the active state.
+    ChangeState,
 
     Cap
   } type;
 
   // There will probably be a union here for extra data later.
+
+  // State to change to if type == ChangeState
+  WorldState * changeState;
 };
 
 #endif//RESPONSE_HPP

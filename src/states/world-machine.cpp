@@ -19,7 +19,7 @@ WorldMachine::WorldMachine (WorldState * initialState) :
 
 WorldMachine::~WorldMachine ()
 {
-  delete currentState;
+//  delete currentState;
 }
 
 // see header
@@ -27,7 +27,6 @@ void WorldMachine::update (WorldState * nextState)
 {
   if (nullptr == nextState) return;
 
-  nextState->transition(currentState);
   currentState = nextState;
 }
 
@@ -37,7 +36,6 @@ void WorldMachine::changeState (WorldState * nextState)
   assert(nullptr != nextState);
   assert(currentState != nextState);
 
-  nextState->transition(currentState);
   currentState = nextState;
 }
 

@@ -9,12 +9,16 @@ NullWorldState::NullWorldState () : WorldState() {}
 NullWorldState::~NullWorldState () {}
 
 // see header
-void NullWorldState::handleInput (InputEvent const & ievent)
-{}
+WorldState * NullWorldState::handleInput (InputEvent const & ievent)
+{
+  return nullptr;
+}
 
 // see header
-void NullWorldState::update (sf::Time const & deltaT)
-{}
+WorldState * NullWorldState::update (sf::Time const & deltaT)
+{
+  return nullptr;
+}
 
 // see header
 void NullWorldState::draw (sf::RenderTarget & target,

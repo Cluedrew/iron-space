@@ -19,6 +19,21 @@ template<typename SourceT>
 GenEventHandler<SourceT>::~GenEventHandler ()
 {}
 
+/* TODO
+1. I need to be able to get the state change signal out of this class and
+   back to the caller (Engine/test code).
+2. Consider moving the sf::Event -> InputEvent translation logic out of
+   the template and into some universal code.
+
+void GenEventTranslator::translate
+    (sf::Event sfEvent, InputEvent iEvent)
+
+template<typename SourceT>
+bool GenEventHandler<SourceT>::pollEvents
+    (SourceT & source, WorldMachine & machine)
+
+*/
+
 template<typename SourceT>
 Response GenEventHandler<SourceT>::pollEvents
     (SourceT & window, WorldState & state)
@@ -41,6 +56,15 @@ Response GenEventHandler<SourceT>::pollEvents
       ievent.pos.y = event.mouseButton.y;
       state.handleInput(ievent);
       break;
+    case sf::Event::KeyPressed:
+      if (sf::Keyboard::Key::Space == event.key.code)
+      {
+        InputEvent ievent;
+        ievent.type = InputEvent::Pause;
+        state.handleInput(ievent);
+      }
+      break;
+    //case sf::Event::KeyReleased:
     default:
       break;
     }

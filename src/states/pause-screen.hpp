@@ -13,6 +13,8 @@ class PauseScreen : public WorldState
 {
 private:
   WorldState * paused;
+  bool unpause;
+
 protected:
 public:
   PauseScreen (WorldState * paused);
@@ -27,13 +29,13 @@ public:
    * Params: Pointer to state being transitioned from.
    */
 
-  void handleInput (InputEvent const & ievent);
+  WorldState * handleInput (InputEvent const & ievent);
   /* Handle InputEvents.
    * Params: Reference to the state being handled.
    * Effect: Handles input.
    */
 
-  void update (sf::Time const & deltaT);
+  WorldState * update (sf::Time const & deltaT);
   /* Update the pause screen. Very little happens here.
    * Params: A reference to the amount of real time passed.
    * Effect: Move the state forward in time.

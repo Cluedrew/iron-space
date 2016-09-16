@@ -18,7 +18,10 @@ struct InputEvent
 {
   enum EventType
   {
+    // A selection is made on the screen.
     Select,
+    // The pause/unpause command.
+    Pause,
 
     Cap
   } type;

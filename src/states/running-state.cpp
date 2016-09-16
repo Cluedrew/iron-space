@@ -25,17 +25,21 @@ RunningState::~RunningState ()
 
 
 // see header
-void RunningState::handleInput (InputEvent const & ievent)
+WorldState * RunningState::handleInput (InputEvent const & ievent)
 {
   map.handleInput(ievent);
+
+  return nullptr;
 }
 
 // see header
-void RunningState::update (sf::Time const & deltaT)
+WorldState * RunningState::update (sf::Time const & deltaT)
 {
   PlaneDrawable<GameObject>::iterator it;
   for (it = map.begin() ; it != map.end() ; ++it)
     it->updateAi(deltaT);
+
+  return nullptr;
 }
 
 // see header

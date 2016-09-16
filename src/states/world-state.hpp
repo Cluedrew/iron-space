@@ -4,6 +4,22 @@
 /* A class that repersents the current state of the world. It itself is a
  * state, mantained by the engine. Or will be, the state-machine part of the
  * Engine is not complete yet so there is one non-abstract state for now.
+ *
+ * There are two points a WorldState can signal a change in state:
+ * 1. In handleInput, the current InputEvent is considered handled and all
+ *    future events will be passed to the new state. This is for state
+ *    changes triggered by input.
+ * XXX [Currently Ignored
+ * 2. In update, the returned state is considered up to date and is drawn
+ *    for this frame. This is for changes from internal events.
+ * In both cases a change in state is signaled by returning a non-null
+ * pointer. This design depends on being able to delete(this) before
+ * returning, if that does not work a pair of values will.
+ * (newState, stateToDelete)
+ *
+ * The other option would be to combine handleInput and update, so update
+ * takes a queue of translated input. Might be a little faster, but would
+ * it force additional complexity into the WorldState class?
  */
 
 #include <SFML/Graphics/Drawable.hpp>
@@ -38,7 +54,7 @@ public:
    *   Default is simply to free the old state as it is no longer needed.
    */
 
-  virtual void handleInput (InputEvent const & ievent) = 0;
+  virtual WorldState * handleInput (InputEvent const & ievent) = 0;
   /* Handles InputEvents.
    * Params: A reference to the event to be handled.
    * Effect: Input is either handled or discarded.
@@ -46,7 +62,7 @@ public:
    *   not handle an Input Event, it is discarded.
    */
 
-  virtual void update (sf::Time const & deltaT) = 0;
+  virtual WorldState * update (sf::Time const & deltaT) = 0;
   /* Updates the World's State depending on the recent input and time passed.
    * Params: A reference to the amount of real time passed.
    * Effect: Move the state forward in time.

@@ -28,16 +28,20 @@ void EchoWorldState::storeEcho (std::string const & newEcho)
 }
 
 
-void EchoWorldState::handleInput (InputEvent const & ievent)
+WorldState * EchoWorldState::handleInput (InputEvent const & ievent)
 {
   storeEcho(toString(ievent));
+
+  return nullptr;
 }
 
-void EchoWorldState::update (sf::Time const & deltaT)
+WorldState * EchoWorldState::update (sf::Time const & deltaT)
 {
   std::ostringstream out;
   out << deltaT.asMilliseconds() << " milliseconds";
   storeEcho(out.str());
+
+  return nullptr;
 }
 
 void EchoWorldState::draw

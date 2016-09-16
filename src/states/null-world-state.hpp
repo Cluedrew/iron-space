@@ -20,8 +20,8 @@ public:
   //void transition (WorldState * lastState);
 
 
-  void handleInput (InputEvent const & ievent);
-  void update (sf::Time const & deltaT);
+  WorldState * handleInput (InputEvent const & ievent);
+  WorldState * update (sf::Time const & deltaT);
   void draw (sf::RenderTarget & target, sf::RenderStates states) const;
   /* See WorldState for purpose.
    * This particular implementations do nothing.

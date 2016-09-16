@@ -4,11 +4,13 @@
 
 #include "input/event-handler.hpp"
 #include "states/running-state.hpp"
+#include "states/pause-screen.hpp"
 
 
 
 Engine::Engine (LoggerDetailLevel logdl) :
-  window(), state(new RunningState()), clock(60), log("Engine", logdl)
+  window(), state(new PauseScreen(new RunningState())),
+  clock(60), log("Engine", logdl)
 {}
 
 Engine::~Engine ()
@@ -65,6 +67,10 @@ bool Engine::pollInput ()
       log.data("End pollInput");
       return false;
 
+    case Response::ChangeState:
+      state.update(re.changeState);
+      break;
+
     default:
       log.warn("Uncaught Response in pollInput");
       break;
@@ -78,7 +84,7 @@ bool Engine::pollInput ()
 void Engine::update ()
 {
     log.data("Begin update");
-    state->update(clock.getIncrement());
+    state.update(state->update(clock.getIncrement()));
     log.data("End update");
 }
 
