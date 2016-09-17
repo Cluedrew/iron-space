@@ -14,10 +14,16 @@ static std::ostream & operator<< (std::ostream & out,
 {
   switch (type)
   {
-  case InputEvent::EventType::Select:
+  case InputEvent::Quit:
+    out << "Quit";
+    break;
+  case InputEvent::Select:
     out << "Select";
     break;
-  case InputEvent::EventType::Cap:
+  case InputEvent::Pause:
+    out << "Pause";
+    break;
+  case InputEvent::Cap:
     out << "Cap";
     break;
   }
@@ -35,10 +41,12 @@ std::ostream & operator<< (std::ostream & out, InputEvent const & ievent)
   out << ievent.type << "(";
   switch (ievent.type)
   {
-  case InputEvent::EventType::Select:
+  case InputEvent::Select:
     out << ievent.pos;
     break;
-  case InputEvent::EventType::Cap:
+  case InputEvent::Quit:
+  case InputEvent::Pause:
+  case InputEvent::Cap:
     break;
   };
   return out << ")";

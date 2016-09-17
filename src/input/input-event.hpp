@@ -18,6 +18,8 @@ struct InputEvent
 {
   enum EventType
   {
+    // A command is given to quit the game.
+    Quit,
     // A selection is made on the screen.
     Select,
     // The pause/unpause command.

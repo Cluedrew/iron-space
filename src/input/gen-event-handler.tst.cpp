@@ -7,6 +7,7 @@
  */
 
 #include "event-stream.tst.hpp"
+#include "input-event.hpp"
 #include "../states/null-world-state.hpp"
 #include "../states/echo-world-state.tst.hpp"
 
@@ -18,12 +19,15 @@ TEST_CASE("EventHandler tests", "[input]")
 {
   TestEventHandler handler;
   EventStream stream;
+  InputEvent iEvent;
   NullWorldState state;
 
   SECTION("No Events")
   {
     Response re = handler.pollEvents(stream, state);
     REQUIRE( Response::Done == re.type );
+
+    REQUIRE_FALSE( handler.pollEvent(stream, iEvent) );
   }
 
   SECTION("Closed to Quit")

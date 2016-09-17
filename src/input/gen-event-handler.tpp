@@ -7,6 +7,7 @@
 #include <SFML/Window/Event.hpp>
 #include "response.hpp"
 #include "input-event.hpp"
+#include "translate-event.hpp"
 #include "../states/world-state.hpp"
 
 
@@ -19,20 +20,19 @@ template<typename SourceT>
 GenEventHandler<SourceT>::~GenEventHandler ()
 {}
 
-/* TODO
-1. I need to be able to get the state change signal out of this class and
-   back to the caller (Engine/test code).
-2. Consider moving the sf::Event -> InputEvent translation logic out of
-   the template and into some universal code.
-
-void GenEventTranslator::translate
-    (sf::Event sfEvent, InputEvent iEvent)
-
 template<typename SourceT>
-bool GenEventHandler<SourceT>::pollEvents
-    (SourceT & source, WorldMachine & machine)
+bool GenEventHandler<SourceT>::pollEvent
+    (SourceT & source, InputEvent & iEvent)
+{
+  sf::Event sfEvent;
+  while (source.pollEvent(sfEvent))
+  {
+    if (translateEvent(sfEvent, iEvent))
+      return true;
+  }
 
-*/
+  return false;
+}
 
 template<typename SourceT>
 Response GenEventHandler<SourceT>::pollEvents

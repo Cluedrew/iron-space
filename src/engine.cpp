@@ -3,6 +3,7 @@
 // Implementation of the games internal Engine.
 
 #include "input/event-handler.hpp"
+#include "input/translate-event.hpp"
 #include "states/running-state.hpp"
 #include "states/pause-screen.hpp"
 
@@ -51,33 +52,15 @@ bool Engine::pollInput ()
 {
   log.data("Begin pollInput");
 
-  // This is not going to be static forever.
-  static EventHandler eventHandler;
+  InputEvent iEvent;
 
-  while (true)
+  while (pollTranslateEvent<sf::Window>(window, iEvent))
   {
-    Response re = eventHandler.pollEvents(window, *state);
-    switch (re.type)
-    {
-    case Response::Done:
-      log.data("End pollInput");
-      return true;
-
-    case Response::Quit:
-      log.data("End pollInput");
+    if (InputEvent::Quit == iEvent.type)
       return false;
-
-    case Response::ChangeState:
-      state.update(re.changeState);
-      break;
-
-    default:
-      log.warn("Uncaught Response in pollInput");
-      break;
-    }
+    state.update(state->handleInput(iEvent));
   }
 
-  log.warn("Reached end of pollInput body.");
   return true;
 }
 
