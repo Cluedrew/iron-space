@@ -2,7 +2,6 @@
 
 // Implementation of the games internal Engine.
 
-#include "input/event-handler.hpp"
 #include "input/translate-event.hpp"
 #include "states/running-state.hpp"
 #include "states/pause-screen.hpp"
@@ -10,7 +9,7 @@
 
 
 Engine::Engine (LoggerDetailLevel logdl) :
-  window(), state(new PauseScreen(new RunningState())),
+  running(true), window(), state(new PauseScreen(new RunningState())),
   clock(60), log("Engine", logdl)
 {}
 
@@ -28,10 +27,9 @@ int Engine::runLoop ()
 
   log.note("Finished runLoop init");
 
-  bool running = true;
   while (running)
   {
-    running = pollInput();
+    pollInput();
     update();
     render();
     wait();
@@ -43,7 +41,7 @@ int Engine::runLoop ()
 }
 
 
-bool Engine::pollInput ()
+void Engine::pollInput ()
 /* Collect and distribut all input over the last frame.
  * Effect: Collects input from the window the the EventHandler and processes
  *   them.
@@ -57,11 +55,14 @@ bool Engine::pollInput ()
   while (pollTranslateEvent<sf::Window>(window, iEvent))
   {
     if (InputEvent::Quit == iEvent.type)
-      return false;
+    {
+      running = false;
+      log.data("End pollInput (Quitting)");
+      return;
+    }
     state.update(state->handleInput(iEvent));
   }
-
-  return true;
+  log.data("End pollInput");
 }
 
 void Engine::update ()

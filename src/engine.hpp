@@ -20,13 +20,14 @@
 class Engine
 {
 private:
+  bool running;
   sf::RenderWindow window;
   WorldMachine state;
 
   LoopClock clock;
   Logger log;
 
-  bool pollInput ();
+  void pollInput ();
   void render ();
   void update ();
   void wait ();

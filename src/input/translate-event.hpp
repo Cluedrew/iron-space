@@ -24,6 +24,7 @@ bool pollTranslateEvent(SourceT & source, InputEvent & iEvent);
  *   the iEvent to store the translated event in.
  * Return: True if an event was polled and translated, false the source had
  *   no more translatable events.
+ * Note: SourceT must have bool pollEvent(sf::Event &) defined on it.
  */
 
 
