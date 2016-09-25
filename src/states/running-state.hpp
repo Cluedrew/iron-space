@@ -21,16 +21,6 @@ public:
   RunningState ();
   virtual ~RunningState ();
 
-
-
-  //static WorldState * start (...);
-  /* Possible alternate way to create initial states.
-   */
-
-  //void transition (WorldState * from);
-  /* Pass this state the previous state.
-   */
-
   WorldState * handleInput (InputEvent const & ievent);
   /* Handles InputEvents.
    * Params: A reference to the event to be handled.
@@ -42,7 +32,7 @@ public:
   WorldState * update (sf::Time const & deltaT);
   /* Updates the World's State depending on the recent input and time passed.
    * Params: A reference to the amount of real time passed.
-   * Effect:
+   * Effect: Moves game forward in time.
    */
 
   void draw (sf::RenderTarget & target, sf::RenderStates states) const;

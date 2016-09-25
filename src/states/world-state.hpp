@@ -9,17 +9,15 @@
  * 1. In handleInput, the current InputEvent is considered handled and all
  *    future events will be passed to the new state. This is for state
  *    changes triggered by input.
- * XXX [Currently Ignored
  * 2. In update, the returned state is considered up to date and is drawn
  *    for this frame. This is for changes from internal events.
  * In both cases a change in state is signaled by returning a non-null
- * pointer. This design depends on being able to delete(this) before
- * returning, if that does not work a pair of values will.
- * (newState, stateToDelete)
+ * pointer.
  *
- * The other option would be to combine handleInput and update, so update
- * takes a queue of translated input. Might be a little faster, but would
- * it force additional complexity into the WorldState class?
+ * When a WorldState signals a change in state it is responsible for cleaning
+ * up its memory. Generally this means a delete(this) right before returning
+ * a pointer to the new state or passing the current state as an argument to
+ * the new state which then assumes responsibility.
  */
 
 #include <SFML/Graphics/Drawable.hpp>
@@ -40,19 +38,6 @@ protected:
 public:
   WorldState ();
   virtual ~WorldState ();
-
-
-
-  //static WorldState * start (...);
-  /* Possible alternate way to create initial states.
-   */
-
-  virtual void transition (WorldState * from);
-  /* Transition from the previous state to this one.
-   * Params: Pointer to privious state. (nullptr for initial state?)
-   * Effect: Exits from the old state and enters the new one.
-   *   Default is simply to free the old state as it is no longer needed.
-   */
 
   virtual WorldState * handleInput (InputEvent const & ievent) = 0;
   /* Handles InputEvents.

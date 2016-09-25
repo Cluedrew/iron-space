@@ -24,11 +24,6 @@ public:
 
   virtual ~PauseScreen ();
 
-  void transition (WorldState * from);
-  /* Transition to this state from the state being paused.
-   * Params: Pointer to state being transitioned from.
-   */
-
   WorldState * handleInput (InputEvent const & ievent);
   /* Handle InputEvents.
    * Params: Reference to the state being handled.

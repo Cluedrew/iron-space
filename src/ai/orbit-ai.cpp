@@ -28,7 +28,6 @@ void OrbitAi::init (GameObject & container)
 bool OrbitAi::handleInput
     (GameObject & container, InputEvent const & ievent)
 {
-  std::cout << "OrbitAi: " << ievent << std::endl;
   if (InputEvent::Select == ievent.type)
   {
     moving = !moving;

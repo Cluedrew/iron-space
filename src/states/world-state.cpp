@@ -11,8 +11,3 @@
 WorldState::WorldState () {}
 
 WorldState::~WorldState () {}
-
-void WorldState::transition (WorldState * from)
-{
-  delete from;
-}

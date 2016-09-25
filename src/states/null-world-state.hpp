@@ -16,10 +16,6 @@ public:
   NullWorldState ();
   virtual ~NullWorldState ();
 
-  //NullWorldState start ();
-  //void transition (WorldState * lastState);
-
-
   WorldState * handleInput (InputEvent const & ievent);
   WorldState * update (sf::Time const & deltaT);
   void draw (sf::RenderTarget & target, sf::RenderStates states) const;

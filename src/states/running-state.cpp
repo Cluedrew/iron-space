@@ -8,6 +8,7 @@
 #include "../ai/orbit-ai.hpp"
 #include "../physics/physics-component.hpp"
 #include "../graphics/circle-graphics.hpp"
+#include "pause-screen.hpp"
 
 
 
@@ -27,7 +28,19 @@ RunningState::~RunningState ()
 // see header
 WorldState * RunningState::handleInput (InputEvent const & ievent)
 {
-  map.handleInput(ievent);
+  switch (ievent.type)
+  {
+  case InputEvent::Select:
+    map.handleInput(ievent);
+    break;
+
+  case InputEvent::Pause:
+    return new PauseScreen(this);
+
+  case InputEvent::Quit:
+  case InputEvent::Cap:
+    break;
+  }
 
   return nullptr;
 }
