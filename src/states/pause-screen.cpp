@@ -24,9 +24,6 @@ PauseScreen::PauseScreen (WorldState * paused) :
 PauseScreen::~PauseScreen ()
 {}
 
-void PauseScreen::transition (WorldState * from)
-{}
-
 WorldState * PauseScreen::handleInput (InputEvent const & ievent)
 {
   if (InputEvent::Pause == ievent.type)

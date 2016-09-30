@@ -26,6 +26,8 @@ private:
 protected:
 public:
   PhysicsComponent ();
+  /* TODO Needs to take something more general.
+   */
   virtual ~PhysicsComponent ();
 
   void updatePosition (sf::Transformable const & parent);

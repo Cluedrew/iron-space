@@ -1,8 +1,8 @@
 #ifndef MAIN_MENU_HPP
 #define MAIN_MENU_HPP
 
-/* WorldState for the MainMenu. The game menu above even playing the game
- * itself.
+/* WorldState for the MainMenu. The game menu before you start playing the
+ * game itself.
  */
 
 #include "world-state.hpp"
