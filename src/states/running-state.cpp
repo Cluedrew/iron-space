@@ -7,6 +7,7 @@
 #include "../input/input-event.hpp"
 #include "../ai/orbit-ai.hpp"
 #include "../physics/physics-component.hpp"
+#include "../physics/circle-collider.hpp"
 #include "../graphics/circle-graphics.hpp"
 #include "pause-screen.hpp"
 
@@ -16,7 +17,7 @@ RunningState::RunningState () :
   map()
 {
   map.emplace(GameObject(new OrbitAi(),
-                new PhysicsComponent(),
+                new PhysicsComponent(new CircleCollider(0, 0, 25)),
                 new CircleGraphics(25)));
 }
 

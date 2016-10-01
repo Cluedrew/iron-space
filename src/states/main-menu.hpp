@@ -15,6 +15,7 @@ class MainMenu : public WorldState
 {
 private:
   PlaneDrawable<GameObject> gui;
+  bool started;
 
 protected:
 public:
@@ -34,6 +35,13 @@ public:
   void draw (sf::RenderTarget & target, sf::RenderStates states) const;
   /* Draw the world in its current state to the target.
    * Implements WorldState::draw
+   */
+
+  void startGame ();
+  /* Call to start the game.
+   *
+   * OK this isn't really part of the public interface, although it could be.
+   * Currently it is a work around, friendship might work better.
    */
 };
 

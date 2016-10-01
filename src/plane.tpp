@@ -83,4 +83,29 @@ bool Plane<Object2D>::handleInput (InputEvent const & ievent)
   return false;
 }
 
+#if 0
+// Planned addition:
+template<typename Object2D>
+void Plane<Object2D>::resolveCollitions ()
+/* Search the Plane for colliding (overlapping) objects and notify them.
+ *
+ * The implementation might change, but I hope the interface does not get
+ * much more complex than this.
+ */
+{
+  iterator it, jt;
+  for (it = objects.begin() ; it != objects.end() ; ++it)
+  {
+    for (jt = it, ++jt ; jt != objects.end() ; ++jt)
+    {
+      if (it->collides(*jt))
+      {
+        it->handleCollition(...(jt));
+        jt->handleCollition(...(it));
+      }
+    }
+  }
+}
+#endif
+
 #endif//PLANE_TPP

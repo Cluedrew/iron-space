@@ -8,6 +8,11 @@
  * except for the part in the collider, and that part swaps out.
  * WIP Very Work in Progress. Will be an abstract base at some time but I
  * will probably try to figure out the standard for this component first.
+ *
+ * TODO I think I have confligated two parts into physics: collition and
+ * kinimatics. They are connected (especially if you want to have something
+ * move but stop when it hits something) but they are not the same thing.
+ * The collider part can exist on its own. The kinimatics part
  */
 
 #include "collider.hpp"
@@ -25,7 +30,7 @@ private:
 
 protected:
 public:
-  PhysicsComponent ();
+  PhysicsComponent (Collider * collider);
   /* TODO Needs to take something more general.
    */
   virtual ~PhysicsComponent ();
@@ -42,41 +47,5 @@ public:
    * WIP
    */
 };
-
-
-
-#if 0
-// OK, I ported over my planed version but it is going to get hacked appart.
-class PhysicsComponent
-{
-private:
-  // Position is handled in the GameObject itself.
-  float dx, dy;
-  float spin;
-
-  Shape body;
-
-protected:
-public:
-  PhysicsComponent ();
-  virtual ~PhysicsComponent ();
-
-  void update (GameObject & obj, sf::Time const & deltaT);
-  /* Move the GameObject through space.
-   * Params: Mutable reference to the GameObject and time that passed during
-   *   this update.
-   * Effect: Modifies the GameObject's transform.
-   */
-
-  bool collidesWith (PhysicsComponent const & other);
-  /* Check for a collision between the this component's body and the other
-   *   component's body.
-   * Params: Reference to the other physics component.
-   * Return: True if there was a collision, false otherwise.
-   *
-   * ! Still can't get positional data.
-   */
-};
-#endif
 
 #endif//PHYSICS_COMPONENT_HPP

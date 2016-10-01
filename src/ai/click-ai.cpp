@@ -7,8 +7,8 @@
 
 
 // see header
-ClickAi::ClickAi (Command * onSelect) :
-    onSelect(onSelect)
+ClickAi::ClickAi (Command * onSelect_) :
+    onSelect(onSelect_)
 {}
 
 

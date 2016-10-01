@@ -7,21 +7,8 @@
  */
 
 #include "game-object.hpp"
+class Command;
 
-
-
-/* Command, here I am using it to delay an action, you pass in a command
- * to the Button and it runs the command when it is ready. Action->no undo?
- * This will be moved into its own space eventually.
- */
-
-struct Command
-{
-  Command ();
-  virtual ~Command ();
-
-  virtual void operator() () =0;
-};
 
 
 struct Button : public GameObject
@@ -32,6 +19,8 @@ struct Button : public GameObject
    *         <something about how you draw it>
    * and coordinates for the Button's top left corner and its size.
    */
+
+  Button (Button &&) = default;
 };
 
 #endif//BUTTON_HPP

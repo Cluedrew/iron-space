@@ -7,7 +7,7 @@
 
 #include "ai-component.hpp"
 // Until I seperate out the Command class.
-#include "../button.hpp"
+#include "../util/command.hpp"
 
 
 

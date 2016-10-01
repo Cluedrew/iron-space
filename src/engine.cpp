@@ -5,11 +5,12 @@
 #include "input/translate-event.hpp"
 #include "states/running-state.hpp"
 #include "states/pause-screen.hpp"
+#include "states/main-menu.hpp"
 
 
 
 Engine::Engine (LoggerDetailLevel logdl) :
-  running(true), window(), state(new PauseScreen(new RunningState())),
+  running(true), window(), state(new MainMenu()),
   clock(60), log("Engine", logdl)
 {}
 

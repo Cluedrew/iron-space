@@ -2,16 +2,20 @@
 
 // Implementation of the base PhysicsComponent
 
+#include <cassert>
 #include <SFML/Graphics/Transformable.hpp>
 #include "circle-collider.hpp"
 
 
 
 // see header
-PhysicsComponent::PhysicsComponent () :
+PhysicsComponent::PhysicsComponent (Collider * collider_) :
 //  dx(0), dy(0), spin(0)
-  collider(new CircleCollider(0, 0, 25))
-{}
+  collider(collider_)
+//  collider(new CircleCollider(0, 0, 25))
+{
+  assert(collider);
+}
 
 PhysicsComponent::~PhysicsComponent ()
 {

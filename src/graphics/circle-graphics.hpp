@@ -1,9 +1,7 @@
 #ifndef CIRCLE_GRAPHICS_HPP
 #define CIRCLE_GRAPHICS_HPP
 
-/* Drawable component.
- *
- * Soon to be an abstract base class.
+/* Drawable Circle, draws a white circle around the origin with a given radius.
  */
 
 #include <SFML/Graphics/CircleShape.hpp>
