@@ -43,7 +43,7 @@ WorldState * RunningState::handleInput (InputEvent const & ievent)
     break;
   }
 
-  return nullptr;
+  return this;
 }
 
 // see header
@@ -53,7 +53,7 @@ WorldState * RunningState::update (sf::Time const & deltaT)
   for (it = map.begin() ; it != map.end() ; ++it)
     it->updateAi(deltaT);
 
-  return nullptr;
+  return this;
 }
 
 // see header

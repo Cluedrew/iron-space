@@ -13,7 +13,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "util/loop-clock.hpp"
 #include "util/logger.hpp"
-#include "states/world-machine.hpp"
+class WorldState;
 
 
 
@@ -22,7 +22,7 @@ class Engine
 private:
   bool running;
   sf::RenderWindow window;
-  WorldMachine state;
+  WorldState * state;
 
   LoopClock clock;
   Logger log;

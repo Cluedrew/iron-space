@@ -42,7 +42,7 @@ WorldState * MainMenu::handleInput (InputEvent const & ievent)
 {
   gui.handleInput(ievent);
 
-  return nullptr;
+  return this;
 }
 
 WorldState * MainMenu::update (sf::Time const & deltaT)
@@ -58,7 +58,7 @@ WorldState * MainMenu::update (sf::Time const & deltaT)
     return new RunningState();
   }
 
-  return nullptr;
+  return this;
 }
 
 void MainMenu::draw (sf::RenderTarget & target, sf::RenderStates states) const

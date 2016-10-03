@@ -42,7 +42,7 @@ WorldState * PauseScreen::update (sf::Time const & deltaT)
     return paused;
   }
   else
-    return nullptr;
+    return this;
 }
 
 static void fill (sf::RenderTarget & target, sf::RenderStates states,

@@ -17,7 +17,7 @@ TEST_CASE("Tests for the MainMenu class.", "[states]")
     WorldState * nextState;
 
     nextState = menu->update(sf::Time::Zero);
-    REQUIRE( nullptr == nextState );
+    REQUIRE( menu == nextState );
 
     menu->startGame();
     nextState = menu->update(sf::Time::Zero);

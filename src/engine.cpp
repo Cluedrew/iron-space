@@ -2,6 +2,7 @@
 
 // Implementation of the games internal Engine.
 
+#include <cassert>
 #include "input/translate-event.hpp"
 #include "states/running-state.hpp"
 #include "states/pause-screen.hpp"
@@ -15,7 +16,9 @@ Engine::Engine (LoggerDetailLevel logdl) :
 {}
 
 Engine::~Engine ()
-{}
+{
+  delete state;
+}
 
 // see header
 int Engine::runLoop ()
@@ -61,7 +64,8 @@ void Engine::pollInput ()
       log.data("End pollInput (Quitting)");
       return;
     }
-    state.update(state->handleInput(iEvent));
+    state = state->handleInput(iEvent);
+    assert(state);
   }
   log.data("End pollInput");
 }
@@ -69,7 +73,8 @@ void Engine::pollInput ()
 void Engine::update ()
 {
     log.data("Begin update");
-    state.update(state->update(clock.getIncrement()));
+    state = state->update(clock.getIncrement());
+    assert(state);
     log.data("End update");
 }
 
