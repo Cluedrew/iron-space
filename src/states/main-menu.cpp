@@ -7,6 +7,7 @@
 #include "../input/input-event.hpp"
 #include "../util/command.hpp"
 #include "../button.hpp"
+#include "../text-fragment.hpp"
 #include "running-state.hpp"
 
 
@@ -33,6 +34,7 @@ MainMenu::MainMenu () :
 {
   gui.emplace(Button(new StartGame(*this),
                      100.0f, 100.0f, 50.0f, 50.0f));
+  gui.emplace(TextFragment("iron-space"));
 }
 
 MainMenu::~MainMenu ()

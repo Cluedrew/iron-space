@@ -18,6 +18,7 @@ struct Button : public GameObject
    * Params: <something to show what happens when you click it>
    *         <something about how you draw it>
    * and coordinates for the Button's top left corner and its size.
+   *         <x & y are ignored>
    */
 
   Button (Button &&) = default;

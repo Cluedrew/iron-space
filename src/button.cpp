@@ -18,4 +18,6 @@ Button::Button(Command * effect, float x, float y, float w, float h) :
                new AlignRectGraphics(w, h))
 {
   // TODO Something to move the shape over so x & y are not ignored.
+  // This solution isn't working.
+  this->move(x, y);
 }

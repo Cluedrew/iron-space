@@ -12,7 +12,8 @@
  * TODO I think I have confligated two parts into physics: collition and
  * kinimatics. They are connected (especially if you want to have something
  * move but stop when it hits something) but they are not the same thing.
- * The collider part can exist on its own. The kinimatics part
+ * The collider part can exist on its own. The kinimatics part should probably
+ * exist around that.
  */
 
 #include "collider.hpp"
@@ -31,7 +32,8 @@ private:
 protected:
 public:
   PhysicsComponent (Collider * collider);
-  /* TODO Needs to take something more general.
+  /* Create a PhysicsComponent with the collider that reperents its body.
+   * Params: Pointer to collider, the PhysicsComponent takes ownership.
    */
   virtual ~PhysicsComponent ();
 

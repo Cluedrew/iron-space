@@ -4,6 +4,8 @@
 /* Null Object for the AiComponent.
  */
 
+#include "ai-component.hpp"
+
 
 
 class NullAi : public AiComponent
@@ -11,7 +13,7 @@ class NullAi : public AiComponent
 private:
 protected:
 public:
-  virtual ~NullAi {}
+  virtual ~NullAi () {}
 
   void init (GameObject &) {}
   /* Does nothing.

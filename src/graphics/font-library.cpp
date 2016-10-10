@@ -64,7 +64,8 @@ FontLibrary::getFont(std::string const & fontName)
   {
     return FontReference(loadedFonts.find(fontName)->second);
   }
-  std::string fileName = std::string("/example/prefix/" + fontName);
+  std::string fontDir = std::string("/usr/share/fonts/truetype/freefont/");
+  std::string fileName = fontDir + fontName;
   AnnotatedFont * afont = new AnnotatedFont;
   afont->name = fontName;
   afont->uses = 0;

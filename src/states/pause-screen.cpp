@@ -28,7 +28,7 @@ WorldState * PauseScreen::handleInput (InputEvent const & ievent)
 {
   if (InputEvent::Pause == ievent.type)
     unpause = true;
-  return nullptr;
+  return this;
 }
 
 WorldState * PauseScreen::update (sf::Time const & deltaT)
