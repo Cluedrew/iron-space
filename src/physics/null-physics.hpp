@@ -2,20 +2,21 @@
 #define NULL_PHYSICS_HPP
 
 /* Null Object for the PhysicsComponent.
- * WIP
+ *
+ * Never collides, all update operations are really no-ops.
  */
 
+#include "physics-component.hpp"
 
 
-class NullPhysics : public PhysicsComponent
+
+struct NullPhysics : public PhysicsComponent
 {
-private:
-protected:
-public:
-  virtual ~NullPhysics () {}
+  NullPhysics ();
+  /* Create a NullPhysics object.
+   */
 
-  // Yeah, I am so confident that I am going to change the PhysicsComponent
-  // around I am not even filling this in yet.
+  virtual ~NullPhysics () {}
 };
 
 #endif//NULL_PHYSICS_HPP

@@ -10,6 +10,7 @@
  */
 
 #include "game-object.hpp"
+#include "objects/null-game-object.hpp"
 
 
 
@@ -66,12 +67,9 @@ TEST_CASE("Testing for the Plane container.", "")
   SECTION("Checking emplace (GameObject)")
   {
     Plane<GameObject> plane;
-    plane.emplace(GameObject());
-    plane.emplace();
+    plane.emplace(NullGameObject());
     Plane<GameObject>::iterator it = plane.begin();
     Plane<GameObject>::iterator endOfPlane = plane.end();
-    REQUIRE( it != endOfPlane );
-    ++it;
     REQUIRE( it != endOfPlane );
     ++it;
     REQUIRE( it == endOfPlane );

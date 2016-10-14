@@ -5,6 +5,8 @@
  * WIP
  */
 
+#include "graphics-component.hpp"
+
 
 
 class NullGraphics : public GraphicsComponent

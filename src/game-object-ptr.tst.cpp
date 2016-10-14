@@ -12,6 +12,7 @@
 
 #include "catch.hpp"
 #include "game-object.hpp"
+#include "objects/null-game-object.hpp"
 
 
 
@@ -38,7 +39,7 @@ TEST_CASE("Tests for the GameObjectPtr", "")
 
   SECTION("Check construction")
   {
-    GameObject object;
+    GameObject object = NullGameObject();
     GameObjectPtr ptr1(object);
 
     SECTION("Target Constructor")
@@ -64,7 +65,7 @@ TEST_CASE("Tests for the GameObjectPtr", "")
 
   SECTION("Check Comparison")
   {
-    GameObject objs[2] = {GameObject(), GameObject()};
+    GameObject objs[2] = {NullGameObject(), NullGameObject()};
     GameObjectPtr ptr1(objs[0]);
     GameObjectPtr ptr2(objs[1]);
     GameObjectPtr ptr3(objs[0]);
@@ -100,15 +101,15 @@ TEST_CASE("Tests for the GameObjectPtr", "")
 
   SECTION("Check access")
   {
-    GameObject obj;
+    GameObject obj = NullGameObject();
     GameObjectPtr ptr(obj);
     REQUIRE( &obj == &*ptr );
   }
 
   SECTION("Check assignment")
   {
-    GameObject obj1;
-    GameObject obj2;
+    GameObject obj1 = NullGameObject();
+    GameObject obj2 = NullGameObject();
     GameObjectPtr ptrA(obj1);
     GameObjectPtr ptrB(ptrA);
     CHECK( ptrA == ptrB );
@@ -126,7 +127,7 @@ TEST_CASE("Tests for the GameObjectPtr", "")
 
     SECTION("Simple Case")
     {
-      GameObject * dynobj = new GameObject();
+      GameObject * dynobj = new NullGameObject();
       GameObjectPtr ptr(*dynobj);
       REQUIRE( ptr );
       REQUIRE( &*ptr == &*dynobj );
@@ -136,8 +137,8 @@ TEST_CASE("Tests for the GameObjectPtr", "")
 
     SECTION("takeRegester")
     {
-      GameObject * obj1 = new GameObject();
-      GameObject * obj2 = new GameObject();
+      GameObject * obj1 = new NullGameObject();
+      GameObject * obj2 = new NullGameObject();
       GameObjectPtr ptr1(makePtrTo(*obj1));
       CHECK( &*ptr1 == &*obj1 );
 
@@ -152,7 +153,7 @@ TEST_CASE("Tests for the GameObjectPtr", "")
     SECTION("Mass Auto-Null")
     {
       int const n = 16;
-      GameObject * obj = new GameObject();
+      GameObject * obj = new NullGameObject();
       GameObjectPtr ptrs[n];
       for (int i = 0 ; i < n ; ++i)
       {

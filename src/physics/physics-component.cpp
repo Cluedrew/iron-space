@@ -12,7 +12,6 @@
 PhysicsComponent::PhysicsComponent (Collider * collider_) :
 //  dx(0), dy(0), spin(0)
   collider(collider_)
-//  collider(new CircleCollider(0, 0, 25))
 {
   assert(collider);
 }

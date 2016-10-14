@@ -47,16 +47,20 @@ private:
 
 protected:
 public:
-  GameObject ();
-  /* A blank constructor. Used mostly for testing the containers and pointers
-   * that work with GameObjects.
-   */
-
   GameObject (AiComponent * ai,
               PhysicsComponent * physics,
               GraphicsComponent * graphics);
-  /* Create a new GameObject from its list of components.
+  /* Create a new GameObject from its components.
    * Params: Pointers to the components, ownership of them is taken.
+   */
+
+  GameObject (sf::Transformable const & start,
+              AiComponent * ai,
+              PhysicsComponent * physics,
+              GraphicsComponent * graphics);
+  /* Create a new GameObject from its starting transform and components.
+   * Params: A reference to the starting transform (which is copied) and
+   *   pointers to the components, ownership of them is taken.
    */
 
   GameObject(GameObject const & other) = delete;

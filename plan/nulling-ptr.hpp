@@ -7,6 +7,20 @@
  * nice to take the pointer logic out of the GameObject class.
  *
  * It is actually an oberver. However it is a very narrow one.
+ *
+ * Ironically, the solution (I think, haven't tried it) to the problem that
+ * kept me from implementing this occured to me at about the same time as a
+ * simpler solution to the problem this was trying to solve (that is to say
+ * the zero argument constructor on the GameObject). So this is on the back
+ * burner until its generic advantage comes up again.
+ *
+ * The possible solution to make this work looks like this:
+ * Create template classes for the NullingPtr and the vector of back pointers.
+ * The former is a 'regular' smart pointer and the latter declares the first
+ * as its friend (so it can have an almost non-existant public interface).
+ * A class that can be the target of a NullingPtr must have the back pointers
+ * class as a component (with a particular, unusual name).
+ * All includes should flow towards the back pointer template.
  */
 
 /* This is an intermediary that is to prevent a circle of dependancies.

@@ -11,16 +11,18 @@
 
 
 
-GameObject::GameObject () :
-  sf::Transformable(), sf::Drawable(), ptrsToThis(),
-  ai(nullptr), physics(nullptr), graphics(nullptr)
-{
-  //ai->init(*this); // !? This actually worked for a while. WHY?
-}
-
 GameObject::GameObject (AiComponent * ai, PhysicsComponent * physics,
     GraphicsComponent * graphics) :
   sf::Transformable(), sf::Drawable(), ptrsToThis(),
+  ai(ai), physics(physics), graphics(graphics)
+{
+  ai->init(*this);
+  physics->updatePosition(*this);
+}
+
+GameObject::GameObject (sf::Transformable const & start, AiComponent * ai,
+    PhysicsComponent * physics, GraphicsComponent * graphics) :
+  sf::Transformable(start), sf::Drawable(), ptrsToThis(),
   ai(ai), physics(physics), graphics(graphics)
 {
   ai->init(*this);
