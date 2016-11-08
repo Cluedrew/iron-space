@@ -15,7 +15,7 @@ struct Button : public GameObject
 {
   Button (Command * effect, float x, float y, float w, float h);
   /* Create a new button of given size and effect.
-   * Params: <something to show what happens when you click it>
+   * Params: A command to be called when the button is clicked.
    *         <something about how you draw it>
    * and coordinates for the Button's top left corner and its size.
    *         <x & y are ignored>
