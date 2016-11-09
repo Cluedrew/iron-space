@@ -18,8 +18,8 @@ template<typename KeyT, typename DataT>
 class DataLibrary
 {
 private:
-  // Stored data.
-  struct DataPack
+  // Wrapper around the internal data, with reference counter.
+  struct AnnotatedData
   {
     KeyT key;
     unsigned int useCount;
@@ -27,11 +27,15 @@ private:
   };
 
 public:
+  // class ConstDataReference ???
+  // The difference would be the constness you get when you dereference the
+  // object. Sort of like pointers. [Const]DataPointer?
+
   // Reference to internal data type.
   class DataReference
   {
   private:
-    DataPack & data
+    AnnotatedData & data
 
   protected:
   public:
@@ -49,10 +53,10 @@ public:
   };
 
 private:
-  std::map<std::string, DataPack *> loadedData;
+  std::map<std::string, AnnotatedData *> loadedData;
 
 protected:
-  DataPack * prepareData(KeyT) =0;
+  AnnotatedData * prepareData(KeyT) =0;
   /* Function to overload. It must be defined to create a DataPack
    * from a KeyT
    * Params: Key value to generate the data from.
@@ -67,6 +71,53 @@ public:
    * Effect: Prepare the data if it is not already.
    * Return: A DataReference to the data.
    */
-}:
+};
+
+#ifndef DATA_LIBRARY_TPP
+#define DATA_LIBRARY_TPP
+
+template<typename KeyT, typename DataT>
+DataLibrary<KeyT, DataT>::DataReference
+DataLibrary<KeyT, DataT>::get (KeyT key)
+{
+  if (0 != loadedData.count(key))
+    return DataReference(loadedData[key]);
+
+  AnnotatedData * newData = prepareData(key);
+  //assert(newData);
+  newData->useCount = 0;
+  loadedData.insert(key, newData);
+  return DataReference(newData);
+}
+
+template<typename KeyT, typename DataT>
+DataLibrary<KeyT, DataT>::DataReference::DataReference (AnnotatedData * data) :
+  data(*data)
+{
+  ++data->useCount;
+}
+
+template<typename KeyT, typename DataT>
+DataLibrary<KeyT, DataT>::DataReference::~DataReference ()
+{
+  --data->useCount;
+  if (0 == data->useCount)
+  {
+    /* How do we remove it from the collection?
+     * (If we can template a static (which comes out different for each
+     * instance) than we could reference that directly.
+     */
+     delete data;
+  }
+}
+
+//TEMPLATE_ARGS template<typename KeyT, typename DataT>
+//DATALIB_PREFIX DataLibrary<KeyT, DataT>
+
+//TWRAP_BASE(rettype) TEMPLATE_ARGS rettype DATALIB_PREFIX
+//TWRAP_XTOR() TWRAP_BASE()
+//TWRAP(rettype) TWRAP_BASE(DATALIB_PREFIX::rettype)
+
+#endif//DATA_LIBRARY_TPP
 
 #endif//DATA_LIBRARY_HPP
