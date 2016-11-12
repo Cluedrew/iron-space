@@ -8,6 +8,12 @@
  * DataT: Stored type, it must be possible to generate one from KeyT.
  *
  * TODO: Not finished, document use as well as filling in the implementation.
+ *     * Consider adding a third ID template argument. I tested it (on a small
+ *       scale) and the static varable is different for each template. But
+ *       that means we can only have one instance for each set of types. A
+ *       third unused argument would avoid collitions.
+ *     * Move prepareData to a different template class which is specialized
+ *       to implement the loading.
  */
 
 #include <map>
@@ -35,7 +41,7 @@ public:
   class DataReference
   {
   private:
-    AnnotatedData & data
+    AnnotatedData * data
 
   protected:
   public:
@@ -53,7 +59,7 @@ public:
   };
 
 private:
-  std::map<std::string, AnnotatedData *> loadedData;
+  static std::map<std::string, AnnotatedData *> loadedData;
 
 protected:
   AnnotatedData * prepareData(KeyT) =0;
@@ -72,52 +78,5 @@ public:
    * Return: A DataReference to the data.
    */
 };
-
-#ifndef DATA_LIBRARY_TPP
-#define DATA_LIBRARY_TPP
-
-template<typename KeyT, typename DataT>
-DataLibrary<KeyT, DataT>::DataReference
-DataLibrary<KeyT, DataT>::get (KeyT key)
-{
-  if (0 != loadedData.count(key))
-    return DataReference(loadedData[key]);
-
-  AnnotatedData * newData = prepareData(key);
-  //assert(newData);
-  newData->useCount = 0;
-  loadedData.insert(key, newData);
-  return DataReference(newData);
-}
-
-template<typename KeyT, typename DataT>
-DataLibrary<KeyT, DataT>::DataReference::DataReference (AnnotatedData * data) :
-  data(*data)
-{
-  ++data->useCount;
-}
-
-template<typename KeyT, typename DataT>
-DataLibrary<KeyT, DataT>::DataReference::~DataReference ()
-{
-  --data->useCount;
-  if (0 == data->useCount)
-  {
-    /* How do we remove it from the collection?
-     * (If we can template a static (which comes out different for each
-     * instance) than we could reference that directly.
-     */
-     delete data;
-  }
-}
-
-//TEMPLATE_ARGS template<typename KeyT, typename DataT>
-//DATALIB_PREFIX DataLibrary<KeyT, DataT>
-
-//TWRAP_BASE(rettype) TEMPLATE_ARGS rettype DATALIB_PREFIX
-//TWRAP_XTOR() TWRAP_BASE()
-//TWRAP(rettype) TWRAP_BASE(DATALIB_PREFIX::rettype)
-
-#endif//DATA_LIBRARY_TPP
 
 #endif//DATA_LIBRARY_HPP

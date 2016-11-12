@@ -24,7 +24,6 @@ EXE=iron-space
 TST_EXE=run-tests
 
 
-# The following directories are searched for code.
 # The name of the directory that holds code.
 CODEDIR=src
 # The name of every sub directory of CODEDIR.
@@ -109,9 +108,6 @@ endif
 
 all : $(EXE)
 
-run : $(EXE)
-	./$(EXE)
-
 # Rule for the binary
 $(EXE) : $(call objsfor,$(SRCFILES) $(SRCMAIN))
 	$(CXX) $(CXXFLAGS) $^ $(CXXLIBS) -o $@
@@ -140,6 +136,12 @@ $(TMPDIR) :
 $(SUBDIRS) : | $(TMPDIR)
 	mkdir $@
 
+### Action rules:
+
+# Phony rule for running the executable.
+run : $(EXE)
+	./$<
+
 # Phony rule for cleaning intermediate files
 clean :
 	-rm $(TMPDIR)/*/*.[do]
@@ -152,7 +154,7 @@ deepclean : clean
 	-[ -e $(EXE) ] && rm $(EXE)
 	-[ -e $(TST_EXE) ] && rm $(TST_EXE)
 
-# Phony rules for running the test executable.
+# Phony rule for running the test executable.
 test : $(TST_EXE)
 	./$<
 
