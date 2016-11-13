@@ -15,65 +15,55 @@
 
 // Wrap the declaration of the template in the args and class prefix.
 #define TWRAP(type) TEMPLATE_ARGS type TEMPLATE_PREFIX
-// Same as above, but rettype is put in the scope of the class.
-#define TWRAP_RET(innertype) TWRAP(TEMPLATE_PREFIX::innertype)
-//efine TRETURN/TWRAP_INNER
-// ...
-#define TWRAP_REF(rettype) TWRAP(rettype)::DataReference
-// ...
-#undef TWRAP_REF
-// ...
-#undef TWRAP_RET
-#undef TWRAP
+// Put a type in the scope of the template. [Not so sure about this name.]
+#define TTYPE(type) typename TEMPLATE_PREFIX::type
+// Same as above, but type argument the scope of the class as well.
+#define TWRAP_TYPE(type) TWRAP(typename TEMPLATE_PREFIX::type)
 
 template<typename KeyT, typename DataT>
-std::map<std::string, AnnotatedData *> DataLibrary<KeyT, DataT>::loadedData;
+std::map<std::string, typename DataLibrary<KeyT, DataT>::AnnotatedData *>
+DataLibrary<KeyT, DataT>::loadedData;
+// TWRAP(std::map<std::string, TTYPE(AnnotatedData *)>)::loadedData
 
 
 
-template<typename KeyT, typename DataT>
-DataLibrary<KeyT, DataT>::DataReference
-DataLibrary<KeyT, DataT>::get (KeyT key)
+// see header
+TWRAP_TYPE(DataPointer)::get (KeyT key)
 {
   if (0 != loadedData.count(key))
-    return DataReference(loadedData[key]);
+    return DataPointer(loadedData[key]);
 
-  AnnotatedData * newData = prepareData(key);
+  AnnotatedData * newData = DataLibraryLoader<KeyT, DataT>::loadData(key);
   //assert(newData);
+  newData->key = key;
   newData->useCount = 0;
   loadedData.insert(key, newData);
-  return DataReference(newData);
+  return DataPointer(newData);
 }
 
 
 
-// DataReference Constructors & Deconstrctor:
-template<typename KeyT, typename DataT>
-DataLibrary<KeyT, DataT>::DataReference::DataReference (AnnotatedData * data) :
+// DataPointer Constructors & Deconstrctor:
+TWRAP()::DataPointer::DataPointer (AnnotatedData * data) :
   data(data)
 {
   //assert(data);
   ++data->useCount;
 }
 
-template<typename KeyT, typename DataT>
-DataLibrary<KeyT, DataT>::DataReference::DataReference
-    (DataReference const & other) :
+TWRAP()::DataPointer::DataPointer (DataPointer const & other) :
   data(other.data)
 {
   ++data->useCount;
 }
 
-template<typename KeyT, typename DataT>
-DataLibrary<KeyT, DataT>::DataReference::DataReference
-    (DataReference && other) :
+TWRAP()::DataPointer::DataPointer (DataPointer && other) :
   data(other.data)
 {
   ++data->useCount;
 }
 
-template<typename KeyT, typename DataT>
-DataLibrary<KeyT, DataT>::DataReference::~DataReference ()
+TWRAP()::DataPointer::~DataPointer ()
 {
   --data->useCount;
   if (0 == data->useCount)
@@ -85,17 +75,76 @@ DataLibrary<KeyT, DataT>::DataReference::~DataReference ()
 
 
 
-// DataReference Operators:
-template<typename KeyT, typename DataT>
-DataLibrary<KeyT, DataT>::DataT &
-DataLibrary<KeyT, DataT>::DataReference::operator* ()
+// DataPointer Operators:
+TWRAP_TYPE(DataPointer &)::DataPointer::operator==
+    (TTYPE(DataPointer) const & other)
+{
+  if (data == other.data)
+    return *this;
+
+  --data->useCount;
+  if (0 == data->useCount)
+  {
+    DataLibrary<KeyT, DataT>::loadedData.erase(data->key);
+    delete data;
+  }
+  data = other.data;
+  ++data->useCount;
+  return *this;
+}
+
+TWRAP_TYPE(DataPointer &)::DataPointer::operator==
+    (TTYPE(DataPointer) && other)
+{
+  if (data == other.data)
+    return *this;
+
+  --data->useCount;
+  if (0 == data->useCount)
+  {
+    DataLibrary<KeyT, DataT>::loadedData.erase(data->key);
+    delete data;
+  }
+  data = other.data;
+  ++data->useCount;
+  return *this;
+}
+
+TWRAP(DataT &)::DataPointer::operator* () const
 {
   return data->coreData;
 }
 
+TWRAP(DataT *)::DataPointer::operator-> () const
+{
+  return &data->coreData;
+}
 
 
-#undef DATALIB_PREFIX
+
+#undef TWRAP_TYPE
+#undef TWRAP
+
+#undef TEMPLATE_PREFIX
 #undef TEMPLATE_ARGS
 
 #endif//DATA_LIBRARY_TPP
+
+/* If I could make this work...
+#define TWRAP(type)                                             \
+TEMPLATE_ARGS                                                   \
+#if #type[0] != '\0' && #type[0] == ':' && #type[1] == ':'      \
+typename TEMPLATE_PREFIX type                                   \
+#else                                                           \
+type                                                            \
+#endif                                                          \
+TEMPLATE_PREFIX
+
+Basically, it switches between the two current forms depending on the
+  start of type, if it is :: then it adds the TEMPLATE_PREFIX.
+Of course the next step would be to create a macro that defines the TWRAP
+  macro so we can use it across files easily. Or even define a slightly
+  seperate macro each time to avoid naming collitions.
+I could even make this pretty, but it all depends on if you can embed
+  preprocesser directives in macros and have them happen at that time.
+*/
