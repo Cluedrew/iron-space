@@ -13,17 +13,22 @@
 #define TEMPLATE_ARGS template<typename KeyT, typename DataT>
 #define TEMPLATE_PREFIX DataLibrary<KeyT, DataT>
 
-// Wrap the declaration of the template in the args and class prefix.
+// Wrap the declaration of a template member with the args and prefix.
 #define TWRAP(type) TEMPLATE_ARGS type TEMPLATE_PREFIX
 // Put a type in the scope of the template. [Not so sure about this name.]
 #define TTYPE(type) typename TEMPLATE_PREFIX::type
-// Same as above, but type argument the scope of the class as well.
-#define TWRAP_TYPE(type) TWRAP(typename TEMPLATE_PREFIX::type)
+// Same as TWRAP, but type argument is put in the scope of the template.
+#define TWRAP_TYPE(type) TWRAP(TTYPE(type))
+
+// This would remove the ambiguity of TTYPE's usage.
+// define TTYPE typename TEMPLATE_PREFIX
+// define TWRAP_TYPE(type) TWRAP(TTYPE::type)
 
 template<typename KeyT, typename DataT>
 std::map<std::string, typename DataLibrary<KeyT, DataT>::AnnotatedData *>
 DataLibrary<KeyT, DataT>::loadedData;
-// TWRAP(std::map<std::string, TTYPE(AnnotatedData *)>)::loadedData
+// The comma messes things up.
+//TWRAP(std::map<std::string, TTYPE(AnnotatedData *)>)::loadedData
 
 
 
@@ -123,28 +128,10 @@ TWRAP(DataT *)::DataPointer::operator-> () const
 
 
 #undef TWRAP_TYPE
+#undef TTYPE
 #undef TWRAP
 
 #undef TEMPLATE_PREFIX
 #undef TEMPLATE_ARGS
 
 #endif//DATA_LIBRARY_TPP
-
-/* If I could make this work...
-#define TWRAP(type)                                             \
-TEMPLATE_ARGS                                                   \
-#if #type[0] != '\0' && #type[0] == ':' && #type[1] == ':'      \
-typename TEMPLATE_PREFIX type                                   \
-#else                                                           \
-type                                                            \
-#endif                                                          \
-TEMPLATE_PREFIX
-
-Basically, it switches between the two current forms depending on the
-  start of type, if it is :: then it adds the TEMPLATE_PREFIX.
-Of course the next step would be to create a macro that defines the TWRAP
-  macro so we can use it across files easily. Or even define a slightly
-  seperate macro each time to avoid naming collitions.
-I could even make this pretty, but it all depends on if you can embed
-  preprocesser directives in macros and have them happen at that time.
-*/

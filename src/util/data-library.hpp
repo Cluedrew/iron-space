@@ -96,12 +96,13 @@ protected:
   // If we use a sub-template instead:
   typedef DataLibraryLoader<KeyT, DataT> Loader;
 
-  AnnotatedData * prepareData(KeyT) =0;
-  /* Function to overload. It must be defined to create a DataPack
-   * from a KeyT
+  virtual AnnotatedData * loadData(KeyT) =0;
+  /* Function to overload. It must be defined to create a dynamic
+   * AnnotatedData object from a KeyT.
    * Params: Key value to generate the data from.
    * Effect: Prepare the data.
-   * Return: Pointer to the new DataPack.
+   * Return: Pointer to the new AnnotatedData. key and useCount fields are
+   *   overwritten.
    */
 
 public:

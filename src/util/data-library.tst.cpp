@@ -10,6 +10,45 @@
  */
 
 
+// ============== Test of DataLibraryLoader solution. [It compiled.]
+#if 0
+class IntIdLibrary : public DataLibrary<int, int>
+{ AnnotatedData * loadData (int key) {return nullptr;} };
+
+template<>
+class DataLibraryLoader<int, int>
+{
+  typedef typename IntIdLibrary::AnnotatedData AnnotatedData;
+
+  AnnotatedData * loadData (int key)
+  {
+    AnnotatedData * data = new AnnotatedData;
+    data->coreData = key;
+    return data;
+  }
+};
+
+
+
+#else
+// =============== Test of internal loadData solution. [It Compiled.]
+class IntIdLibrary : public DataLibrary<int, int>
+{
+  AnnotatedData * loadData (int key)
+  {
+    AnnotatedData * data = new AnnotatedData;
+    data->coreData = key;
+    return data;
+  }
+};
+#endif
+
+/* So they both work. Is there any advantages to the DataLibraryLoader
+ * method? Currently it just adds to the boiler plate.
+ */
+
+
+
 TEST_CASE("Tests for the DataLibrary Template Class", "[util]")
 {
   // TODO: Demonstration Tests come first, then cover any corner cases.
