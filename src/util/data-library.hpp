@@ -90,13 +90,13 @@ public:
   };*/
 
 private:
-  static std::map<std::string, AnnotatedData *> loadedData;
+  static std::map<KeyT, AnnotatedData *> loadedData;
 
 protected:
   // If we use a sub-template instead:
   typedef DataLibraryLoader<KeyT, DataT> Loader;
 
-  virtual AnnotatedData * loadData(KeyT) =0;
+  //static virtual AnnotatedData * loadData(KeyT) =0;
   /* Function to overload. It must be defined to create a dynamic
    * AnnotatedData object from a KeyT.
    * Params: Key value to generate the data from.
@@ -106,7 +106,7 @@ protected:
    */
 
 public:
-  DataPointer get(KeyT);
+  static DataPointer get(KeyT);
   /* Get a DataPointer for the key, preparing it if nessary.
    * Params: Key value.
    * Effect: Prepare the data if it is not already.

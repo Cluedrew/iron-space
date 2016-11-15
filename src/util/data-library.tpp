@@ -5,6 +5,8 @@
  * for saving, storing and referencing data after it has been loaded.
  */
 
+#include <utility>
+
 
 
 // I am considering using macros to cut down on the template boiler code:
@@ -15,20 +17,16 @@
 
 // Wrap the declaration of a template member with the args and prefix.
 #define TWRAP(type) TEMPLATE_ARGS type TEMPLATE_PREFIX
-// Put a type in the scope of the template. [Not so sure about this name.]
-#define TTYPE(type) typename TEMPLATE_PREFIX::type
+// Put a type in the scope of the template.
+#define TTYPE() typename TEMPLATE_PREFIX
 // Same as TWRAP, but type argument is put in the scope of the template.
-#define TWRAP_TYPE(type) TWRAP(TTYPE(type))
-
-// This would remove the ambiguity of TTYPE's usage.
-// define TTYPE typename TEMPLATE_PREFIX
-// define TWRAP_TYPE(type) TWRAP(TTYPE::type)
+#define TWRAP_TYPE(type) TWRAP(TTYPE()::type)
 
 template<typename KeyT, typename DataT>
-std::map<std::string, typename DataLibrary<KeyT, DataT>::AnnotatedData *>
+std::map<KeyT, typename DataLibrary<KeyT, DataT>::AnnotatedData *>
 DataLibrary<KeyT, DataT>::loadedData;
 // The comma messes things up.
-//TWRAP(std::map<std::string, TTYPE(AnnotatedData *)>)::loadedData
+//TWRAP(std::map<KeyT, TTYPE()::AnnotatedData *>)::loadedData;
 
 
 
@@ -42,7 +40,7 @@ TWRAP_TYPE(DataPointer)::get (KeyT key)
   //assert(newData);
   newData->key = key;
   newData->useCount = 0;
-  loadedData.insert(key, newData);
+  DataLibrary<KeyT, DataT>::loadedData.insert(std::make_pair(key, newData));
   return DataPointer(newData);
 }
 
@@ -82,7 +80,7 @@ TWRAP()::DataPointer::~DataPointer ()
 
 // DataPointer Operators:
 TWRAP_TYPE(DataPointer &)::DataPointer::operator==
-    (TTYPE(DataPointer) const & other)
+    (TTYPE()::DataPointer const & other)
 {
   if (data == other.data)
     return *this;
@@ -99,7 +97,7 @@ TWRAP_TYPE(DataPointer &)::DataPointer::operator==
 }
 
 TWRAP_TYPE(DataPointer &)::DataPointer::operator==
-    (TTYPE(DataPointer) && other)
+    (TTYPE()::DataPointer && other)
 {
   if (data == other.data)
     return *this;

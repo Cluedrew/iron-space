@@ -11,16 +11,16 @@
 
 
 // ============== Test of DataLibraryLoader solution. [It compiled.]
-#if 0
+#if 1
 class IntIdLibrary : public DataLibrary<int, int>
 { AnnotatedData * loadData (int key) {return nullptr;} };
 
 template<>
-class DataLibraryLoader<int, int>
+struct DataLibraryLoader<int, int>
 {
   typedef typename IntIdLibrary::AnnotatedData AnnotatedData;
 
-  AnnotatedData * loadData (int key)
+  static AnnotatedData * loadData (int key)
   {
     AnnotatedData * data = new AnnotatedData;
     data->coreData = key;
@@ -31,7 +31,7 @@ class DataLibraryLoader<int, int>
 
 
 #else
-// =============== Test of internal loadData solution. [It Compiled.]
+// =============== Test of internal loadData solution. [X static virtual X]
 class IntIdLibrary : public DataLibrary<int, int>
 {
   AnnotatedData * loadData (int key)
@@ -53,4 +53,9 @@ TEST_CASE("Tests for the DataLibrary Template Class", "[util]")
 {
   // TODO: Demonstration Tests come first, then cover any corner cases.
   // Right now this is just forcing the hpp & tpp files to be read.
+  SECTION("Simple <int, int> test")
+  {
+    IntIdLibrary::DataPointer number = IntIdLibrary::get(3);
+    REQUIRE( *number == 3 );
+  }
 }
