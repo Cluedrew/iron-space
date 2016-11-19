@@ -47,6 +47,18 @@ ROOT=$(shell ./.here)
 
 ### End of Setup
 
+### This is going to need some clean-up.
+
+all :
+
+### Include Sub-Makefiles
+
+GEN_FILES=
+
+include mk/*.mk
+
+### Interal variables
+
 # Patterns:
 CPP_PAT=$(CODEDIR)/%.cpp
 MAIN_PAT=$(CODEDIR)/main%cpp
@@ -57,7 +69,11 @@ OBJ_PAT=$(TMPDIR)/%.o
 DEP_PAT=$(TMPDIR)/%.d
 
 # List of all cpp files. These are the files complied to objects.
-CPPFILES=$(wildcard $(CODEDIR)/*.cpp $(CODEDIR)/*/*.cpp)
+# All existing cpp files are used.
+CPP1=$(wildcard $(CODEDIR)/*.cpp $(CODEDIR)/*/*.cpp)
+# Any generated cpp files are added.
+CPP2=$(filter $(CPP_PAT), $(GEN_FILES))
+CPPFILES=$(sort $(CPP1) $(CPP2))
 
 # List of all object and depends files, one each for each cpp.
 OBJFILES=$(CPPFILES:$(CPP_PAT)=$(OBJ_PAT))
@@ -107,6 +123,9 @@ endif
 ### Recipes and Rules
 
 all : $(EXE)
+	@echo $(filter-out $(TST_PAT),$(CPP2))
+	@echo $(findstring $(CPP2), $(SRCFILES))
+	@echo mk/*.mk
 
 # Rule for the binary
 $(EXE) : $(call objsfor,$(SRCFILES) $(SRCMAIN))
@@ -151,8 +170,9 @@ clean :
 
 # Phony rule for cleaning generated files
 deepclean : clean
-	-[ -e $(EXE) ] && rm $(EXE)
-	-[ -e $(TST_EXE) ] && rm $(TST_EXE)
+	-rm $(EXE)
+	-rm $(TST_EXE)
+	-rm $(GEN_FILES)
 
 # Phony rule for running the test executable.
 test : $(TST_EXE)
