@@ -30,6 +30,9 @@ CODEDIR=src
 #   It is defined as all files in CODEDIR that do not contain a '.'
 DIRNAMES ::= $(shell ls -1 $(CODEDIR) | grep '^[^.]*$$' -)
 
+# List of secondary make files:
+SUB_MAKES ::= $(wildcard mk/*.mk)
+
 # The name of the temperary directory for object and dependancy files.
 TMPDIR=.tmp
 
@@ -47,16 +50,6 @@ ROOT=$(shell ./.here)
 
 ### End of Setup
 
-### This is going to need some clean-up.
-
-all :
-
-### Include Sub-Makefiles
-
-GEN_FILES=
-
-include mk/*.mk
-
 ### Interal variables
 
 # Patterns:
@@ -68,11 +61,15 @@ TST_PAT=$(CODEDIR)/%.tst.cpp
 OBJ_PAT=$(TMPDIR)/%.o
 DEP_PAT=$(TMPDIR)/%.d
 
+# List of other generated files.
+search=$(firstword $(shell egrep '_GENERATES' $(1)))
+GEN_FILES=$(foreach mkfile,$(SUB_MAKES),$(call search,$(mkfile)))
+
 # List of all cpp files. These are the files complied to objects.
 # All existing cpp files are used.
 CPP1=$(wildcard $(CODEDIR)/*.cpp $(CODEDIR)/*/*.cpp)
 # Any generated cpp files are added.
-CPP2=$(filter $(CPP_PAT), $(GEN_FILES))
+CPP2=$(filter $(CPP_PAT),$(GEN_FILES))
 CPPFILES=$(sort $(CPP1) $(CPP2))
 
 # List of all object and depends files, one each for each cpp.
@@ -123,9 +120,6 @@ endif
 ### Recipes and Rules
 
 all : $(EXE)
-	@echo $(filter-out $(TST_PAT),$(CPP2))
-	@echo $(findstring $(CPP2), $(SRCFILES))
-	@echo mk/*.mk
 
 # Rule for the binary
 $(EXE) : $(call objsfor,$(SRCFILES) $(SRCMAIN))
@@ -184,6 +178,10 @@ step-test : $(EXE)
 
 mem-test : $(EXE)
 	valgrind ./$(EXE)
+
+### Include Sub-Makefiles
+
+include mk/*.mk
 
 ### Include Depends Files
 
