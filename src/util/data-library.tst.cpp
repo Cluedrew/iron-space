@@ -43,9 +43,29 @@ class IntIdLibrary : public DataLibrary<int, int>
 };
 #endif
 
-/* So they both work. Is there any advantages to the DataLibraryLoader
- * method? Currently it just adds to the boiler plate.
+/* The DataLibraryLoader solution seems to work, where the internal one does
+ * not. So I guess I will be using that one. But I would like to clean up its
+ * use quite a bit if possible.
  */
+
+typedef DataLibrary<char, int> LoadCounterLibrary;
+
+template<>
+struct DataLibraryLoader<char, int>
+{
+  typedef typename LoadCounterLibrary::AnnotatedData AnnotatedData;
+
+  static int loadCount;
+
+  static AnnotatedData * loadData (char key)
+  {
+    AnnotatedData * data = new AnnotatedData;
+    data->coreData = loadCount++;
+    return data;
+  }
+};
+
+int DataLibraryLoader<char, int>::loadCount = 0;
 
 
 
@@ -57,5 +77,23 @@ TEST_CASE("Tests for the DataLibrary Template Class", "[util]")
   {
     IntIdLibrary::DataPointer number = IntIdLibrary::get(3);
     REQUIRE( *number == 3 );
+  }
+
+  SECTION("Check timing of loads.")
+  {
+    LoadCounterLibrary::DataPointer zed = LoadCounterLibrary::get('z');
+    REQUIRE( *zed == 0 );
+
+    LoadCounterLibrary::DataPointer zee = LoadCounterLibrary::get('z');
+    REQUIRE( *zee == 0 );
+
+    {
+      LoadCounterLibrary::DataPointer uu = LoadCounterLibrary::get('u');
+      REQUIRE( *uu == 1 );
+    }
+    {
+      LoadCounterLibrary::DataPointer uu = LoadCounterLibrary::get('u');
+      REQUIRE( *uu == 2 );
+    }
   }
 }

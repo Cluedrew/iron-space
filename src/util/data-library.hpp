@@ -12,8 +12,9 @@
  *       scale) and the static varable is different for each template. But
  *       that means we can only have one instance for each set of types. A
  *       third unused argument would avoid collitions.
- *     * Move prepareData to a different template class which is specialized
- *       to implement the loading.
+ *     * Working with this type is rather awkward, so much static access.
+ *       Maybe making the surface type the reference and the library a static
+ *       section or the support class would work better.
  */
 
 #include <map>
