@@ -17,6 +17,22 @@
  *       section or the support class would work better.
  */
 
+// Possible solution:
+/* MaRC - MApping Refrence Counter
+ * Pernounced: "Mark"
+ *
+ * MaRC is a kind of smart pointer.
+ *
+ * The reference counter part is similar to most reference counters. The
+ * number of MaRCs that reference an object is counted and if that count goes
+ * to zero then the object is unloaded.
+ *
+ * However you don't provide the MaRC with an object to point to. Instead
+ * you give it a seperate key value which is mapped to the value used. If the
+ * key refers to an existing object, then a the MaRC will point to it
+ * instead of creating a new value.
+ */
+
 #include <map>
 
 

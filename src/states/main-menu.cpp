@@ -52,6 +52,14 @@ WorldState * MainMenu::update (sf::Time const & deltaT)
   // TODO: This will actually be added, but first I think I need to
   // add something to the GameObject so that I don't need this step
   // for GameObject to finish their initialization.
+  for (PlaneDrawable<GameObject>::iterator it = gui.begin() ;
+       it != gui.end() ; ++it)
+  {
+    // This doesn't fix the problem as I had hoped. It does change the
+    // position of the collider to be the same place as the drawn box,
+    // but both of those are still wrong.
+    it->updateAi(deltaT);
+  }
   //gui.update(deltaT);
 
   if (started)

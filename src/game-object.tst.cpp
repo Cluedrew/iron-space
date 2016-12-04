@@ -54,6 +54,44 @@ public:
 
 
 
+class RecordUpdate : public Collider
+/* A Collider (for use in a PhysicsComponent) that records its incomming
+ * calls and does not collide.
+ */
+{
+private:
+  mutable std::vector<sf::Transform> recordedTransforms;
+
+protected:
+public:
+  virtual ~RecordUpdate () {}
+
+  void update (sf::Transform const & root)
+  {
+    recordedTransforms.push_back(root);
+  }
+
+  bool collides (Collider const & other) const
+  { return false; }
+
+  bool collides (ColliderLeaf const & other) const
+  { return false; }
+
+  unsigned int countCalls ()
+  {
+    return recordedTransforms.size();
+  }
+
+  sf::RenderStates getState (unsigned int i)
+  {
+    assert(i < recordedTransforms.size());
+
+    return recordedTransforms[i];
+  }
+};
+
+
+
 TEST_CASE("Tests for the GameObject.", "")
 {
   SECTION("Check transform constructor")
@@ -109,8 +147,8 @@ TEST_CASE("Tests for the GameObject.", "")
       GameObject obj(shift1, new NullAi(), new NullPhysics(), record);
       target.draw(obj, shift2.getTransform());
       REQUIRE( 1 == record->countCalls() );
-      sf::Transform shift3t = shift1.getTransform() * shift2.getTransform();
-      REQUIRE( shift3t == record->getState(0).transform );
+      sf::Transformable shift3 = xyTransformable(10, 18);
+      REQUIRE( shift3.getTransform() == record->getState(0).transform );
     }
   }
 }
