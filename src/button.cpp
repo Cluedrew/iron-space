@@ -16,10 +16,10 @@
 Button::Button(Command * effect, float x, float y, float w, float h) :
     GameObject(xyTransformable(x, y),
                new ClickAi(effect),
-               new PhysicsComponent(new AlignRectCollider(0, 0, w, h)),
+               new PhysicsComponent(new AlignRectCollider(x, y, w, h)),
                new AlignRectGraphics(w, h))
 {
   // TODO Something to move the shape over so x & y are not ignored.
   // This solution isn't working.
-  this->move(x, y);
+  //this->move(x, y);
 }

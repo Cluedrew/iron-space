@@ -90,6 +90,35 @@ public:
   }
 };
 
+// It is a graphics component, but is not about that.
+class IsAliveComponent : public GraphicsComponent
+{
+private:
+  bool & aliveField;
+
+protected:
+public:
+  IsAliveComponent (bool & aliveField_) :
+    aliveField(aliveField_)
+  {
+    aliveField = true;
+  }
+
+  virtual ~IsAliveComponent ()
+  {
+    aliveField = false;
+  }
+
+  void draw (sf::RenderTarget & target, sf::RenderStates states) const {}
+};
+
+GameObject makeAndReturn(float x, float y, AiComponent * ai,
+    PhysicsComponent * physics, GraphicsComponent * graphics)
+{
+  GameObject obj(xyTransformable(x, y), ai, physics, graphics);
+  return obj;
+}
+
 
 
 TEST_CASE("Tests for the GameObject.", "")
@@ -106,6 +135,18 @@ TEST_CASE("Tests for the GameObject.", "")
     REQUIRE( complexLoc.getPosition() == obj.getPosition() );
     REQUIRE( complexLoc.getRotation() == obj.getRotation() );
     REQUIRE( complexLoc.getScale() == obj.getScale() );
+  }
+
+  SECTION("Check move constructor.")
+  {
+    bool isGraphicsAlive = false;
+    {
+      GameObject dest = makeAndReturn(3, 4, new NullAi(), new NullPhysics(),
+                                      new IsAliveComponent(isGraphicsAlive));
+      CHECK( isGraphicsAlive );
+      CHECK( sf::Vector2f(3, 4) == dest.getPosition() );
+    }
+    CHECK_FALSE( isGraphicsAlive );
   }
 
   SECTION("Check GameObject::draw")
