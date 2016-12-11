@@ -9,6 +9,7 @@
 
 #include <cassert>
 #include <vector>
+#include <utility>
 #include <SFML/Graphics/Drawable.hpp>
 #include "ai/null-ai.hpp"
 #include "physics/null-physics.hpp"
@@ -112,13 +113,6 @@ public:
   void draw (sf::RenderTarget & target, sf::RenderStates states) const {}
 };
 
-GameObject makeAndReturn(float x, float y, AiComponent * ai,
-    PhysicsComponent * physics, GraphicsComponent * graphics)
-{
-  GameObject obj(xyTransformable(x, y), ai, physics, graphics);
-  return obj;
-}
-
 
 
 TEST_CASE("Tests for the GameObject.", "")
@@ -141,8 +135,9 @@ TEST_CASE("Tests for the GameObject.", "")
   {
     bool isGraphicsAlive = false;
     {
-      GameObject dest = makeAndReturn(3, 4, new NullAi(), new NullPhysics(),
-                                      new IsAliveComponent(isGraphicsAlive));
+      GameObject dest = std::move(
+          GameObject(xyTransformable(3, 4), new NullAi(), new NullPhysics(),
+                     new IsAliveComponent(isGraphicsAlive)));
       CHECK( isGraphicsAlive );
       CHECK( sf::Vector2f(3, 4) == dest.getPosition() );
     }

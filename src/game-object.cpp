@@ -30,7 +30,7 @@ GameObject::GameObject (sf::Transformable const & start, AiComponent * ai,
 }
 
 GameObject::GameObject (GameObject && other) :
-  sf::Transformable(), sf::Drawable(),
+  sf::Transformable(other), sf::Drawable(),
   ptrsToThis(other.ptrsToThis), ai(other.ai),
   physics(other.physics), graphics(other.graphics)
 {

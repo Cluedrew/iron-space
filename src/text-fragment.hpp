@@ -13,6 +13,7 @@ struct TextFragment : public GameObject
 {
   TextFragment (std::string const & text);
   /* Create a text fragment that desplays the given text.
+   * Params: A string repersenting the characters to print out.
    */
 };
 

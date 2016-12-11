@@ -23,6 +23,49 @@ typedef MaRC<#name, __VA_ARGS__> name
  * the function pointer optional.
  */
 
+// If AnnotatedData it put into the global scope, maybe its name should be
+// make to show it is supposed to work with the MaRC.
+template<typename KeyT, typename DataT>
+struct AnnotatedData
+{
+  KeyT key;
+  unsigned int useCount;
+  DataT data;
+};
+
+template<typename KeyT, typename DataT>
+AnnotatedData<KeyT, DataT> * constructMap (KeyT key)
+{
+  return new AnnotatedData{.key = key, .useCount = 0, .data = DataT(key)};
+}
+
+template<char * id, typename KeyT, typename DataT,
+         AnnotatedData<KeyT, DataT> * (*mapping)(KeyT) =
+            constructMap<KeyT, DataT> >
+MaRC<id, KeyT, DataT, mapping>::MaRC (KeyT key)
+  data(nullptr)
+{
+  if (0 != loadedData.count(key))
+  {
+    data = (loadedData[key]);
+    ++data->useCount;
+    return;
+  }
+
+  AnnotatedData<KeyT, DataT> * newData = mapping(key);
+  //assert(nullptr != newData);
+  //assert(0 == newData->useCount);
+  //assert(key == newData->key);
+  loadedData.insert(std::make_pair(key, newData));
+  data = newData;
+};
+
+/* The other operations would all be the same.
+ * Minus the additional template argument of course.
+ */
+template<typename KeyT, typename DataT>
+using mapAnnotatedData = AnnotatedData<KeyT, DataT> * (*)(KeyT);
+
 
 template<typename KeyT, typename DataT, char * id>
 MaRC<KeyT, DataT, id>::AnnotatedData * loadMaRCData (KeyT key)
@@ -59,6 +102,7 @@ MaRC<KeyT, DataT, id>::MaRC (KeyT key) :
   if (0 != loadedData.count(key))
   {
     data = (loadedData[key]);
+    ++data->useCount;
     return;
   }
 

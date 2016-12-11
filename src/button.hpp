@@ -13,12 +13,11 @@ class Command;
 
 struct Button : public GameObject
 {
+  // TODO: Some control over how it is drawn should be added at some point.
   Button (Command * effect, float x, float y, float w, float h);
   /* Create a new button of given size and effect.
-   * Params: A command to be called when the button is clicked.
-   *         <something about how you draw it>
-   * and coordinates for the Button's top left corner and its size.
-   *         <x & y are ignored>
+   * Params: A command to be called when the button is clicked
+   *   and coordinates for the Button's top left corner and its size.
    */
 
   Button (Button &&) = default;
