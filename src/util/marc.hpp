@@ -14,6 +14,8 @@
  * you give it a seperate key value which is mapped to the value used. If the
  * key refers to an existing object, then a the MaRC will point to it
  * instead of creating a new value.
+ *
+ * TODO: Very much not finished. Don't use this just yet.
  */
 
 #include <map>

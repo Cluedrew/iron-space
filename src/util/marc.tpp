@@ -39,6 +39,28 @@ AnnotatedData<KeyT, DataT> * constructMap (KeyT key)
   return new AnnotatedData{.key = key, .useCount = 0, .data = DataT(key)};
 }
 
+// Possible new name and additional contructor:
+template<typename KeyT typename DataT>
+struct MaRCData
+{
+  KeyT const key;
+  unsigned int useCount;
+  DataT data;
+
+  template<typename... Args>
+  MaRCData (KeyT key, Args... args) :
+    key(key), useCount(0), data(std::foward(args))
+  {}
+};
+
+template<typename KeyT, typename DataT>
+MaRCData<KeyT, DataT> * constructMap (KeyT key)
+{
+  return new MaRCData(key, key)};
+}
+
+
+
 template<char * id, typename KeyT, typename DataT,
          AnnotatedData<KeyT, DataT> * (*mapping)(KeyT) =
             constructMap<KeyT, DataT> >

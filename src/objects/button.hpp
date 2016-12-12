@@ -6,7 +6,7 @@
  * I am exparementing on how this is set up.
  */
 
-#include "game-object.hpp"
+#include "../game-object.hpp"
 class Command;
 
 

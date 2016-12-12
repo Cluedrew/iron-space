@@ -37,4 +37,20 @@ enum class Alignment2D : char
 
 
 
+Alignment2D crossAlign (VerticalAlignment, HorizontalAlignment);
+/* Combine alignment on the two axis.
+ */
+
+VerticalAlignment verticalAlignmentComponent (Alignment2D);
+HorizontalAlignment horizontalAlignmentComponent (Alignment2D);
+/* Get the vertical/horizontal component of an Alignment2D.
+ */
+
+void alignVertically (Alignment2D &, VerticalAlignment);
+void alignHorizontally (Alignment2D &, HorizontalAlignment);
+/* Change one of the components of a Alignment2D.
+ * target = crossAlign(VerticalAlignmentComponent(target), _)
+ * target = crossAlign(_, HorizontallyAlignmentComponent(target))
+ */
+
 #endif//ALIGNMENT_HPP
