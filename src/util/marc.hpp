@@ -16,33 +16,37 @@
  * instead of creating a new value.
  *
  * TODO: Very much not finished. Don't use this just yet.
+ *     * MaRC::ReadOnly: Forbids write operations (const data)?
  */
 
 #include <map>
 
 
 
-template<typename KeyT, typename DataT, char * id>
+template<typename KeyT, typename DataT>
+struct MaRCData;
+
+template<typename KeyT, typename DataT>
+MaRCData<KeyT, DataT> * constructMap (KeyT key);
+
+template<char * id, typename KeyT, typename DataT,
+    MaRCData<KeyT, DataT> * (*mapping)(KeyT) = constructMap<KeyT, DataT> >
 class MaRC
 {
 private:
-  struct AnnotatedData
-  {
-    KeyT key;
-    unsigned int useCount;
-    DataT coreData;
-  };
+  static std::map<KeyT, MaRCData<KeyT, DataT> *> loadedData;
 
-  static std::map<KeyT, AnnotatedData *> loadedData;
-  friend class MaRC_Loader<KeyT, DataT, id>;
-
-  AnnotatedData * data;
+  MaRCData<KeyT, DataT> * data;
 
   void unbindData;
 
 protected:
 public:
   MaRC (KeyT key);
+  /* Create a new MaRC from the key.
+   * Params: The key that give the data according to mapping.
+   * Effect: If the data is not loaded, it will be with mapping.
+   */
 
   virtual ~MaRC ();
 
@@ -53,5 +57,12 @@ public:
   MaRC & operator*  () const;
   MaRC * operator-> () const;
 };
+
+template<char * id, typename KeyT, typename DataT,
+    MaRCData<KeyT, DataT> * (*mapping)(KeyT) = constructMap<KeyT, DataT> >
+std::map<KeyT, MaRCData<KeyT, DataT> *>
+MaRC<id, KeyT, DataT, mapping>::loadedData
+
+#include "marc.tpp"
 
 #endif//MARC_HPP
