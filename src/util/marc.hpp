@@ -29,7 +29,7 @@ struct MaRCData;
 template<typename KeyT, typename DataT>
 MaRCData<KeyT, DataT> * constructMap (KeyT key);
 
-template<char * id, typename KeyT, typename DataT,
+template<char ...id, typename KeyT, typename DataT,
     MaRCData<KeyT, DataT> * (*mapping)(KeyT) = constructMap<KeyT, DataT> >
 class MaRC
 {
@@ -38,7 +38,7 @@ private:
 
   MaRCData<KeyT, DataT> * data;
 
-  void unbindData;
+  void unbindData();
 
 protected:
 public:
@@ -50,18 +50,20 @@ public:
 
   virtual ~MaRC ();
 
-  MaRC (MaRC const &);
-  MaRC (MaRC &&);
-  MaRC & operator== (MaRC const &);
-  MaRC & operator== (MaRC &&);
-  MaRC & operator*  () const;
-  MaRC * operator-> () const;
+  MaRC (MaRC<id, KeyT, DataT, mapping> const &);
+  MaRC (MaRC<id, KeyT, DataT, mapping> &&);
+  MaRC<id, KeyT, DataT, mapping> &
+      operator== (MaRC<id, KeyT, DataT, mapping> const &);
+  MaRC<id, KeyT, DataT, mapping> &
+      operator== (MaRC<id, KeyT, DataT, mapping> &&);
+  DataT & operator* () const;
+  DataT * operator-> () const;
 };
 
 template<char * id, typename KeyT, typename DataT,
-    MaRCData<KeyT, DataT> * (*mapping)(KeyT) = constructMap<KeyT, DataT> >
+    MaRCData<KeyT, DataT> * (*mapping)(KeyT)>
 std::map<KeyT, MaRCData<KeyT, DataT> *>
-MaRC<id, KeyT, DataT, mapping>::loadedData
+MaRC<id, KeyT, DataT, mapping>::loadedData;
 
 #include "marc.tpp"
 
