@@ -15,8 +15,20 @@
  * key refers to an existing object, then a the MaRC will point to it
  * instead of creating a new value.
  *
+ * The simplest case is to define a DataT that has a constructor DataT(KeyT).
+ * You can leave out the final mapping argument and take care of any work
+ * for loading and unloading in the constructor and deconstructor. If you
+ * require more control you can define your own function to create MaRCData
+ * objects with.
+ *
+ * The loaded data is mutable, however if you intend to change it keep in mind
+ * that it will be unloaded and re-loaded with no regard for the old value if
+ * the reference count goes to zero.
+ *
  * TODO: Very much not finished. Don't use this just yet.
  *     * MaRC::ReadOnly: Forbids write operations (const data)?
+ *       In the case of immutable data, it would have the same interface.
+ *     * Should there be a way to force unique templates?
  */
 
 #include <map>
@@ -29,7 +41,7 @@ struct MaRCData;
 template<typename KeyT, typename DataT>
 MaRCData<KeyT, DataT> * constructMap (KeyT key);
 
-template<char ...id, typename KeyT, typename DataT,
+template<typename KeyT, typename DataT,
     MaRCData<KeyT, DataT> * (*mapping)(KeyT) = constructMap<KeyT, DataT> >
 class MaRC
 {
@@ -50,20 +62,20 @@ public:
 
   virtual ~MaRC ();
 
-  MaRC (MaRC<id, KeyT, DataT, mapping> const &);
-  MaRC (MaRC<id, KeyT, DataT, mapping> &&);
-  MaRC<id, KeyT, DataT, mapping> &
-      operator== (MaRC<id, KeyT, DataT, mapping> const &);
-  MaRC<id, KeyT, DataT, mapping> &
-      operator== (MaRC<id, KeyT, DataT, mapping> &&);
+  MaRC (MaRC<KeyT, DataT, mapping> const &);
+  MaRC (MaRC<KeyT, DataT, mapping> &&);
+  MaRC<KeyT, DataT, mapping> &
+      operator== (MaRC<KeyT, DataT, mapping> const &);
+  MaRC<KeyT, DataT, mapping> &
+      operator== (MaRC<KeyT, DataT, mapping> &&);
   DataT & operator* () const;
   DataT * operator-> () const;
 };
 
-template<char * id, typename KeyT, typename DataT,
+template<typename KeyT, typename DataT,
     MaRCData<KeyT, DataT> * (*mapping)(KeyT)>
 std::map<KeyT, MaRCData<KeyT, DataT> *>
-MaRC<id, KeyT, DataT, mapping>::loadedData;
+MaRC<KeyT, DataT, mapping>::loadedData;
 
 #include "marc.tpp"
 

@@ -6,14 +6,18 @@
 
 #include <string>
 #include "../game-object.hpp"
+#include "../util/alignment.hpp"
 
 
 
 struct TextFragment : public GameObject
 {
-  TextFragment (std::string const & text);
+  TextFragment (std::string const & text, float x = 0, float y = 0,
+      Alignment2D alignment = Alignment2D::TopLeft);
   /* Create a text fragment that desplays the given text.
    * Params: A string repersenting the characters to print out.
+   *   The x & y coordinates of where the text should be drawn.
+   *   TODO The alignment the coordinates should be messured from.
    */
 };
 

@@ -34,7 +34,7 @@ MainMenu::MainMenu () :
 {
   gui.emplace(Button(new StartGame(*this),
                      100.0f, 100.0f, 50.0f, 50.0f));
-  gui.emplace(TextFragment("iron-space"));
+  gui.emplace(TextFragment("iron-space", 200.0f, 50.0f));
 }
 
 MainMenu::~MainMenu ()
