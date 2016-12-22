@@ -28,7 +28,13 @@
  * TODO: Very much not finished. Don't use this just yet.
  *     * MaRC::ReadOnly: Forbids write operations (const data)?
  *       In the case of immutable data, it would have the same interface.
+ *       I think some helpers from <type_traits> would do it.
+ *   typedef ... ThisType;
+ *   typedef std::conditional<
+ *       std::is_const<ThisType>, ThisType, ThisType const>::type ReadOnly
+ *
  *     * Should there be a way to force unique templates?
+ *     * Get it passing all the tests. There are still a few that don't.
  */
 
 #include <map>

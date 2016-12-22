@@ -3,8 +3,7 @@
 
 /* A graphical component that desplays a bit of text.
  *
- * TODO: If this is going to be the basic text desplay option then it should
- *   probably give more control over the text.
+ * It wraps up an SFML Text object and ensures the Font used stays loaded.
  */
 
 #include <string>
@@ -14,11 +13,10 @@
 
 
 
-class TextGraphics : public GraphicsComponent
+class TextGraphics : public GraphicsComponent, public sf::Text
 {
 private:
   FontLibrary::FontReference font;
-  sf::Text text;
 
 protected:
 public:
