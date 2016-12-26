@@ -10,6 +10,7 @@
 #include <SFML/Graphics/Text.hpp>
 #include "graphics-component.hpp"
 #include "font-library.hpp"
+#include "../util/alignment.hpp"
 
 
 
@@ -20,7 +21,8 @@ private:
 
 protected:
 public:
-  TextGraphics (std::string const & font, std::string const & text);
+  TextGraphics (std::string const & font, std::string const & text,
+      Alignment2D alignment = Alignment2D::TopLeft);
   /* Create a new TextGraphics component.
    * Params: Takes the name of the font and the string to display as text.
    */
@@ -30,6 +32,12 @@ public:
   void draw (sf::RenderTarget & target, sf::RenderStates states) const;
   /* Draw the text to screen.
    * Follows SFML draw conventions.
+   */
+
+  void setAlignment (Alignment2D alignment);
+  /* Change the origin of the text to one of the 9 alignment points.
+   * Params: Any of the nine Alignment2D values.
+   * Effect: Changes the objects origin.
    */
 };
 

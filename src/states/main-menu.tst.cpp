@@ -23,5 +23,8 @@ TEST_CASE("Tests for the MainMenu class.", "[states]")
     nextState = menu->update(sf::Time::Zero);
     REQUIRE( nullptr != dynamic_cast<RunningState*>(nextState) );
     delete(nextState);
+
+    // Also, I checked, MainMenu will delete itself in this case and
+    // deleting it again [delete(menu);] is invalid.
   }
 }
