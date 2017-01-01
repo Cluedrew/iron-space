@@ -14,10 +14,11 @@
 
 
 
-class TextGraphics : public GraphicsComponent, public sf::Text
+class TextGraphics : public GraphicsComponent
 {
 private:
   FontLibrary::FontReference font;
+  sf::Text text;
 
 protected:
 public:
