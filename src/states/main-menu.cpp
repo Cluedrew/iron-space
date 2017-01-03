@@ -8,6 +8,7 @@
 #include "../util/command.hpp"
 #include "../objects/button.hpp"
 #include "../objects/text-fragment.hpp"
+#include "../util/alignment.hpp"
 #include "running-state.hpp"
 
 
@@ -34,7 +35,9 @@ MainMenu::MainMenu () :
 {
   gui.emplace(Button(new StartGame(*this),
                      100.0f, 100.0f, 50.0f, 50.0f));
-  gui.emplace(TextFragment("iron-space", 200.0f, 50.0f));
+  // Try to make relative to the window some day.
+  gui.emplace(TextFragment("iron-space", 400.0f, 100.0f,
+                           Alignment2D::MiddleCenter));
 }
 
 MainMenu::~MainMenu ()

@@ -60,12 +60,12 @@ public:
    *   pointers to the components, ownership of them is taken.
    */
 
-  GameObject(GameObject const & other) = delete;
+  GameObject (GameObject const & other) = delete;
   GameObject & operator= (GameObject const & other) = delete;
   GameObject & operator= (GameObject && other) = delete;
   // Copying and assignment are disabled.
 
-  GameObject(GameObject && other);
+  GameObject (GameObject && other);
   /* Move constructor, this new GameObject replaces the old one.
    * Params: Destroying reference to another GameObject.
    * Effect: Takes components, GameObjectPtrs move from the old GameObject
