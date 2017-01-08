@@ -33,7 +33,9 @@ stations.
 ## Plan ##
 My internal map of how the program works. Consider this a text UML diagram.
 
-Also note all of this is subject to change.
+This is constantly changing and I have actually given up trying to keep it
+all up to date. Check the *plan* directory or the source code itself.
+I hope to come back and update all this eventually.
 
 ### Directories ###
 First a bit about the layout of the code base.

@@ -98,6 +98,11 @@ public:
    * Effect: Varies with AIComponent.
    */
 
+  GraphicsComponent * getGraphics();
+  /* Get the GraphicsComponent for this object.
+   * Return: A pointer to the graphics component. DO NOT FREE.
+   */
+
   //void handleMessage (MessageEvent const & msg)
   /* Called during AI Step (by other GameObjects):
    * Params: Message to be recived.

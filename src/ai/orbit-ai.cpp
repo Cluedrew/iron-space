@@ -15,6 +15,11 @@ OrbitAi::OrbitAi () :
   xCenter(400), yCenter(300), radius(50)
 {}
 
+OrbitAi::OrbitAi (int x, int y, int r) :
+  progress(sf::seconds(0)), moving(true),
+  xCenter(x), yCenter(y), radius(r)
+{}
+
 OrbitAi::~OrbitAi ()
 {}
 

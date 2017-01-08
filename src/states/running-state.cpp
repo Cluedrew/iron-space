@@ -6,6 +6,7 @@
 #include <SFML/System/Time.hpp>
 #include "../input/input-event.hpp"
 #include "../ai/orbit-ai.hpp"
+#include "../ai/blue-touch.hpp"
 #include "../physics/physics-component.hpp"
 #include "../physics/circle-collider.hpp"
 #include "../graphics/circle-graphics.hpp"
@@ -17,6 +18,9 @@ RunningState::RunningState () :
   map()
 {
   map.emplace(GameObject(new OrbitAi(),
+                new PhysicsComponent(new CircleCollider(0, 0, 25)),
+                new CircleGraphics(25)));
+  map.emplace(GameObject(new BlueTouch(315, 300),
                 new PhysicsComponent(new CircleCollider(0, 0, 25)),
                 new CircleGraphics(25)));
 }

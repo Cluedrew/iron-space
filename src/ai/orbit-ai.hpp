@@ -28,6 +28,8 @@ protected:
 public:
   OrbitAi ();
 
+  OrbitAi (int xCenter, int yCenter, int radius);
+
   virtual ~OrbitAi ();
 
   void init (GameObject & container);
