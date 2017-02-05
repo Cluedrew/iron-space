@@ -2,7 +2,10 @@
 
 // Implementation of the BlueTouch class.
 
+#include <cstdlib>
+#include <iostream>
 #include "../game-object.hpp"
+#include "../graphics/circle-graphics.hpp"
 
 
 BlueTouch::BlueTouch (int x, int y) :
@@ -23,9 +26,31 @@ bool BlueTouch::handleInput
   return false;
 }
 
+CircleGraphics * getGraphics(GameObject & container)
+{
+  CircleGraphics * graphics =
+    dynamic_cast<CircleGraphics *>(container.getGraphics());
+
+  if (nullptr == graphics)
+  {
+    // Error state:
+    std::cerr << "BlueTouch: GraphicsComponent to CircleGraphics cast failed."
+              << std::endl;
+    exit(EXIT_FAILURE);
+  }
+
+  return graphics;
+}
+
 void BlueTouch::update
     (GameObject & container, sf::Time const & deltaT)
 {
-  // Colour change?
+  CircleGraphics * graphics = getGraphics(container);
+  graphics->setColour(sf::Color::White);
 }
 
+void BlueTouch::handleCollision (GameObject & container, GameObjectPtr & ptr)
+{
+  CircleGraphics * graphics = getGraphics(container);
+  graphics->setColour(sf::Color::Blue);
+}

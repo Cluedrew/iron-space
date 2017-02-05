@@ -6,6 +6,7 @@
  */
 
 class GameObject;
+class GameObjectPtr;
 #include "ai-component.hpp"
 
 
@@ -30,6 +31,9 @@ public:
 
   void update (GameObject & container, sf::Time const & deltaT);
   // Colour change when approprate.
+
+  void handleCollision (GameObject & container, GameObjectPtr & ptr);
+  // Check to see if the color should be changed.
 };
 
 #endif//BLUE_TOUCH_HPP

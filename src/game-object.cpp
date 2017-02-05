@@ -76,6 +76,11 @@ void GameObject::updateAi (sf::Time const & deltaT)
   physics->updatePosition(*this);
 }
 
+GraphicsComponent * GameObject::getGraphics ()
+{
+  return graphics;
+}
+
 #if 0
 // see header
 void GameObject::handleMessage (MessageEvent const & msg)
@@ -88,13 +93,13 @@ void GameObject::updatePhysics (sf::Time const & deltaT)
 {
   physics->update(this, deltaT);
 }
+#endif
 
 // see header
-void GameObject::handleCollision (GameObjectPtr with)
+void GameObject::handleCollision (GameObjectPtr & with)
 {
-  ai->handleCollision(with);
+  ai->handleCollision(*this, with);
 }
-#endif
 
 // see header
 void GameObject::draw (sf::RenderTarget & target, sf::RenderStates states) const

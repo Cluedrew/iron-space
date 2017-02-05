@@ -11,6 +11,7 @@
 namespace sf { class Time; }
 class GameObject;
 class InputEvent;
+class GameObjectPtr;
 
 
 
@@ -56,16 +57,17 @@ public:
    * Add overloads for sub-classes of Message, so that sub-classes of
    * AIComponent can selectively overide for different message types.
    */
+#endif
 
-  virtual void handleCollision (GameObjectPtr & ptr) = 0;
+  virtual void handleCollision (
+    GameObject & container, GameObjectPtr & ptr) {} //= 0;
   /* Handle a collision with another GameObject.
-   * Params: Mutable reference to a GameObjectPtr +.
+   * Params: Reference to container. Mutable reference to a GameObjectPtr +.
    * Effect: Default is nothing, may be overridden.
    *
    * + If we can garenty the timing of deletes than this could just be a
    *   reference to the GameObject itself.
    */
-#endif
 };
 
 #endif//AI_COMPONENT_HPP

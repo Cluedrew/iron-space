@@ -116,7 +116,7 @@ public:
    * Effect: Moves the GameObject.
    */
 
-  //void handleCollision (GameObjectPtr with)
+  void handleCollision (GameObjectPtr & with);
   /* Called during Collision Step:
    * Resolve a collision with another GameObject.
    * Params: The other GameObject collided with.

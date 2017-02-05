@@ -57,6 +57,8 @@ WorldState * RunningState::update (sf::Time const & deltaT)
   for (it = map.begin() ; it != map.end() ; ++it)
     it->updateAi(deltaT);
 
+  map.resolveCollisions();
+
   return this;
 }
 

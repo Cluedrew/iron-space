@@ -59,9 +59,15 @@ public:
   /* Give an event to a GameObject* to be handled.
    *   * This one needs a GameObject until I have a better solution.
    *     The handle input function is part of the Object2D requirents.
-   * Params: An InputEvent (TODO what types)
+   * Params: An InputEvent (TODO what types, it must have a location)
    * Effect: Event is handled (may result in additional changes in updates).
    * Return: True if the event was handled, false otherwise.
+   */
+
+  void resolveCollisions ();
+  /* Find all the collisions in the plane and notify the colliding objects.
+   * Effect: The objects within the plane might cause some as they resolve
+   *    the collisions.
    */
 };
 

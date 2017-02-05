@@ -9,6 +9,7 @@
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
+#include "game-object-ptr.hpp"
 #include "input/input-event.hpp"
 #include "physics/collider.hpp"
 #include "physics/point-collider.hpp"
@@ -83,15 +84,9 @@ bool Plane<Object2D>::handleInput (InputEvent const & ievent)
   return false;
 }
 
-#if 0
-// Planned addition:
+// see header
 template<typename Object2D>
-void Plane<Object2D>::resolveCollitions ()
-/* Search the Plane for colliding (overlapping) objects and notify them.
- *
- * The implementation might change, but I hope the interface does not get
- * much more complex than this.
- */
+void Plane<Object2D>::resolveCollisions ()
 {
   iterator it, jt;
   for (it = objects.begin() ; it != objects.end() ; ++it)
@@ -100,12 +95,13 @@ void Plane<Object2D>::resolveCollitions ()
     {
       if (it->collides(*jt))
       {
-        it->handleCollition(...(jt));
-        jt->handleCollition(...(it));
+        GameObjectPtr jPtr(*jt);
+        it->handleCollision(jPtr);
+        GameObjectPtr iPtr(*it);
+        jt->handleCollision(iPtr);
       }
     }
   }
 }
-#endif
 
 #endif//PLANE_TPP

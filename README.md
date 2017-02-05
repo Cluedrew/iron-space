@@ -55,7 +55,7 @@ First a bit about the layout of the code base.
 
 As mentioned previously testing for this project is done by *Catch.hpp*, with
 all tests and extra testing code put in *.tst* files (which goes before the
-file type extention.
+file type extention).
 
 Tags:
 +   [util], [input], [states], [physics], [graphics], [audio]: Tags that show

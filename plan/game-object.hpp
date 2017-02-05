@@ -54,8 +54,21 @@ class GameObject3D : public GameObject;
 template<typename ObjectType>
 class GameObjectPointer;
 /* The special pointer, which I do think will remain useful, would have to
- * change to a template. OK it would have to change, we could wrap it up with
- * casts all the time to get the type we want but that seems like a bad idea.
+ * change to a template. This is so we don't have to cast the results of the
+ * pointer. I have been thinking about it and I don't think I can get around
+ * casting the pointer.
+ *
+ * There is a base pointer which points to the object. The object always
+ * points back to that base. To create subtypes we put it in a wrapper, which
+ * checks the type in so the cast on the way out should never fail.
+ *
+ * Maybe an 'alive' field and a reference counter would work better, but I
+ * would like to see this work.
  */
+
+template<typename InternalType, typename ExternalType = InternalType>
+class NullingPtr : public NullingPtrBase<InternalType>
+
+
 
 #endif//GAME_OBJECT
