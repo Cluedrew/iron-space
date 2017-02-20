@@ -6,6 +6,8 @@ library for interacting with the system.
 The [Catch](https://github.com/philsquared/Catch "Catch GitHub") library is
 used for testing. (v1.5.4: retrived 2016/05/18 15:25)
 
+Sounds Effects generated using [bfxr](http://www.bfxr.net/ "bfxr").
+
 #### Project Status ####
 Engine Implementation - Implement the basic code for everything and get a bit
 of everything running.

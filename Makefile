@@ -15,7 +15,7 @@
 ### Variables & Setup
 
 # 'yes' to turn on debugging options, otherwise leaves them off.
-USE_DEBUG=no
+USE_DEBUG=yes
 
 # Name of binary executable.
 EXE=iron-space
@@ -41,7 +41,7 @@ CXX=g++
 # Flags for compilation
 CXXFLAGS=-Wall --std=c++11
 # Additional libraries for the linking step.
-CXXLIBS=-lsfml-graphics -lsfml-window -lsfml-system
+CXXLIBS=-lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system
 # Additional flags for debug builds.
 DEBUG=-ggdb -DDEBUG=true
 

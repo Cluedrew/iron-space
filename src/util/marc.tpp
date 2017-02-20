@@ -5,7 +5,7 @@
  * helpers. See header for details.
  */
 
-//#include <cassert>
+#include <cassert>
 #include <utility>
 
 
@@ -54,10 +54,11 @@ MaRC<KeyT, DataT, mapping>::MaRC (KeyT key) :
 
   MaRCData<KeyT, DataT> * newData = mapping(key);
 
-  // Perhaps I should wrap these in #if DEBUG
-  //assert(nullptr != newData);
-  //assert(0 == newData->useCount);
-  //assert(key == newData->key);
+#if DEBUG
+  assert(nullptr != newData);
+  assert(0 == newData->useCount);
+  assert(key == newData->key);
+#endif
 
   loadedData.insert(std::make_pair(key, newData));
   data = newData;
@@ -90,7 +91,6 @@ MaRC<KeyT, DataT, mapping>::~MaRC ()
   unbindData();
 }
 
-// I could macro this to force it inline.
 template<typename KeyT, typename DataT,
     MaRCData<KeyT, DataT> * (*mapping)(KeyT)>
 void MaRC<KeyT, DataT, mapping>::unbindData ()
@@ -98,7 +98,11 @@ void MaRC<KeyT, DataT, mapping>::unbindData ()
   --data->useCount;
   if (0 == data->useCount)
   {
+#if DEBUG
+    assert(1 == loadedData.erase(data->key));
+#else
     loadedData.erase(data->key);
+#endif
     delete data;
   }
 }

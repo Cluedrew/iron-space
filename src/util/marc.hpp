@@ -32,6 +32,7 @@
  *   typedef ... ThisType;
  *   typedef std::conditional<
  *       std::is_const<ThisType>, ThisType, ThisType const>::type ReadOnly
+ *       Should MaRC DataT ever be mutable?
  *
  *     * Should there be a way to force unique templates?
  *     * Get it passing all the tests. There are still a few that don't.
