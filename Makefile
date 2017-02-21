@@ -15,7 +15,7 @@
 ### Variables & Setup
 
 # 'yes' to turn on debugging options, otherwise leaves them off.
-USE_DEBUG=yes
+USE_DEBUG=no
 
 # Name of binary executable.
 EXE=iron-space

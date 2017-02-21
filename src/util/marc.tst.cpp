@@ -41,6 +41,11 @@ std::string CharTracker::record("");
 using TrackerMaRC = MaRC<char, CharTracker>;
 
 
+#if DEBUG
+#define DEBUG_REQUIRE(x) REQUIRE(x)
+#else
+#define DEBUG_REQUIRE(x)
+#endif//DEBUG
 
 TEST_CASE("Testing for the MaRC template class.", "[util]")
 {
@@ -68,9 +73,8 @@ TEST_CASE("Testing for the MaRC template class.", "[util]")
     CounterMaRC zed('z');
     REQUIRE( *zed == 1 );
 
-    // XXX Runs forever on this check.
-    //CounterMaRC zee('z');
-    //REQUIRE( *zee == 1 );
+    CounterMaRC zee('z');
+    REQUIRE( *zee == 1 );
 
     CounterMaRC tea('t');
     REQUIRE( *tea == 2 );
@@ -81,22 +85,54 @@ TEST_CASE("Testing for the MaRC template class.", "[util]")
     }
 
     {
-      // This one is failing. Look into that.
       CounterMaRC uu('w');
-      REQUIRE( *uu == 3 ); // XXX should be 4
+      REQUIRE( *uu == 4 );
     }
 
     CounterMaRC sea('c');
-    REQUIRE( *sea == 4 ); // XXX should be 5
+    REQUIRE( *sea == 5 );
   }
 
   SECTION("Check Timing of Loads and Unloads")
   {
-    REQUIRE( CharTracker::record == "" );
+    REQUIRE( "" == CharTracker::record );
     {
-      TrackerMaRC('b');
-      REQUIRE( CharTracker::record == "B" );
+      TrackerMaRC bee('b');
+#if DEBUG
+      auto data = TrackerMaRC::cheat();
+      for (auto it = data.begin() ; it != data.end() ; ++it)
+        WARN(it->second->key << ' ' << it->second->useCount);
+      REQUIRE( 1 == data.size() );
+#endif
+      REQUIRE( "B" == CharTracker::record );
     }
-    REQUIRE( CharTracker::record == "Bb" );
+#if DEBUG
+    auto data = TrackerMaRC::cheat();
+    for (auto it = data.begin() ; it != data.end() ; ++it)
+      WARN(it->second->key << ' ' << it->second->useCount);
+    REQUIRE( 0 == data.size() );
+#endif
+    REQUIRE( "Bb" == CharTracker::record );
+
+    {
+      TrackerMaRC zed('z');
+      {
+        TrackerMaRC zee('z');
+      }
+      REQUIRE( "BbZ" == CharTracker::record );
+    }
+    REQUIRE( "BbZz" == CharTracker::record );
+
+    {
+      TrackerMaRC que('q');
+      REQUIRE( "BbZzQ" == CharTracker::record );
+    }
+    REQUIRE( "BbZzQq" == CharTracker::record );
+
+    {
+      TrackerMaRC que('q');
+      REQUIRE( "BbZzQqQ" == CharTracker::record );
+    }
+    REQUIRE( "BbZzQqQq" == CharTracker::record );
   }
 }

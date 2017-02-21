@@ -77,12 +77,17 @@ public:
       operator== (MaRC<KeyT, DataT, mapping> &&);
   DataT & operator* () const;
   DataT * operator-> () const;
-};
 
-template<typename KeyT, typename DataT,
-    MaRCData<KeyT, DataT> * (*mapping)(KeyT)>
-std::map<KeyT, MaRCData<KeyT, DataT> *>
-MaRC<KeyT, DataT, mapping>::loadedData;
+
+
+  // For "I have no idea what is wrong" problems only.
+#if DEBUG
+  static std::map<KeyT, MaRCData<KeyT, DataT> *> & cheat ()
+  {
+    return loadedData;
+  }
+#endif//DEBUG
+};
 
 #include "marc.tpp"
 

@@ -18,6 +18,13 @@
 
 
 
+template<typename KeyT, typename DataT,
+    MaRCData<KeyT, DataT> * (*mapping)(KeyT)>
+std::map<KeyT, MaRCData<KeyT, DataT> *>
+MaRC<KeyT, DataT, mapping>::loadedData;
+
+
+
 template<typename KeyT, typename DataT>
 struct MaRCData
 {
@@ -62,6 +69,7 @@ MaRC<KeyT, DataT, mapping>::MaRC (KeyT key) :
 
   loadedData.insert(std::make_pair(key, newData));
   data = newData;
+  ++data->useCount;
 };
 
 
