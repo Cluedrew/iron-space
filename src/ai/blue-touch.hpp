@@ -1,13 +1,15 @@
 #ifndef BLUE_TOUCH_HPP
 #define BLUE_TOUCH_HPP
 
-/* Blue Touch is so called because it turns blue when anything touches it.
- * It must be hooked up beside a CircleGraphics.
+/* Blue Touch is so called because it turns blue when anything touches it,
+ * playing a sound effect. It must be hooked up beside a CircleGraphics.
  */
 
 class GameObject;
 class GameObjectPtr;
 #include "ai-component.hpp"
+#include <SFML/Audio/Sound.hpp>
+#include "../audio/sound-marc.hpp"
 
 
 
@@ -16,6 +18,9 @@ class BlueTouch : public AiComponent
 private:
   int x;
   int y;
+  SoundMaRC buffer;
+  sf::Sound sound;
+  char contact;
 
 protected:
 public:

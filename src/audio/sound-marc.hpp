@@ -3,14 +3,24 @@
 
 /* MaRC for sounds, storing their SoundBuffer.
  *
- * Trying to make this on a MaRC, but I still have issues there to fix too.
+ * This is not the Sound object itself, it is the SoundBuffer. As long as
+ * each Sound that wants to use the buffer has access to an existing SoundMaRC
+ * the buffer will remain loaded and ready.
  */
 
 #include <string>
 #include <SFML/Audio/SoundBuffer.hpp>
 #include "../util/marc.hpp"
 
-sf::SoundBuffer openSoundBeffer (std::string fileName);
+MaRCData<std::string, sf::SoundBuffer> *
+    openSoundBuffer (std::string fileName);
+/* For use by SoundMaRC. Creates and opens a sound buffer
+ * Params: Name of file to load data from.
+ * Return: Pointer to dynamical allocated MaRCData, caller must free.
+ *
+ * TODO: Should it take the full file name or put the ...sound prefix
+ * on itself? It also stops on error, raise an exeption on error?
+ */
 
 using SoundMaRC = MaRC<std::string, sf::SoundBuffer, openSoundBuffer>;
 

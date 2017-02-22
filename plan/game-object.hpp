@@ -28,6 +28,8 @@ class GameObject;
 /* Defines the general interface for all GameObjects. Most of this has to do
  * with the main loop (input, update (ai/physics/colition) and draw) and
  * probably a memory management tool.
+ *
+ * Should default implementations be included or use pure virtual?
  */
 
 class GameObject2D : public GameObject, public sf::Transformable;
@@ -38,6 +40,12 @@ class GameObject2D : public GameObject, public sf::Transformable;
  * point it is reasonable to assume that) as well as move around.
  *
  * So in short it adds 2D location and physics to the GameObject.
+ *
+ * handleCollision should also be broken up. There is some timing issues with
+ * the current set up. I think we need 3 handlers: begin->continue->end.
+ * Begin is called the first frame of collision, continue ever frame of
+ * collison there after and end the first frame after that.
+ * Those (begin->continue->end) are not the actual names.
  */
 
 class Widget : public GameObject;
@@ -49,6 +57,7 @@ class Widget : public GameObject;
 
 class GameObject3D : public GameObject;
 /* This isn't going to come along for a long time. But some day it might.
+ * SpaceObject?
  */
 
 template<typename ObjectType>
@@ -67,8 +76,7 @@ class GameObjectPointer;
  */
 
 template<typename InternalType, typename ExternalType = InternalType>
-class NullingPtr : public NullingPtrBase<InternalType>
-
-
+class NullingPtr : public NullingPtrBase<InternalType>;
+// Possible way to implement the NullingPtr, according to the above design.
 
 #endif//GAME_OBJECT

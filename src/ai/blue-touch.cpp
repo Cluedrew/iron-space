@@ -9,7 +9,8 @@
 
 
 BlueTouch::BlueTouch (int x, int y) :
-  x(x), y(y)
+  x(x), y(y), buffer("rsrc/sound/Metal_Beep.wav"), sound(*buffer),
+  contact(0)
 {}
 
 BlueTouch::~BlueTouch ()
@@ -47,10 +48,16 @@ void BlueTouch::update
 {
   CircleGraphics * graphics = getGraphics(container);
   graphics->setColour(sf::Color::White);
+  if (0 != contact)
+     --contact;
 }
 
 void BlueTouch::handleCollision (GameObject & container, GameObjectPtr & ptr)
 {
   CircleGraphics * graphics = getGraphics(container);
   graphics->setColour(sf::Color::Blue);
+
+  if (0 == contact)
+    sound.play();
+  contact = 2;
 }
