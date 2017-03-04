@@ -1,13 +1,6 @@
 # iron-space #
 An outer space base building game. Created as a learning project.
 
-The project uses the [SFML](http://www.sfml-dev.org/index.php "SFML Website")
-library for interacting with the system.
-The [Catch](https://github.com/philsquared/Catch "Catch GitHub") library is
-used for testing. (v1.5.4: retrived 2016/05/18 15:25)
-
-Sounds Effects generated using [bfxr](http://www.bfxr.net/ "bfxr").
-
 #### Project Status ####
 Engine Implementation - Implement the basic code for everything and get a bit
 of everything running.
@@ -27,17 +20,29 @@ All 8 of these points have to be completed before moving on (a few other
 points may join this list). This should ensure that all parts of the engine
 have some working base. It should not actually resemple a game in this stage.
 
+I am also in the process of cleaning up and updating my "plan", as the code
+has evolved out from underneath it.
+
 ## Game ##
 The game is a simple game. You find yourself in the depths of space and you
 have to mine iron (you could also call it ore) to build more ships and mining
 stations.
 
-## Plan ##
-My internal map of how the program works. Consider this a text UML diagram.
+## Acknowledgments ##
+Or, parts of this project I didn't do:
 
-This is constantly changing and I have actually given up trying to keep it
-all up to date. Check the *plan* directory or the source code itself.
-I hope to come back and update all this eventually.
++   [SFML](http://www.sfml-dev.org/index.php "SFML Website"), input and
+    output library. On more than just text.
++   [Catch](https://github.com/philsquared/Catch "Catch GitHub"), testing
+    library. (v1.5.4: retrived 2016/05/18 15:25)
++   [bfxr](http://www.bfxr.net/ "bfxr.net"), website used to generate sound
+    effects for the game.
+
+## Plan ##
+Move everything to do with the actual code into other README files or into
+comments at the top of a file. Stuff that has been implemented should be
+covered in *src* (in README files or comments) and actual plans for the future
+should go to *plan*.
 
 ### Directories ###
 First a bit about the layout of the code base.
@@ -67,52 +72,6 @@ Tags:
     not ment to be complete, but rather to check assumptions.
 +   [testing]: Tag for tests on extra code writen for testing. If these are
     not working than some other tests are invalid.
-
-### Main Loop ###
-The main loop is the heart of the program, with each iteration of the loop
-another beat. It is encoded in the `Engine` class. The highest level of the
-game looks like this:
-
-1. Set Up
-2. Main Loop
-3. Clean Up
-
-And comparitively, not a lot happens in steps 1 & 3. The main loop itself can
-be divided into several parts:
-
-1. Poll Input
-2. Update
-3. Render
-4. Wait
-
-The `Engine` controls the timing of these steps. Actually handling them is
-delegated. Most often to a `WorldState`, which repersents the current state
-of the program. The `Engine` itself is a state machine for the `WorldState`s.
-
-Poll Input grabs all the input that has occured over the last frame,
-translates it into the internal events used by the game and then distributes
-them. The `InputHandler` is responsible for the translation, as well as
-skimming off events some of the high level messages. The current `WorldState`
-distributes or discards the rest of the input.
-
-Update moves everything forward in time, by the amount of time a single frame
-reperents. How this is handled entirely by the current `WorldState`.
-The current convention is:
-
-1. Update AI
-2. Update Physics
-3. Collisions
-
-That is everything decides what they do and how to move in AI. Then they do it
-in Physics for a pesudo double buffer. Than collisions are detected and
-resolved. Objects never actually bump into each other, as the game is in space
-but overlapping is still a trigger.
-
-Render clears, redraws and updates the screen. The draw part of this is
-delegated to the `WorldState`.
-
-Wait causes the program to rest for the remaining time in this frame. It is
-handled with a `LoopClock`.
 
 ### Services ###
 Services are systems that cut accross the code base. They generally exist to

@@ -31,7 +31,7 @@ CODEDIR=src
 DIRNAMES ::= $(shell ls -1 $(CODEDIR) | grep '^[^.]*$$' -)
 
 # List of secondary make files:
-SUB_MAKES ::= $(wildcard mk/*.mk)
+SUBMAKES ::= $(wildcard mk/*.mk)
 
 # The name of the temperary directory for object and dependancy files.
 TMPDIR=.tmp
@@ -63,7 +63,7 @@ DEP_PAT=$(TMPDIR)/%.d
 
 # List of other generated files.
 search=$(firstword $(shell egrep '_GENERATES' $(1)))
-GEN_FILES=$(foreach mkfile,$(SUB_MAKES),$(call search,$(mkfile)))
+GEN_FILES=$(foreach mkfile,$(SUBMAKES),$(call search,$(mkfile)))
 
 # List of all cpp files. These are the files complied to objects.
 # All existing cpp files are used.
