@@ -8,6 +8,9 @@
  * This class exists to break up the main loop across more functions, while
  * still keeping them all in the same scope, but not opening the scope up to
  * the global level.
+ *
+ * Most of the functionality that has to be expanded or changed with the
+ * game is delegated to the WorldState class.
  */
 
 #include <SFML/Graphics/RenderWindow.hpp>

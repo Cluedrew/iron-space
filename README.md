@@ -2,26 +2,10 @@
 An outer space base building game. Created as a learning project.
 
 #### Project Status ####
-Engine Implementation - Implement the basic code for everything and get a bit
-of everything running.
-
-+ Get some GameObjects in the gui and map Planes.
-+ The GameObjects should render (a solid circles of colour is enough for now).
-+ The GameObjects should be clickable.
-+ Between the GameObjects, the Interface and Physics at least one GameObject
-  should be orderable to move around the screen.
-+ There should be collisions between GameObjects, and some noticable reaction
-  to the collisions.
-+ At least one sound effect and one piece of music should be played.
-+ Have at least two WorldStates and the ability to transition between them.
-+ Select and install a test harness, get some basic tests up.
-
-All 8 of these points have to be completed before moving on (a few other
-points may join this list). This should ensure that all parts of the engine
-have some working base. It should not actually resemple a game in this stage.
-
-I am also in the process of cleaning up and updating my "plan", as the code
-has evolved out from underneath it.
+Clean-Up: Having completed the base of the engine itself I have already
+discovered cracks in my old design. Those need to be addressed as well as
+updating the plan (which is seriously out of date before addressing the
+cracks) and cutting down on the number of outstanding TODO statements.
 
 ## Game ##
 The game is a simple game. You find yourself in the depths of space and you
@@ -37,6 +21,8 @@ Or, parts of this project I didn't do:
     library. (v1.5.4: retrived 2016/05/18 15:25)
 +   [bfxr](http://www.bfxr.net/ "bfxr.net"), website used to generate sound
     effects for the game.
++   [incompetech](https://incompetech.com/music/royalty-free/music.html
+    "incompetech music), source of the background music.
 
 ## Plan ##
 Move everything to do with the actual code into other README files or into

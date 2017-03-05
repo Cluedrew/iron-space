@@ -15,7 +15,7 @@
 
 
 RunningState::RunningState () :
-  map()
+  map(), bgm()
 {
   map.emplace(GameObject(new OrbitAi(),
                 new PhysicsComponent(new CircleCollider(0, 0, 25)),
@@ -23,6 +23,8 @@ RunningState::RunningState () :
   map.emplace(GameObject(new BlueTouch(315, 300),
                 new PhysicsComponent(new CircleCollider(0, 0, 25)),
                 new CircleGraphics(25)));
+  bgm.openFromFile("rsrc/music/Laser_Groove.wav");
+  bgm.play();
 }
 
 RunningState::~RunningState ()
@@ -40,6 +42,8 @@ WorldState * RunningState::handleInput (InputEvent const & ievent)
     break;
 
   case InputEvent::Pause:
+    // Currently, I don't have a way to cleanly restart this after a pause.
+    bgm.pause();
     return new PauseScreen(this);
 
   case InputEvent::Quit:
@@ -53,6 +57,7 @@ WorldState * RunningState::handleInput (InputEvent const & ievent)
 // see header
 WorldState * RunningState::update (sf::Time const & deltaT)
 {
+
   PlaneDrawable<GameObject>::iterator it;
   for (it = map.begin() ; it != map.end() ; ++it)
     it->updateAi(deltaT);

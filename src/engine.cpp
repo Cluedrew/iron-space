@@ -48,7 +48,7 @@ int Engine::runLoop ()
 void Engine::pollInput ()
 /* Collect and distribut all input over the last frame.
  * Effect: Collects input from the window the the EventHandler and processes
- *   them.
+ *   them, except for system level actions this is delegated to state.
  * Return: Should the program continue running?
  */
 {
@@ -71,6 +71,9 @@ void Engine::pollInput ()
 }
 
 void Engine::update ()
+/* Update the game's state for passing time.
+ * Effect: Dependant on the current state.
+ */
 {
     log.data("Begin update");
     state = state->update(clock.getIncrement());
@@ -80,7 +83,7 @@ void Engine::update ()
 
 void Engine::render ()
 /* Draw everything too the screen and preform the frame swap.
- * Effect: Draws to the window.
+ * Effect: Clears, draws and updates the window.
  */
 {
   log.data("Begin render");

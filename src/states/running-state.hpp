@@ -5,6 +5,7 @@
  * Almost all functionality is distributed to the next state.
  */
 
+#include <SFML/Audio/Music.hpp>
 #include "world-state.hpp"
 #include "../plane-drawable.hpp"
 #include "../game-object.hpp"
@@ -15,6 +16,7 @@ class RunningState : public WorldState
 {
 private:
   PlaneDrawable<GameObject> map;
+  sf::Music bgm;
 
 protected:
 public:
