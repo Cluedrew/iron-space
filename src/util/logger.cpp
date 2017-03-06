@@ -16,7 +16,7 @@ static std::set<std::string> loggerNames;
 
 
 // see header
-Logger::Logger (STRING name_, LoggerDetailLevel detail_) :
+Logger::Logger (STRING name_, DetailLevel detail_) :
   name(name_), detail(detail_)
 {
   if (std::string("") == name)
@@ -74,14 +74,14 @@ void Logger::lprint (STRING msgClass, STRING text)
 // see header
 void Logger::data (STRING text)
 {
-  if (detail == LoggerDetailLevel::Verbose)
+  if (detail == DetailLevel::Verbose)
     lprint("DATA", text);
 }
 
 // see header
 void Logger::note (STRING text)
 {
-  if (detail != LoggerDetailLevel::Quiet)
+  if (detail != DetailLevel::Quiet)
     lprint("NOTE", text);
 }
 

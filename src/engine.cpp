@@ -10,7 +10,7 @@
 
 
 
-Engine::Engine (LoggerDetailLevel logdl) :
+Engine::Engine (Logger::DetailLevel logdl) :
   running(true), window(), state(new MainMenu()),
   clock(60), log("Engine", logdl)
 {}

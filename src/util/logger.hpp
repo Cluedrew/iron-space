@@ -16,7 +16,7 @@
  * Not that fail (as well as any invalid use of the logger) will result in
  * exit() being called. You are not allowed to mess this one up.
  *
- * TODO: LoggerDetailLevel -> Logger::DetailLevel ?
+ * TODO:
  *  Support for other types of streams for output.
  *  Improve the interface for input.
  */
@@ -25,18 +25,20 @@
 
 
 
-enum class LoggerDetailLevel : char { Verbose, Normal, Quiet };
-
 class Logger
 {
+public:
+  enum class DetailLevel : char {Verbose, Normal, Quiet};
+
 private:
   std::string name;
-  LoggerDetailLevel detail;
+  DetailLevel detail;
 
   void lprint (std::string const & msgClass, std::string const & text);
+
 protected:
 public:
-  Logger (std::string const & name, LoggerDetailLevel detail);
+  Logger (std::string const & name, DetailLevel detail);
   /* Create a new Logger.
    * Params: A string that repersents the name of the logger (no existing
    *   logger can have that name) and the detail level of the logger.

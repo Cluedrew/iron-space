@@ -37,7 +37,7 @@ private:
 
 protected:
 public:
-  Engine (LoggerDetailLevel logdl = LoggerDetailLevel::Quiet);
+  Engine (Logger::DetailLevel logdl = Logger::DetailLevel::Quiet);
   /* Create an Engine.
    * Params: The LoggerDetailLevel for the Engine's own Logger.
    */

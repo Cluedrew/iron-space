@@ -24,13 +24,33 @@
  * functions many (but not all) of the final game objects share.
  */
 
-class GameObject;
+class GameObject : public sf::Drawable
 /* Defines the general interface for all GameObjects. Most of this has to do
  * with the main loop (input, update (ai/physics/colition) and draw) and
  * probably a memory management tool.
  *
  * Should default implementations be included or use pure virtual?
+ *
+ * The swap of two GameObjects will have to be removed.
+ *
+ * What to do about messaging? Are there any messages we want to be able to
+ * handle at the top level? Input is a likely candidate. However I don't think
+ * we will need a general messaging system because we can use pointers to
+ * the subtypes in this new system.
  */
+{
+  virtual bool handleInput (InputEvent const & input);
+  // As current.
+
+  virtual void update (sf::Time const & deltaT);
+  // Main update step. Approximately the current updateAi;
+
+  virtual void draw (sf::RenderTarget & target, sf::RenderStates states) const;
+  /* SFML drawable function.
+   * Although not every GameObject will appear on screen I think enough of
+   * them will it is worth adding them here.
+   */
+};
 
 class GameObject2D : public GameObject, public sf::Transformable;
 /* MapObject? PlaneObject? I like the idea of varing it by the first letter.
@@ -45,8 +65,15 @@ class GameObject2D : public GameObject, public sf::Transformable;
  * the current set up. I think we need 3 handlers: begin->continue->end.
  * Begin is called the first frame of collision, continue ever frame of
  * collison there after and end the first frame after that.
- * Those (begin->continue->end) are not the actual names.
+ * Those (begin->continue->end) are not the actual names. collision => overlap
  */
+{
+  void updatePhysics (sf::Time const & deltaT);
+  /* Allow an object to move with time.
+   * Not virtual, although probably dependant on some settings else where,
+   * such as the update function setting the speed.
+   */
+};
 
 class Widget : public GameObject;
 /* The "GuiObject". There might be some shared code with the GameObject2D but
@@ -57,7 +84,10 @@ class Widget : public GameObject;
 
 class GameObject3D : public GameObject;
 /* This isn't going to come along for a long time. But some day it might.
- * SpaceObject?
+ * Maybe call it a SpaceObject?
+ *
+ * When that day comes, GameObject2D could actually be a 'decorator' for
+ * GameObject3D that takes out the 3rd dimention for you.
  */
 
 template<typename ObjectType>
@@ -78,5 +108,16 @@ class GameObjectPointer;
 template<typename InternalType, typename ExternalType = InternalType>
 class NullingPtr : public NullingPtrBase<InternalType>;
 // Possible way to implement the NullingPtr, according to the above design.
+
+
+class PassivePhysics2D;
+class ActivePhysics2D : public PassivePhysics2D;
+/* Possible new form of physics. A PassivePhysics object stays in place and
+ * does not move over time, if you want it do you do so manually. Its only
+ * functionality is to detect collisions. This is for things like Widgets.
+ *
+ * An ActivePhysics object can have things like speed and will move itself
+ * around every frame.
+ */
 
 #endif//GAME_OBJECT

@@ -155,6 +155,12 @@ bool GameObjectPtr::isNull () const
   return nullptr == ptr;
 }
 
+// see header
+bool GameObjectPtr::operator! () const
+{
+  return nullptr == ptr;
+}
+
 
 
 // Assignment Operators

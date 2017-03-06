@@ -62,6 +62,7 @@ public:
    */
 
   bool isNull () const;
+  bool operator! () const;
   /* Check the status of the pointer.
    * Return: True if this does not point at a GameObject, false otherwise.
    */
