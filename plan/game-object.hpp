@@ -13,7 +13,7 @@
  * So I am thinking of discarding the "generic container" model and then
  * have a GameObject base class which you inherite from and then create the
  * exact object you want. Shouldn't be any slower, it just pushes the virtual
- * method look-ups up a layer.
+ * method look-ups up a layer and shouldn't slow things down.
  *
  * Components will still be a thing, especially for reuse, but they might be
  * direct members instead of pointers. That may or may not be a problem for
@@ -22,6 +22,11 @@
  *
  * Further re-use will come from intermediate base classes. These handle
  * functions many (but not all) of the final game objects share.
+ *
+ * To switch to this current version (if I do) the best bet would probably
+ * be to rename the existing GameObject to GameObject2D. Then introduce the
+ * new GameObject as its parent, pull the features that will be a part of it.
+ * Split off the widgets and then start refactoring.
  */
 
 class GameObject : public sf::Drawable
@@ -45,6 +50,12 @@ class GameObject : public sf::Drawable
   virtual void update (sf::Time const & deltaT);
   // Main update step. Approximately the current updateAi;
 
+  //virtual void swap ();
+  /* If we have a buffer approch there will have to be a way to update the
+   * buffer. Currently I don't think it is needed, but it would have to go
+   * here, probably be called right before draw.
+   */
+
   virtual void draw (sf::RenderTarget & target, sf::RenderStates states) const;
   /* SFML drawable function.
    * Although not every GameObject will appear on screen I think enough of
@@ -64,14 +75,33 @@ class GameObject2D : public GameObject, public sf::Transformable;
  * handleCollision should also be broken up. There is some timing issues with
  * the current set up. I think we need 3 handlers: begin->continue->end.
  * Begin is called the first frame of collision, continue ever frame of
- * collison there after and end the first frame after that.
- * Those (begin->continue->end) are not the actual names. collision => overlap
+ * collison there after and end the first frame after that. collision->overlap
  */
 {
+
   void updatePhysics (sf::Time const & deltaT);
   /* Allow an object to move with time.
    * Not virtual, although probably dependant on some settings else where,
    * such as the update function setting the speed.
+   */
+
+protected:
+  virtual void overlapBegin (GameObject2D const & with);
+  virtual void overlapContinue (GameObject2D const & with); // <~name
+  virtual void overlapEnd (GameObject2D const & with);
+
+public:
+  bool overlapCheck (GameObject2D const & with);
+  /* Check to see if this object overlaps with the provided one.
+   * Params: Regular reference?
+   * Effect: If objects overlap, calls one of overlapBegin or overlapContinue
+   * Return: True if there is an overlap, otherwise returns false.
+   */
+
+  void endOverlapStep ();
+  /* Call to end the overlap step of this frame.
+   * Effect: Resets the frame for overlaps and calls overlapEnd on all
+   *   object that collided last frame but not this one.
    */
 };
 
@@ -102,13 +132,48 @@ class GameObjectPointer;
  * checks the type in so the cast on the way out should never fail.
  *
  * Maybe an 'alive' field and a reference counter would work better, but I
- * would like to see this work.
+ * would like to see this work. It takes an integer and an extra check when
+ * the pointer is freed.
  */
 
 template<typename InternalType, typename ExternalType = InternalType>
 class NullingPtr : public NullingPtrBase<InternalType>;
 // Possible way to implement the NullingPtr, according to the above design.
 
+template<typename T>
+class CountRef
+{
+  T & ref;
+public:
+  CountRef (T & ref) :
+    ref(ref)
+  {
+    ++ref.referenceCount;
+  }
+
+  ~CountRef ()
+  {
+    --ref.referenceCount;
+    if (0 == ref.referenceCount)
+      delete &ref;
+  }
+
+  operator T & ()
+  {
+    return ref;
+  }
+};
+/* The actual CountPtr, with mutability, would be a bit longer but this really
+ * shows why the reference count approch is so nice. The NullingPtr has some
+ * advantages but is really hard to get working (I have made progress) and I
+ * know that RC is used so many places so it obviously works.
+ * Also, how much of my attachment to NullingPtr is because of the work I have
+ * put in vs. its own value.
+ *
+ * Hey does this work? (Of course it only saves one character...)
+ * template<typename T>
+ * using ConstCountRef<T> = CountRef<const T>;
+ */
 
 class PassivePhysics2D;
 class ActivePhysics2D : public PassivePhysics2D;
@@ -117,7 +182,12 @@ class ActivePhysics2D : public PassivePhysics2D;
  * functionality is to detect collisions. This is for things like Widgets.
  *
  * An ActivePhysics object can have things like speed and will move itself
- * around every frame.
+ * around every frame. It is for GameObject2D.
+ *
+ * The point of this is really to cut down on code duplication. Those two
+ * objects have a lot of shared behaviour but I think the difference is also
+ * enough that they can't share an additional ancestor. Using these as
+ * components is a way around that.
  */
 
 #endif//GAME_OBJECT
