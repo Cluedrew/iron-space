@@ -120,59 +120,24 @@ class GameObject3D : public GameObject;
  * GameObject3D that takes out the 3rd dimention for you.
  */
 
-template<typename ObjectType>
-class GameObjectPointer;
-/* The special pointer, which I do think will remain useful, would have to
- * change to a template. This is so we don't have to cast the results of the
- * pointer. I have been thinking about it and I don't think I can get around
- * casting the pointer.
- *
- * There is a base pointer which points to the object. The object always
- * points back to that base. To create subtypes we put it in a wrapper, which
- * checks the type in so the cast on the way out should never fail.
- *
- * Maybe an 'alive' field and a reference counter would work better, but I
- * would like to see this work. It takes an integer and an extra check when
- * the pointer is freed.
- */
-
-template<typename InternalType, typename ExternalType = InternalType>
-class NullingPtr : public NullingPtrBase<InternalType>;
-// Possible way to implement the NullingPtr, according to the above design.
-
-template<typename T>
-class CountRef
-{
-  T & ref;
-public:
-  CountRef (T & ref) :
-    ref(ref)
-  {
-    ++ref.referenceCount;
-  }
-
-  ~CountRef ()
-  {
-    --ref.referenceCount;
-    if (0 == ref.referenceCount)
-      delete &ref;
-  }
-
-  operator T & ()
-  {
-    return ref;
-  }
-};
-/* The actual CountPtr, with mutability, would be a bit longer but this really
- * shows why the reference count approch is so nice. The NullingPtr has some
- * advantages but is really hard to get working (I have made progress) and I
- * know that RC is used so many places so it obviously works.
- * Also, how much of my attachment to NullingPtr is because of the work I have
- * put in vs. its own value.
- *
- * Hey does this work? (Of course it only saves one character...)
- * template<typename T>
- * using ConstCountRef<T> = CountRef<const T>;
+/* Memory Management:
+ * OK, so currently memory management has not been an issue because I am not
+ * creating new things or destroying only ones, so I suppose I should leave
+ * this be for now.
+ * Regardless I have thoughts on it. Within a single class I can manage memory
+ * manually, but in the context of the larger program that is going to be hard
+ * to do. So I was working on special pointers for the GameObject class to
+ * help.
+ * The first was the NullingPtr design, if an object is deleted sets all the
+ * pointers pointing at it to null. This is relatively slow and I realize that
+ * it might be havic is concurency is ever introduced. Hadn't thought of that.
+ * But from a game prospective it was kind of nice. The theory was the game
+ * logic would delete something and all the background reference would take
+ * care of themselves.
+ * Now I am convincing myself to throw out that work and instead use reference
+ * counting. All the big engines I know of use it, its only real drawback is
+ * cycles can break the system, so avoid that. I think adding an alive field
+ * to the object would allow me to mimic the nulling ptr, in most cases.
  */
 
 class PassivePhysics2D;
