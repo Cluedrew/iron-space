@@ -22,7 +22,7 @@ Or, parts of this project I didn't do:
 +   [bfxr](http://www.bfxr.net/ "bfxr.net"), website used to generate sound
     effects for the game.
 +   [incompetech](https://incompetech.com/music/royalty-free/music.html
-    "incompetech music), source of the background music.
+    "incompetech music"), source of the background music.
 
 ## Plan ##
 Move everything to do with the actual code into other README files or into

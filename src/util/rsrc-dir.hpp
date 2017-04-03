@@ -3,9 +3,8 @@
 
 /* Exports the path to the resource directory, where all resources files are
  * kept. The path is generated so it doesn't mater where the project is but
- * rsrc has to stay under the project root.
- *
- * Also there is no trailing slash.
+ * rsrc has to stay under the project root. The directory name includes a
+ * trailing slash because it is a directory.
  */
 
 extern char const * const resourceDirectory;

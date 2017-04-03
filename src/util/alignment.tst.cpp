@@ -4,37 +4,17 @@
 /* Tests for the alignment types and their helpers.
  * The tests for the basic operations are quite extencive because they
  * involve casts and casts make me uncomfortable.
- *
- * TODO: That being said it probably could be compacted somewhat.
  */
 
 
 
-#define COMBINE_NAMES(vertical, horisontal) \
-VerticalAlignment::vertical, \
-HorizontalAlignment::horisontal, \
-Alignment2D::vertical##horisontal
+#define VC(name) VerticalAlignment::name
+#define HC(name) HorizontalAlignment::name
+#define VH(vname,hname) Alignment2D::vname##hname
 
-#define CROSS_BASE_MATCH(v, h, vh) crossAlign(v, h) == vh
-#define CROSS_NAME_MATCH(v, h) \
-CROSS_BASE_MATCH(VerticalAlignment::v, \
-HorizontalAlignment::h, Alignment2D::v##h)
-//CROSS_BASE_MATCH(COMBINE_NAMES(v, h))
-
-#define VCOMP_BASE_MATCH(v, h, vh) v == verticalAlignmentComponent(vh)
-#define VCOMP_NAME_MATCH(v, h) \
-VCOMP_BASE_MATCH(VerticalAlignment::v, \
-HorizontalAlignment::h, Alignment2D::v##h)
-//VCOMP_BASE_MATCH(COMBINE_NAMES(v, h))
-
-#define HCOMP_BASE_MATCH(v, h, vh) h == horizontalAlignmentComponent(vh)
-#define HCOMP_NAME_MATCH(v, h) \
-HCOMP_BASE_MATCH(VerticalAlignment::v, \
-HorizontalAlignment::h, Alignment2D::v##h)
-//HCOMP_BASE_MATCH(COMBINE_NAMES(v, h))
-
-#define TOTAL_MATCH(v, h) CROSS_NAME_MATCH(v, h) && \
-HCOMP_NAME_MATCH(v, h) && VCOMP_NAME_MATCH(v, h)
+#define CROSS_NAME_MATCH(v, h) crossAlign(VC(v), HC(h)) == VH(v,h)
+#define VCOMP_NAME_MATCH(v, h) VC(v) == verticalAlignmentComponent(VH(v,h))
+#define HCOMP_NAME_MATCH(v, h) HC(h) == horizontalAlignmentComponent(VH(v,h))
 
 
 

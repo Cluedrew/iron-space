@@ -15,11 +15,11 @@
 MaRCData<std::string, sf::SoundBuffer> *
     openSoundBuffer (std::string fileName);
 /* For use by SoundMaRC. Creates and opens a sound buffer
- * Params: Name of file to load data from.
+ * Params: Name of file in rsrc/sound/ to load data from.
  * Return: Pointer to dynamical allocated MaRCData, caller must free.
  *
- * TODO: Should it take the full file name or put the ...sound prefix
- * on itself? It also stops on error, raise an exeption on error?
+ * TODO: Raise an exception on error. Rename to reference sf::SoundBuffer.
+ * SoundBufferMaRC? SoundBufMaRC?
  */
 
 using SoundMaRC = MaRC<std::string, sf::SoundBuffer, openSoundBuffer>;

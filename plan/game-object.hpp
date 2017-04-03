@@ -23,10 +23,9 @@
  * Further re-use will come from intermediate base classes. These handle
  * functions many (but not all) of the final game objects share.
  *
- * To switch to this current version (if I do) the best bet would probably
- * be to rename the existing GameObject to GameObject2D. Then introduce the
- * new GameObject as its parent, pull the features that will be a part of it.
- * Split off the widgets and then start refactoring.
+ * To refactor:
+ * Create GameObject2D and Widget as empty classes, that inherite from
+ * GameObject. Change existing objects to use those.
  */
 
 class GameObject : public sf::Drawable
@@ -105,12 +104,21 @@ public:
    */
 };
 
-class Widget : public GameObject;
+class Widget : public GameObject
 /* The "GuiObject". There might be some shared code with the GameObject2D but
  * really it is lacking the physics (except for collision with the mouse).
  * It might also have some nesting options, because widgets seem to be
  * orginized that way.
  */
+{
+protected:
+  virtual void hoverBegin (mouse?);
+  virtual void hoverContinue (mouse?);
+  virtual void hoverEnd (mouse?);
+  virtual void clickBegin (mouse?);
+  virtual void clickContinue (mouse?);
+  virtual void clickEnd (mouse?);
+};
 
 class GameObject3D : public GameObject;
 /* This isn't going to come along for a long time. But some day it might.

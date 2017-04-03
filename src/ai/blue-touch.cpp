@@ -9,7 +9,7 @@
 
 
 BlueTouch::BlueTouch (int x, int y) :
-  x(x), y(y), buffer("rsrc/sound/Metal_Beep.wav"), sound(*buffer),
+  x(x), y(y), buffer("Metal_Beep.wav"), sound(*buffer),
   contact(0)
 {}
 
