@@ -14,10 +14,7 @@
  * longer time, accross function calls or iterations of the main loop, use a
  * GameObjectPtr. (See its header.)
  *
- * TODO Once the class settles down the functions that are just forwarding
- *      should probably be moved here so they can be inlined.
- *    + This is too narrow of an interface. I need more access to the
- *      components. But free access might be a bit too much.
+ * TODO In the process of being refactored.
  */
 
 #include <SFML/Graphics.hpp>

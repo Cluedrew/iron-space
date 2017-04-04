@@ -1,8 +1,8 @@
 #ifndef ALIGN_RECT_GRAPHICS_HPP
 #define ALIGN_RECT_GRAPHICS_HPP
 
-/* Drawable rectangle, specified in terms of size.
- * TODO Can it rotate.
+/* Drawable rectangle, specified in terms of size. It is always is aligned
+ * with the axis. And is drawn from its upper right corner.
  */
 
 #include <SFML/Graphics/RectangleShape.hpp>

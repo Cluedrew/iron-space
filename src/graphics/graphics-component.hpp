@@ -1,9 +1,8 @@
 #ifndef GRAPHICS_COMPONENT_HPP
 #define GRAPHICS_COMPONENT_HPP
 
-/* Drawable component.
- *
- * Soon to be an abstract base class.
+/* Drawable component. Currently it just acts as an intermediate to
+ * sf::Drawable, existing for orginiation and as a point of extention.
  */
 
 #include <SFML/Graphics/Drawable.hpp>

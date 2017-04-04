@@ -8,47 +8,6 @@
 
 
 
-// TODO: Keep? Move to Library? Remove?
-// I'm just trying out some other formats.
-float alignedVerticalOrigin (VerticalAlignment alignment, float y)
-{
-  switch(alignment)
-  {
-  case VerticalAlignment::Top:
-    return 0;
-  case VerticalAlignment::Middle:
-    return y / 2;
-  case VerticalAlignment::Bottom:
-  default:
-    return y;
-  }
-}
-
-float alignedHorizontalOrigin (HorizontalAlignment alignment, float x)
-{
-  switch (alignment)
-  {
-  case HorizontalAlignment::Left:
-     return 0;
-  case HorizontalAlignment::Center:
-     return x / 2;
-  case HorizontalAlignment::Right:
-  default:
-     return x;
-  };
-}
-
-sf::Vector2f alignedOrigin (Alignment2D alignment, sf::FloatRect xy)
-{
-  return sf::Vector2f(
-      alignedHorizontalOrigin(horizontalAlignmentComponent(alignment),
-                              xy.width),
-      alignedVerticalOrigin(verticalAlignmentComponent(alignment),
-                            xy.height));
-}
-
-
-
 TextGraphics::TextGraphics (std::string const & font_,
                             std::string const & text_,
                             Alignment2D alignment) :
@@ -65,7 +24,6 @@ TextGraphics::~TextGraphics ()
 void TextGraphics::draw (sf::RenderTarget & target,
                          sf::RenderStates states) const
 {
-  // TODO: Can this ever fail? if not a faster cast should be used.
   target.draw(text, states);
 }
 

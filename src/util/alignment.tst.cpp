@@ -6,6 +6,9 @@
  * involve casts and casts make me uncomfortable.
  */
 
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Rect.hpp>
+
 
 
 #define VC(name) VerticalAlignment::name
@@ -50,5 +53,38 @@ TEST_CASE("Tests for Alignment types and helpers", "[util]")
     CHECK( CROSS_NAME_MATCH(Bottom, Right) );
     CHECK( VCOMP_NAME_MATCH(Bottom, Right) );
     CHECK( HCOMP_NAME_MATCH(Bottom, Right) );
+  }
+
+  SECTION("Check origin calculation by alignment.")
+  {
+    float const expectY[] = {0, 2, 4};
+    VerticalAlignment vValue[] =
+    {
+      VerticalAlignment::Top,
+      VerticalAlignment::Middle,
+      VerticalAlignment::Bottom,
+    };
+    float const expectX[] = {0, 3, 6};
+    HorizontalAlignment hValue[] =
+    {
+      HorizontalAlignment::Left,
+      HorizontalAlignment::Center,
+      HorizontalAlignment::Right,
+    };
+
+    for (unsigned int vi = 0 ; vi < 3 ; ++vi)
+    {
+      CHECK( expectY[vi] == alignedVerticalOrigin(vValue[vi], 4) );
+      for (unsigned int hi = 0 ; hi < 3 ; ++hi)
+      {
+        if (0 == vi)
+        {
+          CHECK( expectX[hi] == alignedHorizontalOrigin(hValue[hi], 6) );
+        }
+        CHECK( sf::Vector2f(expectX[hi], expectY[vi]) ==
+               alignedOrigin(crossAlign(vValue[vi], hValue[hi]),
+                 sf::Vector2f(6, 4)) );
+      }
+    }
   }
 }

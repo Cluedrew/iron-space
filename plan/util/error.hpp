@@ -2,27 +2,28 @@
 #define ERROR_HPP
 
 /* Exception class and error handling tools.
- * The trick is to make sure these things can never through exceptions.
- * I will split this out into
+ * The trick is to make sure these things can never throw exceptions.
+ * My main method of this is to store an inline message and use that if
+ * we run out of space. That is the only source of exceptions I can think of.
+ *
+ * Scratchpad:
  */
 
 #include <exception>
 #include <string>
 
+// In implementation.
+#include <cstring>
+
 class GameError : public exception
 /* Base of local exception types.
  */
 {
-  static char const * unknownMsg;
-  static char const * lostMsg;
-  static char const * dup (char const * src)
+  static char const * const unknownMsg;
+  static char const * const lostMsg;
+  static char const * maybeDup (bool dynamic, char const * src)
   {
-    unsigned int length = 0;
-    while (src[length]) ++length;
-    char * dst = new char[length + 1];
-    for (unsigned int i = 0 ; i <= length ; ++i)
-      dst[i] = src[i];
-    return msg;
+    return (dynamic) ? strdup(src) : src;
   }
 
   bool dynamic;
@@ -33,8 +34,11 @@ public:
     dynamic(false), msg(unknownMsg)
   {}
   GameError (GameError const & other) noexcept :
-    dynamic(other.dynamic), msg((dynamic) ? dup(other.msg) : other.msg)
-  {}
+    dynamic(other.dynamic), msg(maybeDup(dynamic, other.msg))
+  {
+    if (nullptr == msg)
+      msg = lostMsg;
+  }
 
   GameError (GameError && other) noexcept :
     dynamic(other.dynamic), msg(other.msg)
@@ -44,12 +48,18 @@ public:
 
   GameError (char const * msg, bool dynamic = true) noexcept :
   // How often will we be using a new message? (dynamic = false)
-    dynamic(dynamic), msg((dynamic) ? dup(msg) : other.msg);
-  {}
+    dynamic(dynamic), msg(maybeDup(dynamic, msg));
+  {
+    if (nullptr == msg)
+      msg = lostMsg;
+  }
 
   GameError (std::string const & msg) noexcept :
-    dynamic(true), msg(dup(msg.c_str()))
-  {}
+    dynamic(true), msg(maybeDup(true, msg.c_str()))
+  {
+    if (nullptr == msg)
+      msg = lostMsg;
+  }
 
   virtual ~GameError ()
   {
@@ -64,10 +74,10 @@ public:
   }
 };
 
-char const * GameError::unknownMsg =
+char const * const GameError::unknownMsg =
   "Unknown Exeception from within the game engine.";
 
-char const * GameError::lostMsg =
+char const * const GameError::lostMsg =
   "Game Error occured, however the message was lost.";
 
 class FileError : public GameError
@@ -79,12 +89,13 @@ class FileError : public GameError
 
 public:
   FileError (std::string const & problem, std::string const & file)
-    GameError((problem + file).c_str())
+    GameError((problem + file).c_str(), true)
   {}
 
   FileError (FileError const & other);
+  // I completely forget the 'safe' way to copy between children.
 
-  virtual ~FileError ();
+  virtual ~FileError () {}
 };
 
 #endif//ERROR_HPP

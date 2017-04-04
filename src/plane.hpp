@@ -59,7 +59,7 @@ public:
   /* Give an event to a GameObject* to be handled.
    *   * This one needs a GameObject until I have a better solution.
    *     The handle input function is part of the Object2D requirents.
-   * Params: An InputEvent (TODO what types, it must have a location)
+   * Params: An InputEvent with type == InputEvent::Select.
    * Effect: Event is handled (may result in additional changes in updates).
    * Return: True if the event was handled, false otherwise.
    */
