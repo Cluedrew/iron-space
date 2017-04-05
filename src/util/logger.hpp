@@ -14,11 +14,12 @@
  * Quiet : data and note messages are excluded.
  *
  * Not that fail (as well as any invalid use of the logger) will result in
- * exit() being called. You are not allowed to mess this one up.
+ * exit() being called. It repersents a critical failure.
  *
- * TODO:
- *  Support for other types of streams for output.
- *  Improve the interface for input.
+ * I could argument this class, but currently I have found very little use for
+ * its current form. Its only use case is easily adding and removing debug
+ * messages. Everything else seems to be better handled by up-front testing to
+ * make sure the code does what it is supposed to do.
  */
 
 #include <string>

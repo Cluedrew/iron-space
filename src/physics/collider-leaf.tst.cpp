@@ -7,8 +7,6 @@
  * Classes that inherites directly from Collider, without going through
  * ColliderLeaf, is tested elsewhere as they (should not be) part of this
  * interlocked group.
- *
- * TODO Test all six combinations, with and without transformations.
  */
 
 #include <SFML/Graphics/Transform.hpp>
@@ -148,6 +146,40 @@ TEST_CASE("Testing ColliderLeaf and child-classes", "[physics]")
     SECTION("Seperate")
     {
       CHECK_FALSE( rDown.collides(rLeft) );
+    }
+  }
+
+  SECTION("Check with move transformation")
+  {
+    sf::Transform moveRight;
+    moveRight.translate(3, 0);
+    PointCollider base(3, 0);
+
+    SECTION("Point")
+    {
+      PointCollider point(0, 0);
+      point.update(root);
+      CHECK_FALSE( base.collides(point) );
+      point.update(moveRight);
+      CHECK( base.collides(point) );
+    }
+
+    SECTION("Circle")
+    {
+      CircleCollider circle(0, 0, 2);
+      circle.update(root);
+      CHECK_FALSE( base.collides(circle) );
+      circle.update(moveRight);
+      CHECK( base.collides(circle) );
+    }
+
+    SECTION("AlignRect")
+    {
+      AlignRectCollider rect(-1, -1, 2, 2);
+      rect.update(root);
+      CHECK_FALSE( base.collides(rect) );
+      rect.update(moveRight);
+      CHECK( base.collides(rect) );
     }
   }
 }

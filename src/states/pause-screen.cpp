@@ -35,11 +35,9 @@ WorldState * PauseScreen::update (sf::Time const & deltaT)
 {
   if (unpause)
   {
-    // TODO: Should this be valid? paused:=this->paused
-    //WorldState * fin = paused;
+    WorldState * result = paused;
     delete(this);
-    //return fin;
-    return paused;
+    return result;
   }
   else
     return this;

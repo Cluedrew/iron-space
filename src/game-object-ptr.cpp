@@ -186,8 +186,6 @@ GameObjectPtr & GameObjectPtr::operator= (GameObjectPtr && other)
   return *this;
 }
 
-// TODO? Add operator= (GameObject &|* object)?
-
 
 
 // Comparison Operators

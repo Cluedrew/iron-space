@@ -17,7 +17,7 @@ struct TextFragment : public GameObject
   /* Create a text fragment that desplays the given text.
    * Params: A string repersenting the characters to print out.
    *   The x & y coordinates of where the text should be drawn.
-   *   TODO The alignment the coordinates should be messured from.
+   *   The alignment of the origin.
    */
 };
 
