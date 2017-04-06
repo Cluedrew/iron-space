@@ -111,6 +111,8 @@ class Widget : public GameObject
  * orginized that way.
  */
 {
+  enum class MouseState : char {Free, Hover, Click} mouseState;
+
 protected:
   virtual void hoverBegin (mouse?);
   virtual void hoverContinue (mouse?);

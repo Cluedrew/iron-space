@@ -41,6 +41,32 @@ public:
   operator T & () const;
 };
 
+class ReferenceCounter
+/* Instead of hand crafting the features you need every time, you can just
+ * inherite from ReferenceCounter.
+ */
+{
+  unsigned int referenceCount_;
+  template<typename T>
+  friend class CountPtr<T>;
+  template<typename T>
+  friend class CountRef<T>;
+
+protected:
+  ReferenceCounter (bool dynamic = true) :
+    referenceCount_(dynamic ? 0 : 1)
+  {}
+  /* Create a new ReferenceCounter object.
+   * Params: dynamic = false actually disables the dealocation when there are
+   *   no more references to the counter. Only use this if you have some other
+   *   way of deleting the object. For instance, stack allocation.
+   */
+
+//ReferenceCounter () : referenceCount_(0) {}
+//enum DisableFlagType {Disable};
+//ReferenceCounter (DisableFlagType) : referenceCount_(1) {}
+};
+
 #include "count-ptr.tpp"
 
 #endif//COUNT_PTR_HPP
