@@ -9,7 +9,7 @@ class GameObject;
 class GameObjectPtr;
 #include "ai-component.hpp"
 #include <SFML/Audio/Sound.hpp>
-#include "../audio/sound-marc.hpp"
+#include "../audio/sound-effect.hpp"
 
 
 
@@ -18,8 +18,7 @@ class BlueTouch : public AiComponent
 private:
   int x;
   int y;
-  SoundMaRC buffer;
-  sf::Sound sound;
+  SoundEffect sound;
   char contact;
 
 protected:

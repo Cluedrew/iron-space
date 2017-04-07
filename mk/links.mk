@@ -9,7 +9,7 @@
 
 .PHONY: links clean-links
 
-ALL_LINKS=$(addsuffix /.top,$(CODEDIR) $(addprefix $(CODEDIR),$(DIRNAMES)))
+ALL_LINKS=$(addsuffix /.top,$(CODEDIR) $(addprefix $(CODEDIR)/,$(DIRNAMES)))
 TOP_LINKS=$(CODEDIR)/.top
 SUB_LINKS=$(patsubst %,$(CODEDIR)/%/.top,$(DIRNAMES))
 
@@ -24,3 +24,6 @@ $(SUB_LINKS) :
 	ln -s -T $(CODEDIR) $@
 
 # .DIR links would just expand to .top/DIR
+
+clean-links :
+	rm $(ALL_LINKS)

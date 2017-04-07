@@ -12,7 +12,7 @@
 
 class SoundEffect : public sf::Sound
 {
-  SoundMaRC buffer;
+  SoundBufferMaRC buffer;
 
 public:
   SoundEffect(std::string fileName) :

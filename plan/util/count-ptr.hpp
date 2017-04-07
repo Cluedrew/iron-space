@@ -53,18 +53,21 @@ class ReferenceCounter
   friend class CountRef<T>;
 
 protected:
-  ReferenceCounter (bool dynamic = true) :
-    referenceCount_(dynamic ? 0 : 1)
-  {}
+  ReferenceCounter () :
+    referenceCount_(0) {}
   /* Create a new ReferenceCounter object.
-   * Params: dynamic = false actually disables the dealocation when there are
-   *   no more references to the counter. Only use this if you have some other
-   *   way of deleting the object. For instance, stack allocation.
+   * After the first CountPtr/CountRef selects the pointer
    */
 
-//ReferenceCounter () : referenceCount_(0) {}
-//enum DisableFlagType {Disable};
-//ReferenceCounter (DisableFlagType) : referenceCount_(1) {}
+  enum DisableFlagType {Disable};
+
+  ReferenceCounter (DisableFlagType) :
+    referenceCount_(1) {}
+  /* Create a new ReferenceCounter object that with deallocation disabled.
+   * It can (and must) be deallocated manually. Really only useful if you want
+   * to allocate it on the stack or as a component of a larger object. Hence
+   * having non-pointer access to it.
+   */
 };
 
 #include "count-ptr.tpp"

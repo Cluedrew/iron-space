@@ -109,6 +109,9 @@ class Widget : public GameObject
  * really it is lacking the physics (except for collision with the mouse).
  * It might also have some nesting options, because widgets seem to be
  * orginized that way.
+ *
+ * I am not sure how much behaviour should be here, it depends on what we
+ * consider to the basic widget. Is it a decal or something interactable?
  */
 {
   enum class MouseState : char {Free, Hover, Click} mouseState;
