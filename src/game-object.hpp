@@ -15,6 +15,11 @@
  * GameObjectPtr. (See its header.)
  *
  * TODO In the process of being refactored.
+ *      Or will be once I have the curage to throw out so much old code.
+ * The top of the GameObject hierarcy. The GameObject provides some simple
+ * memory management tools and hooks for the game loop to latch onto.
+ * This may be expanded to include a messaging system and others as the
+ * project progresses.
  */
 
 #include <SFML/Graphics.hpp>
