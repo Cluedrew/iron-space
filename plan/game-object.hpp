@@ -10,15 +10,20 @@
  * type with the proper interface. Or it could store the pointer itself,
  * but at that point it is starting to take on the role of the GameObject.
  *
+ * On a more technically level it had to do with type casting, which seems
+ * to fit into C# (Unity) better than C++ (Unreal). The other issue is that I
+ * miss having a centeral location to put my code into. Really this is the Ai
+ * component again, as what it does with the components of the object is given
+ * in a completely different place than where the components are decided.
+ *
  * So I am thinking of discarding the "generic container" model and then
  * have a GameObject base class which you inherite from and then create the
  * exact object you want. Shouldn't be any slower, it just pushes the virtual
  * method look-ups up a layer and shouldn't slow things down.
  *
  * Components will still be a thing, especially for reuse, but they might be
- * direct members instead of pointers. That may or may not be a problem for
- * some optimization ideas I had, but I'm a long way from having to cross that
- * bridge.
+ * direct members instead of pointers. This is slightly less optimal but I
+ * think I have a ways to go before I worry about that.
  *
  * Further re-use will come from intermediate base classes. These handle
  * functions many (but not all) of the final game objects share.

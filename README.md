@@ -42,7 +42,9 @@ First a bit about the layout of the code base.
     Things moving over time, resolving colitions and similar.
 +   *graphics* is for image loading and rendering code.
 +   *audio* is for sound loading and playing code.
++   *object* contains the base GameObject types.
 +   *objects* contains instances of different GameObjects used in the game.
+    I would like to rename this one, but I'm not sure to what.
 
 ### Testing ###
 

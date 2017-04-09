@@ -3,34 +3,27 @@
 
 /* The GameObject that exists in 2D space, that is in a plane.
  *
- * The current constructors are temperary, while I refactor.
- */
-
-/* MapObject? PlaneObject? I like the idea of varing it by the first letter.
- * This takes all of the features of the GameObject but then makes it occur
- * in a space. PlaneObject then has a location in space, and probably a body
- * that can collide and overlap (well maybe not always, but I think at this
- * point it is reasonable to assume that) as well as move around.
+ * This adds 2D physics, collision and kinematics, to the game object.
  *
- * So in short it adds 2D location and physics to the GameObject.
+ * Collision is currently limited to overlaping, no actual hits are
+ * calculated. Collisions should be checked for once per frame (iteration of
+ * the main loop). There are three collision handler functions.
  *
- * handleCollision should also be broken up. There is some timing issues with
- * the current set up. I think we need 3 handlers: begin->continue->end.
- * Begin is called the first frame of collision, continue ever frame of
- * collison there after and end the first frame after that. collision->overlap
+ * Its current form is temporary as I refactor GameObject.
  */
 
 #include <vector>
 #include <SFML/Graphics/Transform.hpp>
-#include "game-object.hpp"
+#include "../game-object.hpp"
 
-class PlaneObject : public GameObject, public sf::Transformable
+class PlaneObject : public GameObject
+// TODO Add public sf::Transformable once GameObject stops using it.
 {
   // TODO switch to CountPtr/Ref once that is availible.
   struct OverlapData
   {
     bool thisFrame;
-    PlaneObject * with
+    PlaneObject & with;
   };
   std::vector<OverlapData> overlaps;
 
@@ -41,9 +34,9 @@ class PlaneObject : public GameObject, public sf::Transformable
    */
 
 protected:
-  virtual void overlapBegin (PlaneObject const & with);
-  virtual void overlapContinue (PlaneObject const & with); // <~name
-  virtual void overlapEnd (PlaneObject const & with);
+  virtual void overlapBegin (PlaneObject & with);
+  virtual void overlapContinue (PlaneObject & with); // <~name
+  virtual void overlapEnd (PlaneObject & with);
 
 public:
   PlaneObject (AiComponent * ai,
@@ -54,8 +47,14 @@ public:
                PhysicsComponent * physics,
                GraphicsComponent * graphics);
 
-  bool overlapCheck (PlaneObject const & with);
-  /* Check to see if this object overlaps with the provided one.
+  bool isOverlapping (PlaneObject const & with) const;
+  /* Check for overlap between two objects.
+   * Params: Constant reference to other object.
+   * Return: True if they overlap, false otherwise.
+   */
+
+  bool overlapCheck (PlaneObject & with);
+  /* Check for and resolve overlap between two objects.
    * Params: Regular reference?
    * Effect: If objects overlap, calls one of overlapBegin or overlapContinue
    * Return: True if there is an overlap, otherwise returns false.

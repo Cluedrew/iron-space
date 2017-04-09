@@ -1,7 +1,8 @@
 #ifndef GAME_OBJECT_HPP
 #define GAME_OBJECT_HPP
 
-/* The centeral GameObject for the system. It is based off of the Unity
+/*
+ The centeral GameObject for the system. It is based off of the Unity
  * GameObject with a few important changes, mostly specializing it for the
  * given game. Although the GameObject is supposed to be component base,
  * there is actually no room for components here. Inherated sub-classes are

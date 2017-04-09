@@ -16,22 +16,26 @@ PlaneObject::PlaneObject (sf::Transformable const & start,
 void PlaneObject::updatePhysics (sf::Time const & deltaT)
 {}
 
-void PlaneObject::overlapBegin (PlaneObject const & with)
-{}
+// No-ops, exist to be overloaded.
+void PlaneObject::overlapBegin (PlaneObject & with) {}
+void PlaneObject::overlapContinue (PlaneObject & with) {}
+void PlaneObject::overlapEnd (PlaneObject & with) {}
 
-void PlaneObject::overlapContinue (PlaneObject const & with)
-{}
-
-void PlaneObject::overlapEnd (PlaneObject const & with)
-{}
-
-bool PlaneObject::overlapCheck (PlaneObject const & with)
+bool PlaneObject::isOverlapping (PlaneObject const & with) const
 {
-  // If the object collides...
+  // The calculation should take place here later in refactoring.
+  return collides(with);
+}
+
+bool PlaneObject::overlapCheck (PlaneObject & with)
+{
+  if (!isOverlapping(with))
+    return false;
+
   std::vector<OverlapData>::iterator it;
   for (it = overlaps.begin() ; it != overlaps.end() ; ++it)
   {
-    if (it->with == &with)
+    if (&it->with == &with)
     {
       if (it->thisFrame)
         return true;
@@ -43,7 +47,7 @@ bool PlaneObject::overlapCheck (PlaneObject const & with)
       }
     }
   }
-  overlaps.push_back(OverlapData{thisFrame = true, with = *with});
+  overlaps.push_back(OverlapData{.thisFrame = true, .with = with});
   overlapBegin(with);
   return true;
 }
@@ -57,12 +61,8 @@ void PlaneObject::endOverlapStep ()
       it->thisFrame = false;
     else
     {
-      overlapEnd(with);
+      overlapEnd(it->with);
       // Remove the element from the list, which invalidates the iterator.
     }
   }
 }
-
-if (it->with == &with):
-
-end if;

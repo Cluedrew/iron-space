@@ -48,9 +48,9 @@ class ReferenceCounter
 {
   unsigned int referenceCount_;
   template<typename T>
-  friend class CountPtr<T>;
+  friend class CountPtr;
   template<typename T>
-  friend class CountRef<T>;
+  friend class CountRef;
 
 protected:
   ReferenceCounter () :
