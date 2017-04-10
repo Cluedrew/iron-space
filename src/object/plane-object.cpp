@@ -35,7 +35,7 @@ bool PlaneObject::overlapCheck (PlaneObject & with)
   std::vector<OverlapData>::iterator it;
   for (it = overlaps.begin() ; it != overlaps.end() ; ++it)
   {
-    if (&it->with == &with)
+    if (it->with == &with)
     {
       if (it->thisFrame)
         return true;
@@ -47,22 +47,31 @@ bool PlaneObject::overlapCheck (PlaneObject & with)
       }
     }
   }
-  overlaps.push_back(OverlapData{.thisFrame = true, .with = with});
+  overlaps.push_back(OverlapData{.thisFrame = true, .with = &with});
   overlapBegin(with);
   return true;
 }
 
 void PlaneObject::endOverlapStep ()
 {
-  std::vector<OverlapData>::iterator it;
-  for (it = overlaps.begin() ; it != overlaps.end() ; ++it)
+  using IteratorT = std::vector<OverlapData>::iterator;
+  IteratorT nextCheck = overlaps.begin();
+  IteratorT nextEmpty = overlaps.begin();
+  IteratorT end = overlaps.end();
+
+  while (nextCheck != end)
   {
-    if (it->thisFrame)
-      it->thisFrame = false;
+    if (nextCheck->thisFrame)
+    {
+      nextCheck->thisFrame = false;
+      *nextEmpty = *nextCheck;
+      ++nextEmpty;
+    }
     else
     {
-      overlapEnd(it->with);
-      // Remove the element from the list, which invalidates the iterator.
+      overlapEnd(*nextCheck->with);
     }
+    ++nextCheck;
   }
+  overlaps.erase(nextEmpty, end);
 }

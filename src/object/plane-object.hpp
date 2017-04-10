@@ -23,7 +23,7 @@ class PlaneObject : public GameObject
   struct OverlapData
   {
     bool thisFrame;
-    PlaneObject & with;
+    PlaneObject * with;
   };
   std::vector<OverlapData> overlaps;
 

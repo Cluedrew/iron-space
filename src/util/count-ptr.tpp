@@ -20,10 +20,18 @@ CountPtr<T>::CountPtr (T * pointer) :
 }
 
 template<typename T>
-CountPtr<T>::CountPtr (CountPtr<T> && pointer) :
-  ptr(pointer.ptr)
+CountPtr<T>::CountPtr (CountPtr<T> const & other) :
+  ptr(other.ptr)
 {
-  pointer.ptr = nullptr;
+  if (ptr)
+    ++ptr->referenceCount_;
+}
+
+template<typename T>
+CountPtr<T>::CountPtr (CountPtr<T> && other) :
+  ptr(other.ptr)
+{
+  other.ptr = nullptr;
 }
 
 template<typename T>
@@ -41,20 +49,53 @@ CountPtr<T>::operator T * ()
 }
 
 template<typename T>
-T * CountPtr<T>::operator= (T * pointer)
+CountPtr<T> & CountPtr<T>::operator= (T * pointer)
 {
+  if (ptr == pointer)
+    return *this;
+
   if (ptr)
     if (0 == (--ptr->referenceCount_))
       delete ptr;
   ptr = pointer;
-  ++ptr->referenceCount_;
+  if (ptr)
+    ++ptr->referenceCount_;
+
+  return *this;
 }
+
+template<typename T>
+CountPtr<T> & CountPtr<T>::operator= (CountPtr<T> const & other)
+{
+  return (*this = other.ptr);
+}
+
+template<typename T>
+CountPtr<T> & CountPtr<T>::operator= (CountPtr<T> && other)
+{
+  return (*this = other.ptr);
+}
+
 
 // CountRef:
 
 template<typename T>
 CountRef<T>::CountRef (T & ref) :
   ref(ref)
+{
+  ++ref.referenceCount_;
+}
+
+template<typename T>
+CountRef<T>::CountRef (CountRef<T> const & other) :
+  ref(other.ref)
+{
+  ++ref.referenceCount_;
+}
+
+template<typename T>
+CountRef<T>::CountRef (CountRef<T> && other) :
+  ref(other.ref)
 {
   ++ref.referenceCount_;
 }

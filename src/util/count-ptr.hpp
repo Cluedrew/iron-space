@@ -19,14 +19,16 @@ class CountPtr
   T * ptr;
 public:
   CountPtr (T * pointer = nullptr);
-
-  CountPtr (CountPtr<T> && pointer);
+  CountPtr (CountPtr<T> const & other);
+  CountPtr (CountPtr<T> && other);
 
   ~CountPtr ();
 
   operator T * ();
 
-  T * operator= (T * pointer);
+  CountPtr<T> & operator= (T * pointer);
+  CountPtr<T> & operator= (CountPtr<T> const & other);
+  CountPtr<T> & operator= (CountPtr<T> && other);
 };
 
 template<typename T>
@@ -35,7 +37,8 @@ class CountRef
   T & ref;
 public:
   CountRef (T & ref);
-
+  CountRef (CountRef<T> const & other);
+  CountRef (CountRef<T> && other);
   ~CountRef ();
 
   operator T & () const;
@@ -52,14 +55,15 @@ class ReferenceCounter
   template<typename T>
   friend class CountRef;
 
+public:
+  enum DisableFlagType {Disable};
+
 protected:
   ReferenceCounter () :
     referenceCount_(0) {}
   /* Create a new ReferenceCounter object.
    * After the first CountPtr/CountRef selects the pointer
    */
-
-  enum DisableFlagType {Disable};
 
   ReferenceCounter (DisableFlagType) :
     referenceCount_(1) {}
