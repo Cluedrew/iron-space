@@ -17,10 +17,10 @@
 RunningState::RunningState () :
   map(), bgm()
 {
-  map.emplace(GameObject(new OrbitAi(),
+  map.emplace(PlaneObject(new OrbitAi(),
                 new PhysicsComponent(new CircleCollider(0, 0, 25)),
                 new CircleGraphics(25)));
-  map.emplace(GameObject(new BlueTouch(315, 300),
+  map.emplace(PlaneObject(new BlueTouch(315, 300),
                 new PhysicsComponent(new CircleCollider(0, 0, 25)),
                 new CircleGraphics(25)));
   bgm.openFromFile("rsrc/music/Laser_Groove.wav");
@@ -58,7 +58,7 @@ WorldState * RunningState::handleInput (InputEvent const & ievent)
 WorldState * RunningState::update (sf::Time const & deltaT)
 {
 
-  PlaneDrawable<GameObject>::iterator it;
+  PlaneDrawable<PlaneObject>::iterator it;
   for (it = map.begin() ; it != map.end() ; ++it)
     it->updateAi(deltaT);
 

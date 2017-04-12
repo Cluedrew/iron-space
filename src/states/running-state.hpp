@@ -8,14 +8,14 @@
 #include <SFML/Audio/Music.hpp>
 #include "world-state.hpp"
 #include "../plane-drawable.hpp"
-#include "../game-object.hpp"
+#include "../object/plane-object.hpp"
 
 
 
 class RunningState : public WorldState
 {
 private:
-  PlaneDrawable<GameObject> map;
+  PlaneDrawable<PlaneObject> map;
   sf::Music bgm;
 
 protected:

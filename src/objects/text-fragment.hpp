@@ -5,12 +5,12 @@
  */
 
 #include <string>
-#include "../game-object.hpp"
+#include "../object/widget.hpp"
 #include "../util/alignment.hpp"
 
 
 
-struct TextFragment : public GameObject
+struct TextFragment : public Widget
 {
   TextFragment (std::string const & text, float x = 0, float y = 0,
       Alignment2D alignment = Alignment2D::TopLeft);

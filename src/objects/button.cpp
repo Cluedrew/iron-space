@@ -14,8 +14,8 @@
 
 // see header
 Button::Button(Command * effect, float x, float y, float w, float h) :
-    GameObject(xyTransformable(x, y),
-               new ClickAi(effect),
-               new PhysicsComponent(new AlignRectCollider(0, 0, w, h)),
-               new AlignRectGraphics(w, h))
+    Widget(xyTransformable(x, y),
+           new ClickAi(effect),
+           new PhysicsComponent(new AlignRectCollider(0, 0, w, h)),
+           new AlignRectGraphics(w, h))
 {}

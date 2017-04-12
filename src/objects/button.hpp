@@ -6,12 +6,12 @@
  * I am exparementing on how this is set up.
  */
 
-#include "../game-object.hpp"
+#include "../object/widget.hpp"
 class Command;
 
 
 
-struct Button : public GameObject
+struct Button : public Widget
 {
   // TODO: Some control over how it is drawn should be added at some point.
   Button (Command * effect, float x, float y, float w, float h);

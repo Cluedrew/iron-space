@@ -7,14 +7,14 @@
 
 #include "world-state.hpp"
 #include "../plane-drawable.hpp"
-#include "../game-object.hpp"
+#include "../object/widget.hpp"
 
 
 
 class MainMenu : public WorldState
 {
 private:
-  PlaneDrawable<GameObject> gui;
+  PlaneDrawable<Widget> gui;
   bool started;
 
 protected:

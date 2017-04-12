@@ -11,6 +11,6 @@
 
 TextFragment::TextFragment(std::string const & text, float x, float y,
     Alignment2D alignment) :
-  GameObject(xyTransformable(x, y), new NullAi(), new NullPhysics(),
+  Widget(xyTransformable(x, y), new NullAi(), new NullPhysics(),
       new TextGraphics("FreeSans.ttf", text, alignment))
 {}
