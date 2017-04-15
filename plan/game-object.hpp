@@ -114,9 +114,6 @@ class Widget : public GameObject
  * really it is lacking the physics (except for collision with the mouse).
  * It might also have some nesting options, because widgets seem to be
  * orginized that way.
- *
- * I am not sure how much behaviour should be here, it depends on what we
- * consider to the basic widget. Is it a decal or something interactable?
  */
 {
   enum class MouseState : char {Free, Hover, Click} mouseState;
@@ -128,6 +125,21 @@ protected:
   virtual void clickBegin (mouse?);
   virtual void clickContinue (mouse?);
   virtual void clickEnd (mouse?);
+
+public:
+  enum class Interaction : char {Static, Interactable}
+
+  Widget (Interaction interact);
+
+  Interaction getInteraction ();
+  void setInteraction (Interaction);
+  /* Solution to the interactibility of the widget, set a flag. The flag
+   * (or flags) determaine what sort of checks we do. So before checking if
+   * the object was clicked, first check to see if the object can be clicked,
+   * if not just say no. Currently I have just two modes, but more could be
+   * added. To clean up names I might need some declarations like:
+   * static Interaction const Static = Interaction::Static;
+   */
 };
 
 class GameObject3D : public GameObject;

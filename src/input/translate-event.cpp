@@ -10,7 +10,6 @@ bool translateEvent (sf::Event const & sfEvent, InputEvent & iEvent)
 {
   switch (sfEvent.type)
   {
-  // Combine Response and InputEvent?
   case sf::Event::Closed:
     iEvent.type = InputEvent::Quit;
     return true;

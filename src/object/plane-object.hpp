@@ -55,7 +55,7 @@ public:
 
   bool overlapCheck (PlaneObject & with);
   /* Check for and resolve overlap between two objects.
-   * Params: Regular reference?
+   * Params: Mutable reference to other object.
    * Effect: If objects overlap, calls one of overlapBegin or overlapContinue
    * Return: True if there is an overlap, otherwise returns false.
    */
