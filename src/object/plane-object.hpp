@@ -35,7 +35,7 @@ class PlaneObject : public GameObject
 
 protected:
   virtual void overlapBegin (PlaneObject & with);
-  virtual void overlapContinue (PlaneObject & with); // <~name
+  virtual void overlapNext (PlaneObject & with);
   virtual void overlapEnd (PlaneObject & with);
 
 public:

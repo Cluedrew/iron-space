@@ -104,4 +104,21 @@ void Plane<Object2D>::resolveCollisions ()
   }
 }
 
+/* I need something like this for the new collision system.
+template<>
+void Plane<PlaneObject>::resolveCollisions ()
+{
+  iterator const end = objects.end();
+  for (iterator it = objects.begin() ; it != end ; ++it)
+  {
+    for (iterator jt = it ; (++jt) != end ; )
+      if (it->overlapCheck(*jt))
+        jt->overlapChecke(*it);
+    // I think this can be mixed in, as long as it's checks are done.
+    it->endOverlapStep();
+  }
+}
+*/
+
+
 #endif//PLANE_TPP

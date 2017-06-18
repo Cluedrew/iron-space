@@ -18,7 +18,7 @@ void PlaneObject::updatePhysics (sf::Time const & deltaT)
 
 // No-ops, exist to be overloaded.
 void PlaneObject::overlapBegin (PlaneObject & with) {}
-void PlaneObject::overlapContinue (PlaneObject & with) {}
+void PlaneObject::overlapNext (PlaneObject & with) {}
 void PlaneObject::overlapEnd (PlaneObject & with) {}
 
 bool PlaneObject::isOverlapping (PlaneObject const & with) const
@@ -42,7 +42,7 @@ bool PlaneObject::overlapCheck (PlaneObject & with)
       else
       {
         it->thisFrame = true;
-        overlapContinue(with);
+        overlapNext(with);
         return true;
       }
     }

@@ -26,7 +26,17 @@
  * think I have a ways to go before I worry about that.
  *
  * Further re-use will come from intermediate base classes. These handle
- * functions many (but not all) of the final game objects share.
+ * functions many (but not all) of the final game objects share. Some of the
+ * system hooks will probably move down to here. It depends on how general
+ * the hooks are.
+ *
+ * That being said I think I also need to rework the main loops steps and
+ * standard hooks. Two main decisions: how many hooks to include at the base
+ * (I have been doing add them as they are used, but it might be better to
+ * add empty hooks and let them go unused, either as no-ops or don't even call
+ * them sometimes), the other is I kind of want to do some stuff with double
+ * buffering. I can't control the ordering so well and this is my best
+ * solution I have right now.
  *
  * To refactor:
  * Create GameObject2D and Widget as empty classes, that inherite from
@@ -91,7 +101,7 @@ class GameObject2D : public GameObject, public sf::Transformable;
 
 protected:
   virtual void overlapBegin (GameObject2D const & with);
-  virtual void overlapContinue (GameObject2D const & with); // <~name
+  virtual void overlapNext (GameObject2D const & with);
   virtual void overlapEnd (GameObject2D const & with);
 
 public:
@@ -120,10 +130,10 @@ class Widget : public GameObject
 
 protected:
   virtual void hoverBegin (mouse?);
-  virtual void hoverContinue (mouse?);
+  virtual void hoverNext (mouse?);
   virtual void hoverEnd (mouse?);
   virtual void clickBegin (mouse?);
-  virtual void clickContinue (mouse?);
+  virtual void clickNext (mouse?);
   virtual void clickEnd (mouse?);
 
 public:
