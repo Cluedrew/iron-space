@@ -14,7 +14,7 @@
 
 #include <vector>
 #include <SFML/Graphics/Transform.hpp>
-#include "../game-object.hpp"
+#include "game-object.hpp"
 
 class PlaneObject : public GameObject
 // TODO Add public sf::Transformable once GameObject stops using it.

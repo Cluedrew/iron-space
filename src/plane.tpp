@@ -9,7 +9,7 @@
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
-#include "game-object-ptr.hpp"
+#include "object/game-object-ptr.hpp"
 #include "input/input-event.hpp"
 #include "physics/collider.hpp"
 #include "physics/point-collider.hpp"

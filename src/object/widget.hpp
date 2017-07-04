@@ -6,7 +6,7 @@
  * Still deciding what the default feature set should be.
  */
 
-#include "../game-object.hpp"
+#include "game-object.hpp"
 
 
 

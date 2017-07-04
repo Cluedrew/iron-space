@@ -6,7 +6,7 @@
 #include <cmath>
 #include <SFML/System/Time.hpp>
 #include "../input/input-event.hpp"
-#include "../game-object.hpp"
+#include "../object/game-object.hpp"
 
 
 

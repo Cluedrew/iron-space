@@ -4,7 +4,7 @@
 
 #include <cstdlib>
 #include <iostream>
-#include "../game-object.hpp"
+#include "../object/game-object.hpp"
 #include "../graphics/circle-graphics.hpp"
 
 

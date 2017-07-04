@@ -9,7 +9,7 @@
  * have the same behaviour, where relativant.
  */
 
-#include "game-object.hpp"
+#include "object/game-object.hpp"
 #include "objects/null-game-object.hpp"
 
 
