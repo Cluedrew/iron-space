@@ -6,7 +6,7 @@
  * I am exparementing on how this is set up.
  */
 
-#include "../object/widget.hpp"
+#include "object/widget.hpp"
 class Command;
 
 

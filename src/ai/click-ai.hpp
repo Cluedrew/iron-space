@@ -6,8 +6,7 @@
  */
 
 #include "ai-component.hpp"
-// Until I seperate out the Command class.
-#include "../util/command.hpp"
+#include "util/command.hpp"
 
 
 

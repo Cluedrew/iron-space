@@ -4,7 +4,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Time.hpp>
-#include "../input/input-event.hpp"
+#include "input/input-event.hpp"
 
 
 

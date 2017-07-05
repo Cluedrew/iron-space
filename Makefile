@@ -33,20 +33,22 @@ DIRNAMES ::= $(shell ls -1 $(CODEDIR) | grep '^[^.]*$$' -)
 # List of secondary make files:
 SUBMAKES ::= $(wildcard mk/*.mk)
 
+# Calculated as to allow the repository to be used multiple places.
+ROOT=$(shell ./.here)
+
 # The name of the temperary directory for object and dependancy files.
 TMPDIR=.tmp
 
 # C++ Compiler
 CXX=g++
 # Flags for compilation
-CXXFLAGS=-Wall --std=c++11
+CXXFLAGS=-Wall --std=c++11 -iquote $(ROOT)/src
 # Additional libraries for the linking step.
 CXXLIBS=-lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system
 # Additional flags for debug builds.
 DEBUG=-ggdb -DDEBUG=true
-
-# Calculated as to allow the repository to be used multiple places.
-ROOT=$(shell ./.here)
+# Extra flags for building the test harness.
+TSTFLAGS=-I$(ROOT)
 
 ### End of Setup
 
@@ -100,9 +102,6 @@ getdir=$(patsubst %/,%,$(dir $(1)))
 
 # Get a list of the objects for the given cpp files.
 objsfor=$(1:$(CPP_PAT)=$(OBJ_PAT))
-
-# Extra flags for compilation and linking of the test harness.
-TSTFLAGS=-I$(ROOT)
 
 # If USE_DEBUG add the DUBUG flags.
 ifeq ($(USE_DEBUG),yes)

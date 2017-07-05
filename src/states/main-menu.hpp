@@ -6,8 +6,8 @@
  */
 
 #include "world-state.hpp"
-#include "../plane-drawable.hpp"
-#include "../object/widget.hpp"
+#include "plane-drawable.hpp"
+#include "object/widget.hpp"
 
 
 

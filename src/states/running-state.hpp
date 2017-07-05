@@ -7,8 +7,8 @@
 
 #include <SFML/Audio/Music.hpp>
 #include "world-state.hpp"
-#include "../plane-drawable.hpp"
-#include "../object/plane-object.hpp"
+#include "plane-drawable.hpp"
+#include "object/plane-object.hpp"
 
 
 

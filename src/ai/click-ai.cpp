@@ -2,7 +2,7 @@
 
 // Implementation of the ClickAi
 
-#include "../input/input-event.hpp"
+#include "input/input-event.hpp"
 
 
 

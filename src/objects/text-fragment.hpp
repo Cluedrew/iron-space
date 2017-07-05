@@ -5,8 +5,8 @@
  */
 
 #include <string>
-#include "../object/widget.hpp"
-#include "../util/alignment.hpp"
+#include "object/widget.hpp"
+#include "util/alignment.hpp"
 
 
 

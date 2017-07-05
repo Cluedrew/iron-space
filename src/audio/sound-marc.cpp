@@ -5,8 +5,8 @@
 
 #include <cassert>
 #include <string>
-#include "../util/rsrc-dir.hpp"
-#include "../util/except.hpp"
+#include "util/rsrc-dir.hpp"
+#include "util/except.hpp"
 
 
 

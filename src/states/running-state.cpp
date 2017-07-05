@@ -4,12 +4,12 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Time.hpp>
-#include "../input/input-event.hpp"
-#include "../ai/orbit-ai.hpp"
-#include "../ai/blue-touch.hpp"
-#include "../physics/physics-component.hpp"
-#include "../physics/circle-collider.hpp"
-#include "../graphics/circle-graphics.hpp"
+#include "input/input-event.hpp"
+#include "ai/orbit-ai.hpp"
+#include "ai/blue-touch.hpp"
+#include "physics/physics-component.hpp"
+#include "physics/circle-collider.hpp"
+#include "graphics/circle-graphics.hpp"
 #include "pause-screen.hpp"
 
 

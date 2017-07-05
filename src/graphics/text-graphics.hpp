@@ -10,7 +10,7 @@
 #include <SFML/Graphics/Text.hpp>
 #include "graphics-component.hpp"
 #include "font-library.hpp"
-#include "../util/alignment.hpp"
+#include "util/alignment.hpp"
 
 
 

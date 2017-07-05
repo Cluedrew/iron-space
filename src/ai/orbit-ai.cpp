@@ -5,8 +5,8 @@
 #include <iostream>
 #include <cmath>
 #include <SFML/System/Time.hpp>
-#include "../input/input-event.hpp"
-#include "../object/game-object.hpp"
+#include "input/input-event.hpp"
+#include "object/game-object.hpp"
 
 
 

@@ -5,7 +5,7 @@
  * no-ops, or as close as we can get, in every case).
  */
 
-#include "../object/game-object.hpp"
+#include "object/game-object.hpp"
 
 
 

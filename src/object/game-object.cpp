@@ -4,10 +4,10 @@
 
 #include <cassert>
 #include <iostream>
-#include "../input/input-event.hpp"
-#include "../ai/ai-component.hpp"
-#include "../physics/physics-component.hpp"
-#include "../graphics/graphics-component.hpp"
+#include "input/input-event.hpp"
+#include "ai/ai-component.hpp"
+#include "physics/physics-component.hpp"
+#include "graphics/graphics-component.hpp"
 
 
 

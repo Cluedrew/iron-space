@@ -2,9 +2,9 @@
 
 // Implement the GameObject that implements nothing.
 
-#include "../ai/null-ai.hpp"
-#include "../physics/null-physics.hpp"
-#include "../graphics/null-graphics.hpp"
+#include "ai/null-ai.hpp"
+#include "physics/null-physics.hpp"
+#include "graphics/null-graphics.hpp"
 
 
 

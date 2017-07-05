@@ -2,10 +2,10 @@
 
 // Implementation of TextFragment object constructor.
 
-#include "../ai/null-ai.hpp"
-#include "../physics/null-physics.hpp"
-#include "../graphics/text-graphics.hpp"
-#include "../util/transforms.hpp"
+#include "ai/null-ai.hpp"
+#include "physics/null-physics.hpp"
+#include "graphics/text-graphics.hpp"
+#include "util/transforms.hpp"
 
 
 

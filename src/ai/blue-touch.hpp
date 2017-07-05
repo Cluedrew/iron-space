@@ -9,7 +9,7 @@ class GameObject;
 class GameObjectPtr;
 #include "ai-component.hpp"
 #include <SFML/Audio/Sound.hpp>
-#include "../audio/sound-effect.hpp"
+#include "audio/sound-effect.hpp"
 
 
 

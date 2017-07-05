@@ -10,7 +10,7 @@
 
 #include <string>
 #include <SFML/Audio/SoundBuffer.hpp>
-#include "../util/marc.hpp"
+#include "util/marc.hpp"
 
 MaRCData<std::string, sf::SoundBuffer> *
     openSoundBuffer (std::string fileName);

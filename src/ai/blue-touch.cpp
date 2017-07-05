@@ -4,8 +4,8 @@
 
 #include <cstdlib>
 #include <iostream>
-#include "../object/game-object.hpp"
-#include "../graphics/circle-graphics.hpp"
+#include "object/game-object.hpp"
+#include "graphics/circle-graphics.hpp"
 
 
 BlueTouch::BlueTouch (int x, int y) :

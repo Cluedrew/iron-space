@@ -5,7 +5,7 @@
 
 #include <cmath>
 #include <SFML/Graphics/Transform.hpp>
-#include "../util/math.hpp"
+#include "util/math.hpp"
 #include "point-collider.hpp"
 #include "align-rect-collider.hpp"
 
