@@ -6,8 +6,8 @@
 #include <SFML/System/Time.hpp>
 #include "input/input-event.hpp"
 #include "util/command.hpp"
-#include "objects/button.hpp"
-#include "objects/text-fragment.hpp"
+#include "inst/button.hpp"
+#include "inst/text-fragment.hpp"
 #include "util/alignment.hpp"
 #include "running-state.hpp"
 
