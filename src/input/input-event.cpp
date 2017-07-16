@@ -23,6 +23,9 @@ static std::ostream & operator<< (std::ostream & out,
   case InputEvent::Pause:
     out << "Pause";
     break;
+  case InputEvent::Point:
+    out << "Point";
+    break;
   case InputEvent::Cap:
     out << "Cap";
     break;
@@ -42,6 +45,7 @@ std::ostream & operator<< (std::ostream & out, InputEvent const & ievent)
   switch (ievent.type)
   {
   case InputEvent::Select:
+  case InputEvent::Point:
     out << ievent.pos;
     break;
   case InputEvent::Quit:

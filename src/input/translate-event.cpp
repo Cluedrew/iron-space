@@ -15,7 +15,17 @@ bool translateEvent (sf::Event const & sfEvent, InputEvent & iEvent)
     return true;
 
   case sf::Event::MouseButtonPressed:
-    iEvent.type = InputEvent::Select;
+    switch (sfEvent.mouseButton.button)
+    {
+    case sf::Mouse::Left:
+      iEvent.type = InputEvent::Select;
+      break;
+    case sf::Mouse::Right:
+      iEvent.type = InputEvent::Point;
+      break;
+    default:
+      return false;
+    }
     iEvent.pos.x = sfEvent.mouseButton.x;
     iEvent.pos.y = sfEvent.mouseButton.y;
     return true;

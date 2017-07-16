@@ -65,6 +65,12 @@ public:
    * Effect: Resets the frame for overlaps and calls overlapEnd on all
    *   object that collided last frame but not this one.
    */
+
+  // These overloads are used to implement the non-inner versions on
+  // GameObject when AiWrapper is the AiComponent.
+  virtual bool innerHandleInput (InputEvent const & input) { return false; }
+  virtual void innerUpdateAi (sf::Time const & deltaT) {}
+  virtual void innerHandleCollision (GameObjectPtr & with) {}
 };
 
 #endif//PLANE_OBJECT_HPP

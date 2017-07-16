@@ -24,6 +24,8 @@ struct InputEvent
     Select,
     // The pause/unpause command.
     Pause,
+    // Point to a particular point on screen.
+    Point,
 
     Cap
   } type;
@@ -36,6 +38,7 @@ struct InputEvent
 
   union
   {
+    // Used with Select & Point.
     Position pos;
   };
 };

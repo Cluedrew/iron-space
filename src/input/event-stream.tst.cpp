@@ -142,7 +142,6 @@ void EventStream::addFrame ()
 
 void EventStream::addEvent (sf::Event const & event, size_t frame, size_t pos)
 {
-  // Add it the event.
   readyEvent(frame, pos) = event;
 }
 
@@ -151,13 +150,24 @@ void EventStream::addClosed (size_t frame, size_t pos)
   readyEvent(frame, pos).type = sf::Event::Closed;
 }
 
-void EventStream::addMouseLeftPress (int x, int y, size_t frame, size_t pos)
+void EventStream::addMousePress (sf::Mouse::Button button,
+    int x, int y, size_t frame, size_t pos)
 {
   sf::Event event = {.type = sf::Event::MouseButtonPressed};
-  event.mouseButton.button = sf::Mouse::Button::Left;
+  event.mouseButton.button = button;
   event.mouseButton.x = x;
   event.mouseButton.y = y;
   addEvent(event, frame, pos);
+}
+
+void EventStream::addMouseLeftPress (int x, int y, size_t frame, size_t pos)
+{
+  addMousePress(sf::Mouse::Button::Left, x, y, frame, pos);
+}
+
+void EventStream::addMouseRightPress (int x, int y, size_t frame, size_t pos)
+{
+  addMousePress(sf::Mouse::Button::Right, x, y, frame, pos);
 }
 
 
@@ -240,10 +250,10 @@ TEST_CASE("EventStream test", "[input][testing]")
       REQUIRE( sf::Event::Closed == event.type );
     }
 
-    SECTION("Check addMouseLeftPress")
+    SECTION("Check addMousePress (Left & Right)")
     {
       stream.addMouseLeftPress(10, 20);
-      stream.addMouseLeftPress(25, 15);
+      stream.addMouseRightPress(25, 15);
       stream.pollEvent(event);
       REQUIRE( sf::Event::MouseButtonPressed == event.type );
       CHECK( sf::Mouse::Button::Left == event.mouseButton.button );
@@ -251,7 +261,7 @@ TEST_CASE("EventStream test", "[input][testing]")
       CHECK( 20 == event.mouseButton.y );
       stream.pollEvent(event);
       REQUIRE( sf::Event::MouseButtonPressed == event.type );
-      CHECK( sf::Mouse::Button::Left == event.mouseButton.button );
+      CHECK( sf::Mouse::Button::Right == event.mouseButton.button );
       CHECK( 25 == event.mouseButton.x );
       CHECK( 15 == event.mouseButton.y );
     }

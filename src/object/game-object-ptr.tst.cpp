@@ -1,4 +1,5 @@
 #include "game-object-ptr.hpp"
+#include <catch.hpp>
 
 /* Testing Code for the GameObjectPtr. This also includes testing for the
  * code in the GameObject that works with the pointer. That is all tested
@@ -10,9 +11,8 @@
  * error).
  */
 
-#include "catch.hpp"
 #include "game-object.hpp"
-#include "objects/null-game-object.hpp"
+#include "inst/null-game-object.hpp"
 
 
 
@@ -27,7 +27,7 @@ GameObjectPtr makePtrTo (GameObject & object)
 
 
 
-TEST_CASE("Tests for the GameObjectPtr", "")
+TEST_CASE("Tests for the GameObjectPtr", "[object]")
 {
   SECTION("Check initial state")
   {

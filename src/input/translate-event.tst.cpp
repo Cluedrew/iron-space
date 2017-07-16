@@ -70,5 +70,15 @@ TEST_CASE("translateEvent and pollTranslateEvent tests", "[input]")
       REQUIRE( translateEvent(spaceBar, iEvent) );
       CHECK( InputEvent::Pause == iEvent.type );
     }
+
+    SECTION("Check Point")
+    {
+      // Piggy backs Select a bit.
+      stream.addMouseRightPress(3, 4);
+      REQUIRE( pollTranslateEvent(stream, iEvent) );
+      CHECK( InputEvent::Point == iEvent.type );
+      CHECK( 3 == iEvent.pos.x );
+      CHECK( 4 == iEvent.pos.y );
+    }
   }
 }

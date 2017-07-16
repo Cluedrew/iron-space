@@ -46,6 +46,9 @@ WorldState * RunningState::handleInput (InputEvent const & ievent)
     bgm.pause();
     return new PauseScreen(this);
 
+  case InputEvent::Point:
+    // TODO
+
   case InputEvent::Quit:
   case InputEvent::Cap:
     break;

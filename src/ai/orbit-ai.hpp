@@ -8,6 +8,7 @@
  * Soon to be an abstract base class.
  */
 
+
 #include <SFML/System/Time.hpp>
 #include "ai-component.hpp"
 class GameObject;

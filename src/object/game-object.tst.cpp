@@ -115,7 +115,7 @@ public:
 
 
 
-TEST_CASE("Tests for the GameObject.", "")
+TEST_CASE("Tests for the GameObject.", "[object]")
 {
   SECTION("Check transform constructor")
   {

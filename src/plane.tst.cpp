@@ -10,7 +10,7 @@
  */
 
 #include "object/game-object.hpp"
-#include "objects/null-game-object.hpp"
+#include "inst/null-game-object.hpp"
 
 
 

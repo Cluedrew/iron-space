@@ -140,13 +140,25 @@ public:
    * Effect: Add a new Closed event at the given spot in the stream.
    */
 
-  void addMouseLeftPress (int x, int y,
+  void addMousePress(sf::Mouse::Button button, int x, int y,
       size_t frame = FRAME_TOP, size_t pos = POS_TOP);
-  /* Add a new left MouseButtonPressed event to the stream.
-   * Params: The x & y location of the mouse click.
+  /* Add a new MouseButtonPressed event to the stream.
+   * Params: The button pressed, the x & y location of the mouse click.
    *   Optional frame and pos parameters as in addEvent.
    * Effect: Add a new MouseButtonPressed event to the stream, its button
    *   field will be set to Mouse::Button::Left.
+   */
+
+  void addMouseLeftPress (int x, int y,
+      size_t frame = FRAME_TOP, size_t pos = POS_TOP);
+  /* Add a new left MouseButtonPressed event to the stream.
+   * As addMousePress with button=sf::Mouse::Button::Left.
+   */
+
+  void addMouseRightPress (int x, int y,
+      size_t frame = FRAME_TOP, size_t pos = POS_TOP);
+  /* Add a new right MouseButtonPressed event to the stream.
+   * As addMousePress with button=sf::Mouse::Button::Right.
    */
 };
 

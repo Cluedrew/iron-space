@@ -4,8 +4,6 @@
 /* The component that does the thinking.
  * Currently there is only one Component at all, later it should be a base
  * class for all the different blocks of AI.
- *
- * Soon to be an abstract base class.
  */
 
 namespace sf { class Time; }
