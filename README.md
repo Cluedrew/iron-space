@@ -33,8 +33,7 @@ First a bit about the layout of the code base.
     code and tie the codebase together.
 +   *plan* the other top level directory, it is for work in progress things
     that are not yet part of the project.
-+   *util* is for other files, those that don't have a particlar place, are
-    used accross the code base but are not core.
++   *object* contains the base GameObject types.
 +   *input* contains code that handles input from the user.
 +   *states* has the WorldState base class and it's subclasses that define the
     game's global state.
@@ -42,9 +41,9 @@ First a bit about the layout of the code base.
     Things moving over time, resolving colitions and similar.
 +   *graphics* is for image loading and rendering code.
 +   *audio* is for sound loading and playing code.
-+   *object* contains the base GameObject types.
-+   *objects* contains instances of different GameObjects used in the game.
-    I would like to rename this one, but I'm not sure to what.
++   *inst* contains instances of different GameObjects used in the game.
++   *util* is for other files, those that don't have a particlar place, are
+    used accross the code base but are not core.
 
 ### Testing ###
 
@@ -53,8 +52,8 @@ all tests and extra testing code put in *.tst* files (which goes before the
 file type extention).
 
 Tags:
-+   [util], [input], [states], [physics], [graphics], [audio]: Tags that show
-    which sub-directory the test came from.
++   [object], [util], [input], [states], [physics], [graphics], [audio]: Tags
+    that show which sub-directory the test came from.
 +   [@lib], [sfml]: Tags for marking tests on external dependances. [@lib]
     refers to all of them. The others refer to a particular library. These are
     not ment to be complete, but rather to check assumptions.

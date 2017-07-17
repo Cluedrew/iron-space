@@ -11,7 +11,7 @@ class PlaneObject;
 
 
 
-class AiWrapper
+class AiWrapper : public AiComponent
 {
   PlaneObject * cashed;
 

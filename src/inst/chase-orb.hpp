@@ -17,6 +17,7 @@ private:
 
 protected:
 public:
+  ChaseOrb();
   ChaseOrb(int x, int y);
   ChaseOrb(sf::Vector2<int> xy);
 
