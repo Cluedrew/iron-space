@@ -55,6 +55,13 @@ public:
    * Return: The iterator to (one past) the end of the Plane.
    */
 
+  std::vector<Object2D*> overlapping (Collider const & with);
+  /* WIP: get all internal objects that overlap with the Collider.
+   * Params: The collider to check against.
+   * Effect: ???
+   * Return: A vector of references to the resulting objects. -> Iterator?
+   */
+
   bool handleInput (InputEvent const & ievent);
   /* Give an event to a GameObject* to be handled.
    *   * This one needs a GameObject until I have a better solution.

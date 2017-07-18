@@ -9,19 +9,18 @@
  * have the same behaviour, where relativant.
  */
 
+#include <vector>
 #include "object/game-object.hpp"
 #include "inst/null-game-object.hpp"
+#include "physics/circle-collider.hpp"
 
 
 
 // Replacement for the GameObject for testing the Plane.
-class TestObject
+struct TestObject
 {
-private:
   Collider * body;
 
-protected:
-public:
   TestObject() :
   /* Create a new TestObject with no body, it will never collide.
    */
@@ -73,5 +72,29 @@ TEST_CASE("Testing for the Plane container.", "")
     REQUIRE( it != endOfPlane );
     ++it;
     REQUIRE( it == endOfPlane );
+  }
+
+  SECTION("Checking overlapping")
+  {
+    Plane<TestObject> plane;
+    CircleCollider bodyA(5, 5, 1);
+    CircleCollider bodyB(5, 7, 1);
+    CircleCollider bodyC(5, 9, 1);
+
+    plane.emplace(TestObject(&bodyA));
+    plane.emplace(TestObject(&bodyB));
+    plane.emplace(TestObject(&bodyC));
+
+    std::vector<TestObject*> hits(plane.overlapping(CircleCollider(5, 6, 1)));
+    REQUIRE( 2 == hits.size() );
+    if (&bodyA == hits[0]->body)
+    {
+      CHECK( &bodyB == hits[1]->body );
+    }
+    else
+    {
+      CHECK( &bodyB == hits[0]->body );
+      CHECK( &bodyA == hits[1]->body );
+    }
   }
 }

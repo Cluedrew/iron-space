@@ -63,6 +63,24 @@ typename Plane<Object2D>::const_iterator Plane<Object2D>::cend () const
 
 // see header
 template<typename Object2D>
+std::vector<Object2D*> Plane<Object2D>::overlapping (Collider const & with)
+{
+  iterator it;
+  std::vector<Object2D*> result;
+  for (it = objects.begin() ; it != objects.end() ; ++it)
+  {
+    if (it->collides(with))
+    {
+      Object2D & ref = *it;
+      result.emplace_back(&ref);
+    }
+  }
+
+  return result;
+}
+
+// see header
+template<typename Object2D>
 bool Plane<Object2D>::handleInput (InputEvent const & ievent)
 {
   iterator it;
