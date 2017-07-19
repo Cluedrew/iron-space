@@ -15,7 +15,7 @@
 
 
 RunningState::RunningState () :
-  map(), bgm()
+  map(), bgm(), selected()
 {
   map.emplace(PlaneObject(new OrbitAi(),
                 new PhysicsComponent(new CircleCollider(0, 0, 25)),
@@ -39,6 +39,10 @@ WorldState * RunningState::handleInput (InputEvent const & ievent)
   {
   case InputEvent::Select:
     map.handleInput(ievent);
+    {
+      PointCollider click(ievent.pos.x, ievent.pos.y);
+      selected = map.overlapping(click);
+    }
     break;
 
   case InputEvent::Pause:
@@ -47,7 +51,11 @@ WorldState * RunningState::handleInput (InputEvent const & ievent)
     return new PauseScreen(this);
 
   case InputEvent::Point:
-    // TODO
+    for (auto&& object : selected)
+    {
+      object->handleInput(ievent);
+    }
+    break;
 
   case InputEvent::Quit:
   case InputEvent::Cap:

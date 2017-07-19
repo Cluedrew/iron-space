@@ -11,6 +11,7 @@
 
 
 
+// see header
 ChaseOrb::ChaseOrb() :
     PlaneObject(
       new AiWrapper(),
@@ -19,6 +20,7 @@ ChaseOrb::ChaseOrb() :
     target(0, 0)
 {}
 
+// see header
 ChaseOrb::ChaseOrb(int x, int y) :
     PlaneObject(
       xyTransformable(x, y),
@@ -28,6 +30,7 @@ ChaseOrb::ChaseOrb(int x, int y) :
     target(x, y)
 {}
 
+// see header
 ChaseOrb::ChaseOrb(sf::Vector2<int> xy) :
     PlaneObject(
       xyTransformable(xy.x, xy.y),
@@ -37,11 +40,13 @@ ChaseOrb::ChaseOrb(sf::Vector2<int> xy) :
     target(xy)
 {}
 
+// see header
 bool ChaseOrb::innerHandleInput (InputEvent const & input)
 {
   return false;
 }
 
+// see header
 void ChaseOrb::innerUpdateAi (sf::Time const & deltaT)
 {
   sf::Vector2<float> const & here = getPosition();
@@ -68,6 +73,7 @@ void ChaseOrb::innerUpdateAi (sf::Time const & deltaT)
   move(dx / dist * movement, dy / dist * movement);
 }
 
+// see header
 void ChaseOrb::innerHandleCollision (GameObjectPtr & with)
 {
   // Do nothing with any collision.
