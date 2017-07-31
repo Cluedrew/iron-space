@@ -33,11 +33,11 @@ struct StartGame : public Command
 MainMenu::MainMenu () :
   gui(), started(false)
 {
-  gui.emplace(Button(new StartGame(*this),
-                     100.0f, 100.0f, 50.0f, 50.0f));
+  gui.insert(new Button(new StartGame(*this),
+                        100.0f, 100.0f, 50.0f, 50.0f));
   // Try to make relative to the window some day.
-  gui.emplace(TextFragment("iron-space", 400.0f, 100.0f,
-                           Alignment2D::MiddleCenter));
+  gui.insert(new TextFragment("iron-space", 400.0f, 100.0f,
+                              Alignment2D::MiddleCenter));
 }
 
 MainMenu::~MainMenu ()

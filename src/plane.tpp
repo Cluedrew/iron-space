@@ -27,10 +27,17 @@ Plane<Object2D>::~Plane ()
 
 // see header
 template<typename Object2D>
+void Plane<Object2D>::insert (Object2D * value)
+{
+  objects.push_back(value);
+}
+
+// see header
+template<typename Object2D>
 template<typename... Args>
 void Plane<Object2D>::emplace (Args&&... args)
 {
-  objects.emplace_back(std::forward<Args>(args)...);
+  objects.emplace_back(new Object2D(std::forward<Args>(args)...));
 }
 
 // see header

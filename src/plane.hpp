@@ -14,6 +14,7 @@
  */
 
 #include <vector>
+#include "util/double-ptr.hpp"
 class InputEvent;
 class Collider;
 
@@ -23,16 +24,23 @@ template<typename Object2D>
 class Plane
 {
 public:
-  typedef typename std::vector<Object2D>::iterator iterator;
-  typedef typename std::vector<Object2D>::const_iterator const_iterator;
+  typedef DoublePtr<typename std::vector<Object2D *>::iterator> iterator;
+  typedef DoublePtr<typename std::vector<Object2D *>::const_iterator>
+      const_iterator;
 
 private:
-  std::vector<Object2D> objects;
+  std::vector<Object2D*> objects;
 
 protected:
 public:
   Plane ();
   virtual ~Plane ();
+
+  void insert (Object2D * value);
+  /* Insert an existing object into the Plane, takes ownership.
+   * Params: Pointer to the object to insert.
+   * Effect: Object is added to the Plane.
+   */
 
   template<typename... Args>
   void emplace (Args&&... args);
