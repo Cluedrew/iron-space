@@ -36,36 +36,13 @@ struct DoublePtr
 
   ThisT & operator++ () { ++data; return *this; }
   ThisT operator++ (int) { ThisT retval = *this; data++; return retval; }
-  /* Pre and post increment operators.
-   */
+  // Pre and post increment operators.
 
   bool operator== (const ThisT & other) const
   { return data == other.data; }
   bool operator!= (const ThisT & other) const
   { return data != other.data; }
-
-  class Const
-  {
-  private:
-    // struct and public?
-    T const ** data;
-
-  protected:
-  public:
-    Const (T ** data = nullptr) : data(data) {}
-    /* Create a new DoublePtr::Const from an primitive double pointer.
-     * Params: Value to copy, null if omitted.
-     */
-
-    T const & operator*() const { return **data; }
-    T const * operator->() const { return *data; }
-    // Deference operator mean this acts as a T*.
-
-    DoublePtr<T> & operator++ () { return ++data; }
-    DoublePtr<T> operator++ (int) { return data++; }
-    /* Pre and post increment operators.
-     */
-  };
+  // Equality is just passed down to data.
 };
 
 #endif//DOUBLE_PTR_HPP

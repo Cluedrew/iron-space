@@ -74,6 +74,18 @@ TEST_CASE("Testing for the Plane container.", "")
     REQUIRE( it == endOfPlane );
   }
 
+  SECTION("Checking insert")
+  {
+    Plane<TestObject> plane;
+    TestObject * tobj = new TestObject();
+    plane.insert(tobj);
+    Plane<TestObject>::iterator it = plane.begin();
+    Plane<TestObject>::iterator endOfPlane = plane.end();
+    REQUIRE( *it.data == tobj );
+    ++it;
+    REQUIRE( it == plane.end() );
+  }
+
   SECTION("Checking overlapping")
   {
     Plane<TestObject> plane;

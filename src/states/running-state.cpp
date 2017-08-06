@@ -11,6 +11,7 @@
 #include "physics/circle-collider.hpp"
 #include "graphics/circle-graphics.hpp"
 #include "pause-screen.hpp"
+#include "inst/chase-orb.hpp"
 
 
 
@@ -23,6 +24,7 @@ RunningState::RunningState () :
   map.emplace(PlaneObject(new BlueTouch(315, 300),
                 new PhysicsComponent(new CircleCollider(0, 0, 25)),
                 new CircleGraphics(25)));
+  //map.insert(new ChaseOrb(25, 25));
   bgm.openFromFile("rsrc/music/Laser_Groove.wav");
   bgm.play();
 }

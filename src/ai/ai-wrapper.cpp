@@ -49,5 +49,3 @@ void AiWrapper::handleCollision (GameObject & container, GameObjectPtr & ptr)
   updateLocalStore(cashed, container);
   return cashed->innerHandleCollision(ptr);
 }
-
-

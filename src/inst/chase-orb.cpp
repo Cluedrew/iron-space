@@ -3,6 +3,7 @@
 // Implementation of ChaseOrb PlaneObject.
 
 #include <cmath>
+#include "input/input-event.hpp"
 #include "ai/ai-wrapper.hpp"
 #include "physics/physics-component.hpp"
 #include "physics/circle-collider.hpp"
@@ -43,7 +44,14 @@ ChaseOrb::ChaseOrb(sf::Vector2<int> xy) :
 // see header
 bool ChaseOrb::innerHandleInput (InputEvent const & input)
 {
-  return false;
+  switch (input.type)
+  {
+  case InputEvent::Point:
+    target = sf::Vector2<int>(input.pos.x, input.pos.y);
+    return true;
+  default:
+    return false;
+  }
 }
 
 // see header
