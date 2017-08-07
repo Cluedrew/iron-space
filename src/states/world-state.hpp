@@ -33,6 +33,12 @@ public:
   WorldState ();
   virtual ~WorldState ();
 
+  //virtual void start() = 0;
+  /* Call start before putting the class into the main loop. Starts or
+   *   restarts the state.
+   * Effect: Dependant on overload.
+   */
+
   virtual WorldState * handleInput (InputEvent const & ievent) = 0;
   /* Handles InputEvents.
    * Params: A reference to the event to be handled.

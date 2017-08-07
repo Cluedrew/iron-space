@@ -25,9 +25,7 @@ void updateLocalStore (PlaneObject * & local, GameObject & passed)
 
 // see header file
 void AiWrapper::init (GameObject & container)
-{
-  updateLocalStore(cashed, container);
-}
+{}
 
 // see header file
 bool AiWrapper::handleInput (GameObject & container, InputEvent const & ievent)

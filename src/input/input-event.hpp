@@ -22,6 +22,8 @@ struct InputEvent
     Quit,
     // A selection is made on the screen.
     Select,
+    // Internal, the selection of an object has ended.
+    Unselect,
     // The pause/unpause command.
     Pause,
     // Point to a particular point on screen.

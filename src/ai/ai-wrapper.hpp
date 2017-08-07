@@ -21,7 +21,6 @@ public:
 
   void init (GameObject & container);
   /* The inheirited object is assumed to do everything it need to.
-   * Effect: Updates cashed.
    */
 
   bool handleInput (GameObject & container, InputEvent const & ievent);

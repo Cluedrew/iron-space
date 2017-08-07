@@ -18,12 +18,7 @@ TEST_CASE("Testing for the AiWrapper.", "[ai]")
 {
   SECTION("Check Contstruction and the init function.")
   {
-    PlaneObject test0(new NullAi(), new NullPhysics(), new NullGraphics());
-    GameObject * gamePtr = &test0;
-    PlaneObject * planePtr = dynamic_cast<PlaneObject *>(gamePtr);
-    REQUIRE( planePtr );
-
-    // Can't figure out why this one is failing.
-  //PlaneObject test(new AiWrapper(), new NullPhysics(), new NullGraphics());
+    PlaneObject test(new AiWrapper(), new NullPhysics(), new NullGraphics());
+    test.updateAi(sf::Time::Zero);
   }
 }

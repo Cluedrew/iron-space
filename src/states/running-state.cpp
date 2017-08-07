@@ -24,7 +24,7 @@ RunningState::RunningState () :
   map.emplace(PlaneObject(new BlueTouch(315, 300),
                 new PhysicsComponent(new CircleCollider(0, 0, 25)),
                 new CircleGraphics(25)));
-  //map.insert(new ChaseOrb(25, 25));
+  map.insert(new ChaseOrb(25, 25));
   bgm.openFromFile("rsrc/music/Laser_Groove.wav");
   bgm.play();
 }
@@ -40,11 +40,21 @@ WorldState * RunningState::handleInput (InputEvent const & ievent)
   switch (ievent.type)
   {
   case InputEvent::Select:
+    {
+      InputEvent unselect = {.type = InputEvent::Unselect};
+      for (auto&& object : selected)
+        object->handleInput(unselect);
+    }
     map.handleInput(ievent);
     {
       PointCollider click(ievent.pos.x, ievent.pos.y);
       selected = map.overlapping(click);
     }
+    break;
+
+  case InputEvent::Unselect:
+    // Currently just all, perhaps an unselection range could be used.
+    selected.clear();
     break;
 
   case InputEvent::Pause:

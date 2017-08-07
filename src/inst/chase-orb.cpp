@@ -46,9 +46,22 @@ bool ChaseOrb::innerHandleInput (InputEvent const & input)
 {
   switch (input.type)
   {
+  case InputEvent::Select:
+    if (CircleGraphics * circle = dynamic_cast<CircleGraphics*>(getGraphics()))
+    {
+      circle->setColour(sf::Color::Blue);
+    }
+    return true;
+  case InputEvent::Unselect:
+    if (CircleGraphics * circle = dynamic_cast<CircleGraphics*>(getGraphics()))
+    {
+      circle->setColour(sf::Color::Green);
+    }
+    return true;
   case InputEvent::Point:
     target = sf::Vector2<int>(input.pos.x, input.pos.y);
     return true;
+  // Unselect event.
   default:
     return false;
   }
