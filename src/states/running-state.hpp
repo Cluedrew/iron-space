@@ -25,12 +25,16 @@ public:
   RunningState ();
   virtual ~RunningState ();
 
+  void start ();
+  /* Starts up the start, beginning to play the music.
+   * Effect: Starts the background music.
+   */
+
   WorldState * handleInput (InputEvent const & ievent);
   /* Handles InputEvents.
    * Params: A reference to the event to be handled.
    * Effect: Input is either handled or discarded.
-   * Return: void, unlike most handleInput functions if a WorldState does
-   *   not handle an Input Event, it is discarded.
+   * Return: Pointer to next world state.
    */
 
   WorldState * update (sf::Time const & deltaT);

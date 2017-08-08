@@ -33,26 +33,26 @@ public:
   WorldState ();
   virtual ~WorldState ();
 
-  //virtual void start() = 0;
+  virtual void start();
   /* Call start before putting the class into the main loop. Starts or
    *   restarts the state.
-   * Effect: Dependant on overload.
+   * Effect: Dependant on overload, default does nothing.
    */
 
   virtual WorldState * handleInput (InputEvent const & ievent) = 0;
   /* Handles InputEvents.
    * Params: A reference to the event to be handled.
    * Effect: Input is either handled or discarded.
-   * Return: Pointer to next state. The input given in this call is considered
-   *   to be handled. See file doc for details.
+   * Return: Pointer to next state, must be started. The input given in this
+   *    call is considered to be handled. See file doc for details.
    */
 
   virtual WorldState * update (sf::Time const & deltaT) = 0;
   /* Updates the World's State depending on the recent input and time passed.
    * Params: A reference to the amount of real time passed.
    * Effect: Move the state forward in time.
-   * Return: Pointer to next state. It is up to date with the end of the time
-   *   deltaT. See file doc for details.
+   * Return: Pointer to next state, must be started. It is up to date with the
+   *   end of the time deltaT. See file doc for details.
    */
 
   virtual void draw (sf::RenderTarget & target,
@@ -60,6 +60,13 @@ public:
   /* Draw the world in its current state to the target.
    * Params: The target to draw to and any states to modify the draw.
    * Effect: Draws to screen.
+   */
+
+  static WorldState * idStart (WorldState * state);
+  /* Start and return a state.
+   * Params: Non-null pointer to state to start.
+   * Effect: Starts the given state.
+   * Return: Input state.
    */
 };
 

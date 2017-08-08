@@ -29,6 +29,7 @@ int Engine::runLoop ()
                 sf::Style::Titlebar | sf::Style::Close);
   // For now it is not sf::Style::Resize-able.
 
+  state->start();
   log.note("Finished runLoop init");
 
   while (running)

@@ -37,7 +37,7 @@ WorldState * PauseScreen::update (sf::Time const & deltaT)
   {
     WorldState * result = paused;
     delete(this);
-    return result;
+    return idStart(result);
   }
   else
     return this;

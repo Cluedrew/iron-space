@@ -61,7 +61,7 @@ WorldState * MainMenu::update (sf::Time const & deltaT)
   if (started)
   {
     delete(this);
-    return new RunningState();
+    return idStart(new RunningState);
   }
 
   return this;

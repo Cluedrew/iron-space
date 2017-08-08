@@ -9,15 +9,19 @@ NullWorldState::NullWorldState () : WorldState() {}
 NullWorldState::~NullWorldState () {}
 
 // see header
+void NullWorldState::start ()
+{}
+
+// see header
 WorldState * NullWorldState::handleInput (InputEvent const & ievent)
 {
-  return nullptr;
+  return this;
 }
 
 // see header
 WorldState * NullWorldState::update (sf::Time const & deltaT)
 {
-  return nullptr;
+  return this;
 }
 
 // see header

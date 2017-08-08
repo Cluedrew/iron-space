@@ -35,6 +35,12 @@ RunningState::~RunningState ()
 
 
 // see header
+void RunningState::start ()
+{
+  bgm.play();
+}
+
+// see header
 WorldState * RunningState::handleInput (InputEvent const & ievent)
 {
   switch (ievent.type)
@@ -60,7 +66,7 @@ WorldState * RunningState::handleInput (InputEvent const & ievent)
   case InputEvent::Pause:
     // Currently, I don't have a way to cleanly restart this after a pause.
     bgm.pause();
-    return new PauseScreen(this);
+    return idStart(new PauseScreen(this));
 
   case InputEvent::Point:
     for (auto&& object : selected)

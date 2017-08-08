@@ -2,6 +2,8 @@
 #define NULL_WORLD_STATE_HPP
 
 /* A world state that does nothing.
+ *
+ * Why do I have this?
  */
 
 #include "world-state.hpp"
@@ -16,6 +18,7 @@ public:
   NullWorldState ();
   virtual ~NullWorldState ();
 
+  void start ();
   WorldState * handleInput (InputEvent const & ievent);
   WorldState * update (sf::Time const & deltaT);
   void draw (sf::RenderTarget & target, sf::RenderStates states) const;
