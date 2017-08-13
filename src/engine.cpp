@@ -65,6 +65,16 @@ void Engine::pollInput ()
       log.data("End pollInput (Quitting)");
       return;
     }
+    /* TODO: Show and hide system cursor.
+    else if (InputEvent::?HideCursor == iEvent.type)
+    {
+      window.setMouseCursorVisible(false);
+    }
+    else if (InputEvent::?ShowCursor == iEvent.type)
+    {
+      window.setMouseCursorVisible(true);
+    }
+    */
     state = state->handleInput(iEvent);
     assert(state);
   }

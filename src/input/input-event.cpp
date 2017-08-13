@@ -9,6 +9,44 @@
 
 
 
+#if 0
+// WIP: A lookup on the data held by the each event type.
+// Inside the main class:
+  InputEvent::EventPayload
+  {
+    // Holds no additional data:
+    Signal,
+    // Carries with it a 2d possition, usually a screen position.
+    Positional,
+
+    Cap
+  }
+
+// This might be worth being a constexpr, it is a fixed lookup.
+static constexpr InputEvent::EventPayload InputEvent::payloadType (
+    InputEvent::EventPayload type)
+{
+  switch (type)
+  {
+  case InputEvent::Unselect:
+  case InputEvent::Quit:
+  case InputEvent::Pause:
+    return Signal;
+  case InputEvent::Select:
+  case InputEvent::Point:
+    return Positional;
+  // Do I need this one? Does it make sense?
+  case InputEvent::Cap:
+    return Cap;
+  }
+}
+
+InputEvent::EventPayload InputEvent::payloadType () const
+{
+  return payloadType(type);
+}
+#endif
+
 static std::ostream & operator<< (std::ostream & out,
     InputEvent::EventType type)
 {
