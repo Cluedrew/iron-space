@@ -30,6 +30,8 @@ private:
   LoopClock clock;
   Logger log;
 
+  bool overrideCursor;
+
   void pollInput ();
   void render ();
   void update ();
