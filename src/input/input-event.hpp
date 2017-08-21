@@ -38,6 +38,20 @@ struct InputEvent
     int y;
   };
 
+  // For each type, repersents the branch of the union used to store data.
+  enum EventPayload
+  {
+    // Holds no additional data.
+    SignalOnly,
+    // Carries with it a 2d possition, usually a screen position.
+    Positional,
+
+    PayloadCap
+  };
+
+  static constexpr EventPayload const payloadFor[Cap + 1] = {
+    SignalOnly, Positional, SignalOnly, Positional, SignalOnly, PayloadCap};
+
   union
   {
     // Used with Select & Point.

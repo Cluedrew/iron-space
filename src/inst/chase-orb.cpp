@@ -26,7 +26,7 @@ ChaseOrb::ChaseOrb(int x, int y) :
     PlaneObject(
       xyTransformable(x, y),
       new AiWrapper(),
-      new PhysicsComponent(new CircleCollider(x, y, 25)),
+      new PhysicsComponent(new CircleCollider(0, 0, 25)),
       new CircleGraphics(25, sf::Color::Green)),
     target(x, y)
 {}
@@ -36,7 +36,7 @@ ChaseOrb::ChaseOrb(sf::Vector2<int> xy) :
     PlaneObject(
       xyTransformable(xy.x, xy.y),
       new AiWrapper(),
-      new PhysicsComponent(new CircleCollider(xy.x, xy.y, 25)),
+      new PhysicsComponent(new CircleCollider(0, 0, 25)),
       new CircleGraphics(25, sf::Color::Green)),
     target(xy)
 {}

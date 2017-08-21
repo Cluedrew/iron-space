@@ -25,7 +25,6 @@ void Cursor::makeIcon ()
 
 void Cursor::draw (sf::RenderTarget & target, sf::RenderStates states) const
 {
-  // Use some rectangle shapes or a convex shape to make the X.
   sf::Transform localTransform;
   localTransform.translate(sf::Vector2f(pos));
   states.transform *= localTransform;
