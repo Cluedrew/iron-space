@@ -25,8 +25,42 @@ void Cursor::makeIcon ()
 
 void Cursor::draw (sf::RenderTarget & target, sf::RenderStates states) const
 {
-  sf::Transform localTransform;
-  localTransform.translate(sf::Vector2f(pos));
-  states.transform *= localTransform;
-  target.draw(icon, states);
+  if (override)
+  {
+    sf::Transform localTransform;
+    localTransform.translate(sf::Vector2f(pos));
+    states.transform *= localTransform;
+    target.draw(icon, states);
+  }
+}
+
+bool isOverWindow (sf::Window & window)
+{
+  sf::Vector2i mousePos(sf::Mouse::getPosition(window));
+  sf::Vector2u winSize(window.getSize());
+  return (0 <= mousePos.x && 0 <= mousePos.y &&
+          (unsigned)mousePos.x < winSize.x &&
+          (unsigned)mousePos.y < winSize.y);
+}
+
+void Cursor::setCursorOverride (sf::Window & target, bool active)
+{
+  bool overWindow;
+
+  if (active && target.hasFocus() && (overWindow = isOverWindow(target)) )
+  {
+    if (!override)
+    {
+      override = true;
+      target.setMouseCursorVisible(false);
+    }
+  }
+  else
+  {
+    if (override)
+    {
+      override = false;
+      target.setMouseCursorVisible(true);
+    }
+  }
 }

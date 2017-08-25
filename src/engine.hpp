@@ -16,6 +16,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "util/loop-clock.hpp"
 #include "util/logger.hpp"
+#include "cursor.hpp"
 class WorldState;
 
 
@@ -30,7 +31,7 @@ private:
   LoopClock clock;
   Logger log;
 
-  bool overrideCursor;
+  Cursor mainCursor;
 
   void pollInput ();
   void render ();

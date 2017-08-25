@@ -12,7 +12,7 @@
 Engine::Engine (Logger::DetailLevel logdl) :
   running(true), window(), state(new MainMenu()),
   clock(60), log("Engine", logdl),
-  overrideCursor(false)
+  mainCursor()
 {}
 
 Engine::~Engine ()
@@ -65,38 +65,13 @@ void Engine::pollInput ()
       log.data("End pollInput (Quitting)");
       return;
     }
-    /* TODO: Show and hide system cursor.
-    else if (InputEvent::?HideCursor == iEvent.type)
-    {
-      window.setMouseCursorVisible(false);
-    }
-    else if (InputEvent::?ShowCursor == iEvent.type)
-    {
-      window.setMouseCursorVisible(true);
-    }
-    */
     state = state->handleInput(iEvent);
     assert(state);
   }
-  // Temporary Cursor Stuff
-  {
-    if (!window.hasFocus())
-    {
-      overrideCursor = false;
-      window.setMouseCursorVisible(true);
-    }
-    else
-    {
-      sf::Vector2i mousePos(sf::Mouse::getPosition(window));
-      sf::Vector2u winSize(window.getSize());
-      if (0 <= mousePos.x && 0 <= mousePos.y &&
-          (unsigned)mousePos.x < winSize.x && (unsigned)mousePos.y < winSize.y)
-      {
-        overrideCursor = true;
-        window.setMouseCursorVisible(false);
-      }
-    }
-  }
+
+  // Update cursor.
+  mainCursor.setCursorOverride(window);
+  mainCursor.pos = sf::Mouse::getPosition(window);
 
   log.data("End pollInput");
 }
@@ -120,14 +95,7 @@ void Engine::render ()
   log.data("Begin render");
   window.clear(sf::Color::Black);
   window.draw(*state);
-
-  // Temperary cursor stuff.
-  if (overrideCursor)
-  {
-    Cursor cursor(sf::Mouse::getPosition(window));
-    window.draw(cursor);
-  }
-
+  window.draw(mainCursor);
   window.display();
   log.data("End render");
 }

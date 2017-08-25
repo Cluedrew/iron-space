@@ -12,10 +12,21 @@
 
 StatusDisplay::StatusDisplay () :
   Widget(new NullAi(), new NullPhysics(), new NullGraphics())
-{}
+{
+  //if (!core.create(X, Y)) { ... }
+}
 
 void StatusDisplay::draw
     (sf::RenderTarget& target, sf::RenderStates states) const
+{
+  const sf::Texture & texture = core.getTexture();
+  sf::Sprite sprite(texture);
+  target.draw(sprite, states);
+}
+
+#if 0
+// I'm not sure where this goes, but I think we need it somewhere.
+void StatusDisplay::update ( ??? )
 {
   // I think this section, updating the center, will actually have to happen
   // earlier, before the main draw pass while this is mutable.
@@ -31,8 +42,13 @@ void StatusDisplay::draw
   else
   {
     // List of all entities selected.
+    for (Entity const * entity : selection)
+    {
+      // Tracked each one.
+    }
   }
 }
+#endif
 
 void StatusDisplay::display (Entity const & source)
 {

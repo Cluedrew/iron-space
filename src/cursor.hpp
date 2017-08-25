@@ -11,26 +11,29 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/ConvexShape.hpp>
-namespace sf { class RenderTarget; class RenderStates; }
+namespace sf { class RenderTarget; class RenderStates; class Window; }
 
 
 
 class Cursor : public sf::Drawable
 {
-private:
+public:
   sf::Vector2<int> pos;
+private:
   sf::ConvexShape icon;
+  bool override;
 
   void makeIcon ();
   void draw(sf::RenderTarget & target, sf::RenderStates states) const;
 
 protected:
 public:
-  Cursor() : pos(0, 0) { makeIcon(); }
-  Cursor(sf::Vector2<int> pos) : pos(pos) { makeIcon(); }
-  Cursor(int x, int y) : pos(x, y) { makeIcon(); }
+  Cursor() : pos(0, 0), override(false) { makeIcon(); }
   /* Create a new cursor.
-   * Params: The position to create the cursor at.
+   */
+
+  void setCursorOverride (sf::Window & target, bool active = true);
+  /* Update the internal override.
    */
 };
 
