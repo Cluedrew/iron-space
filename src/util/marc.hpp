@@ -63,9 +63,9 @@ public:
   MaRC (MaRC<KeyT, DataT, mapping> const &);
   MaRC (MaRC<KeyT, DataT, mapping> &&);
   MaRC<KeyT, DataT, mapping> &
-      operator== (MaRC<KeyT, DataT, mapping> const &);
+      operator= (MaRC<KeyT, DataT, mapping> const &);
   MaRC<KeyT, DataT, mapping> &
-      operator== (MaRC<KeyT, DataT, mapping> &&);
+      operator= (MaRC<KeyT, DataT, mapping> &&);
   DataT & operator* () const;
   DataT * operator-> () const;
 

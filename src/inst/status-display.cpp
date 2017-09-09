@@ -7,6 +7,8 @@
 #include "ai/null-ai.hpp"
 #include "physics/null-physics.hpp"
 #include "graphics/null-graphics.hpp"
+#include "graphics/font-library.hpp"
+#include "inst/text-fragment.hpp"
 
 
 
@@ -15,6 +17,9 @@ StatusDisplay::StatusDisplay () :
 {
   //if (!core.create(X, Y)) { ... }
 }
+
+//StatusDisplay::~StatusDisplay ()
+//{}
 
 void StatusDisplay::draw
     (sf::RenderTarget& target, sf::RenderStates states) const
@@ -30,14 +35,31 @@ void StatusDisplay::update ( ??? )
 {
   // I think this section, updating the center, will actually have to happen
   // earlier, before the main draw pass while this is mutable.
+
+  core.clear(sf::Color::Black);
+
   if (0 == selection.size())
   {
     // Empty core.
+
+    delete header;
+    header = nullptr;
   }
   else if (1 == selection.size())
   {
     // Information about the selected entitiy.
+    Entity const & entity = *selection.front();
+
     //display(*selection.front());
+
+    TextFragment header(entity.getName(), 10, 10);
+    //if (header)
+    //  delete header;
+    //  header->setText(entity.getName());
+    //else
+    //  header = new TextFragment(entity.getName(), 10, 10);
+
+    core.draw(*header);
   }
   else
   {
@@ -47,6 +69,8 @@ void StatusDisplay::update ( ??? )
       // Tracked each one.
     }
   }
+
+  core.swap();
 }
 #endif
 

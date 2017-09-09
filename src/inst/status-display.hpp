@@ -9,6 +9,7 @@
 #include "object/widget.hpp"
 namespace sf { class RenderTarget; class RenderStates; }
 class Entity;
+class TextFragment;
 
 
 
@@ -26,7 +27,11 @@ protected:
 public:
   StatusDisplay ();
 
+  virtual ~StatusDisplay () {}
+
   void display (Entity const & source);
+  /* Display the given entity on this widget.
+   */
 };
 
 #endif//STATUS_DISPLAY_HPP

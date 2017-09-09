@@ -57,4 +57,18 @@ public:
    */
 };
 
+#include "util/marc.hpp"
+
+// Incoming replacement to the font library.
+// Not yet complete and will probably end up in a different file.
+MaRCData<std::string, sf::Font> * loadFontFromFile (std::string fontName);
+/* For use by FontMaRC. Loads a font into a new Font object.
+ * Params: Name of font, which is the pathname of the font file relative to
+ *   the font directory.
+ * Return: Non-null pointer to new MaRCData, caller must free.
+ * Except: <will throw instead of returning null.>
+ */
+
+using FontMaRC = MaRC<std::string, sf::Font, loadFontFromFile>;
+
 #endif//FONT_LIBRARY_HPP

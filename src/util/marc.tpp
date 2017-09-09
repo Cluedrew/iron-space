@@ -118,7 +118,7 @@ void MaRC<KeyT, DataT, mapping>::unbindData ()
 template<typename KeyT, typename DataT,
     MaRCData<KeyT, DataT> * (*mapping)(KeyT)>
 MaRC<KeyT, DataT, mapping> &
-MaRC<KeyT, DataT, mapping>::operator== (
+MaRC<KeyT, DataT, mapping>::operator= (
     MaRC<KeyT, DataT, mapping> const & other)
 {
   if (data != other.data)
@@ -133,7 +133,7 @@ MaRC<KeyT, DataT, mapping>::operator== (
 template<typename KeyT, typename DataT,
     MaRCData<KeyT, DataT> * (*mapping)(KeyT)>
 MaRC<KeyT, DataT, mapping> &
-MaRC<KeyT, DataT, mapping>::operator== (
+MaRC<KeyT, DataT, mapping>::operator= (
     MaRC<KeyT, DataT, mapping> && other)
 {
   if (data != other.data)
