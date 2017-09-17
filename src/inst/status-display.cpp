@@ -7,8 +7,42 @@
 #include "ai/null-ai.hpp"
 #include "physics/null-physics.hpp"
 #include "graphics/null-graphics.hpp"
-#include "graphics/font-library.hpp"
+#include "graphics/font-marc.hpp"
+#include "input/input-event.hpp"
 #include "inst/text-fragment.hpp"
+
+
+
+// The custom made component classes. (Not in the component directories.)
+
+// Switch to AiWrapper?
+struct StatusDisplayAi : public AiComponent
+{
+  void init (GameObject & container)
+  {}
+
+  bool handleInput (GameObject & container, InputEvent const & ievent)
+  {
+    if (InputEvent::Select == ievent.type)
+    {
+      // Select an icon in the multi-character mode.
+    }
+    return false;
+  }
+
+  void update (GameObject & container, sf::Time const & deltaT)
+  {
+    // Might use the inner update function.
+  }
+
+  void handleCollision (GameObject & container, GameObjectPtr & ptr)
+  {
+    // Does this ever need to handle any collisions?
+  }
+};
+
+//class StatusDisplayPhysics : public PhysicsComponent {};
+//class StatusDisplayGraphics : public GraphicsComponent {};
 
 
 

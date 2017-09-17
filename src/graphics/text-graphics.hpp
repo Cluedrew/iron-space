@@ -9,7 +9,7 @@
 #include <string>
 #include <SFML/Graphics/Text.hpp>
 #include "graphics-component.hpp"
-#include "font-library.hpp"
+#include "font-marc.hpp"
 #include "util/alignment.hpp"
 
 
@@ -17,7 +17,7 @@
 class TextGraphics : public GraphicsComponent
 {
 private:
-  FontLibrary::FontReference font;
+  FontMaRC font;
   sf::Text text;
 
 protected:

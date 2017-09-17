@@ -11,7 +11,7 @@
 TextGraphics::TextGraphics (std::string const & font_,
                             std::string const & text_,
                             Alignment2D alignment) :
-  font(FontLibrary::getFont(font_)), text(text_, *font)
+  font(font_), text(text_, *font)
 {
   // text.set{Fill,Outline}Color becomes prefered as of SFML 2.4.1.
   text.setColor(sf::Color::Blue);
