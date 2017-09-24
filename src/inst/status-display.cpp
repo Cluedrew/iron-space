@@ -2,6 +2,7 @@
 
 // Implementation of StatusDisplay, game character data output.
 
+#include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics.hpp>
 #include "object/entity.hpp"
 #include "ai/null-ai.hpp"
@@ -15,7 +16,11 @@
 
 // The custom made component classes. (Not in the component directories.)
 
-// Switch to AiWrapper?
+/* Prehaps I should switch to AiWrapper and use:
+ * bool innerHandleInput (InputEvent const & input);
+ * void innerUpdateAi (sf::Time const & deltaT);
+ * void innerHandleCollision (GameObjectPtr & with);
+ */
 struct StatusDisplayAi : public AiComponent
 {
   void init (GameObject & container)
@@ -60,12 +65,15 @@ void StatusDisplay::draw
 {
   const sf::Texture & texture = core.getTexture();
   sf::Sprite sprite(texture);
+
+  sf::Vector2u offset(0, target.getSize().y - core.getSize().y);
+  states.transform.translate(0, target.getSize().y - core.getSize().y);
   target.draw(sprite, states);
 }
 
 #if 0
 // I'm not sure where this goes, but I think we need it somewhere.
-void StatusDisplay::update ( ??? )
+void StatusDisplay::update ( [ sf::Time const & deltaT ] )
 {
   // I think this section, updating the center, will actually have to happen
   // earlier, before the main draw pass while this is mutable.
@@ -84,24 +92,31 @@ void StatusDisplay::update ( ??? )
     // Information about the selected entitiy.
     Entity const & entity = *selection.front();
 
-    //display(*selection.front());
-
+    // TODO: Consider TextGraphics, similar use but less overhead (all uses).
     TextFragment header(entity.getName(), 10, 10);
-    //if (header)
-    //  delete header;
-    //  header->setText(entity.getName());
-    //else
-    //  header = new TextFragment(entity.getName(), 10, 10);
 
     core.draw(*header);
+
+    //display(*selection.front());
   }
   else
   {
+    int count = 0;
+
     // List of all entities selected.
     for (Entity const * entity : selection)
     {
-      // Tracked each one.
+      // Display just a little bit of information on each one.
+
+      // For now, their count.
+      ++count;
     }
+
+    std::string title("Entity Objects Selected: ");
+    title + to_string(count);
+    TextFragment header(title, 10, 10);
+
+    core.draw(*header);
   }
 
   core.swap();
@@ -110,5 +125,6 @@ void StatusDisplay::update ( ??? )
 
 void StatusDisplay::display (Entity const & source)
 {
+  // Reset all display parameters.
   source.display(*this);
 }

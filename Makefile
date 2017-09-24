@@ -135,10 +135,12 @@ $(OBJFILES) : $(OBJ_PAT) : $(CPP_PAT) | $$(call getdir,$$@)
 # Object compilation for regular (non-testing) objects
 $(call objsfor,$(SRCFILES) $(SRCMAIN)) :
 	$(CXX) $(CXXFLAGS) -MMD -c $< -o $@
+#       echo "compiling src $< to $@"
 
 # Object compilation for testing objects
 $(call objsfor,$(TSTFILES) $(TSTMAIN)) :
 	$(CXX) $(CXXFLAGS) $(TSTFLAGS) -MMD -c $< -o $@
+#       echo "compiling tst $< to $@"
 
 # Rule for the temperary directory
 $(TMPDIR) :
