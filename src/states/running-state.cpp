@@ -5,6 +5,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Time.hpp>
 #include "input/input-event.hpp"
+#include "object/plane-object.hpp"
+#include "object/widget.hpp"
 #include "ai/orbit-ai.hpp"
 #include "ai/blue-touch.hpp"
 #include "physics/physics-component.hpp"
@@ -12,11 +14,12 @@
 #include "graphics/circle-graphics.hpp"
 #include "pause-screen.hpp"
 #include "inst/chase-orb.hpp"
+#include "inst/status-display.hpp"
 
 
 
 RunningState::RunningState () :
-  map(), bgm(), selected()
+  map(), hud(), bgm(), selected()
 {
   map.emplace(PlaneObject(new OrbitAi(),
                 new PhysicsComponent(new CircleCollider(0, 0, 25)),
@@ -25,6 +28,9 @@ RunningState::RunningState () :
                 new PhysicsComponent(new CircleCollider(0, 0, 25)),
                 new CircleGraphics(25)));
   map.insert(new ChaseOrb(25, 25));
+
+  hud.insert(new StatusDisplay());
+
   bgm.openFromFile("rsrc/music/Laser_Groove.wav");
   bgm.play();
 }
@@ -64,7 +70,6 @@ WorldState * RunningState::handleInput (InputEvent const & ievent)
     break;
 
   case InputEvent::Pause:
-    // Currently, I don't have a way to cleanly restart this after a pause.
     bgm.pause();
     return idStart(new PauseScreen(this));
 

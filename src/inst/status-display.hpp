@@ -30,6 +30,9 @@ private:
 
   sf::RenderTexture core;
 
+  // Display variables:
+  unsigned char numStatusBars;
+
   void draw (sf::RenderTarget& target, sf::RenderStates states) const;
 
 protected:
@@ -43,8 +46,10 @@ public:
    */
 
   // CallBacks:
-  /* void drawStatusBar(std::string const & name, sf::Color const & color,
-   *   unsigned int max, unsigned int current);
+  void drawStatusBar(std::string const & name, sf::Color const & color,
+                     unsigned int max, unsigned int current);
+  /* Draw a bar, showing some X/Y score on the unit.
+   *   + Also the proof of concept call back right now.
    */
 };
 
