@@ -106,6 +106,15 @@ public:
    * Return: A pointer to the graphics component. DO NOT FREE.
    */
 
+  template<typename T>
+  T * getCastGraphics()
+  /* Get the GraphicsComponent dynamic_cast to the given type.
+   * Return: A possibly null pointer the the graphics component. DO NOT FREE.
+   */
+  {
+    return dynamic_cast<T *>(getGraphics());
+  }
+
   //void handleMessage (MessageEvent const & msg)
   /* Called during AI Step (by other GameObjects):
    * Params: Message to be recived.
@@ -132,14 +141,5 @@ public:
    * Effect: Draws to screen.
    */
 };
-
-
-
-void swap (GameObject & obj1, GameObject & obj2);
-/* Swap two GameObjects, deep.
- * Params: Mutable references to GameObject.
- * Effect: Swaps the two GameObjects, dependant memory may or may not be
- *   moved but it will be accessable through the same object as before.
- */
 
 #endif//GAME_OBJECT_HPP

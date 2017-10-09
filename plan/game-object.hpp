@@ -37,10 +37,6 @@
  * them sometimes), the other is I kind of want to do some stuff with double
  * buffering. I can't control the ordering so well and this is my best
  * solution I have right now.
- *
- * To refactor:
- * Create GameObject2D and Widget as empty classes, that inherite from
- * GameObject. Change existing objects to use those.
  */
 
 class GameObject : public sf::Drawable
@@ -48,18 +44,61 @@ class GameObject : public sf::Drawable
  * with the main loop (input, update (ai/physics/colition) and draw) and
  * probably a memory management tool.
  *
- * Should default implementations be included or use pure virtual?
- *
- * The swap of two GameObjects will have to be removed.
- *
  * What to do about messaging? Are there any messages we want to be able to
  * handle at the top level? Input is a likely candidate. However I don't think
  * we will need a general messaging system because we can use pointers to
  * the subtypes in this new system.
+ *
+ * And I think I have been thinking about this in the wrong way, we probably
+ * need two layers of functions. First ones called by the system. Most of them
+ * can probably be defined in GameObject and be left alone there after, maybe
+ * with a few flags or protected variables that alter their behaviour. Or
+ * maybe that is the goal, for simplicity and speed.
+ *
+ * The second group are those overriden by a particular subclass, the hooks if
+ * you will. They can redirect to components, but more often I think that
+ * having immediate access to the other aspects of the GameObject is more
+ * important.
+ *
+ * Also I think I need some tools for distributing calls to sub-objects.
+ * Particularly to ensure that each step gets handed out in the correct way.
+ * Just having proper containers for mixing might help that.
  */
 {
-  virtual bool handleInput (InputEvent const & input);
-  // As current.
+  // Some examples:
+
+  enum ControlFlags
+  {
+    RespondToMouse = 1,
+    UpdatePhysics = 2,
+  } control;
+
+  bool mouseHoverCheck(sf::Vector2i mousePosition)
+  {
+    // Objects that don't respond to the mouse can skip the physics check.
+    if (control & RespondToMouse)
+      return body.collides(PointCollider(mousePosition));
+    return false;
+  }
+
+  void updateStep (sf::Time const & deltaT)
+  {
+    // Call the overridable update for object behaviour.
+    update(deltaT);
+    // If the object has physics, update it according to volocity.
+    if (control & UpdatePhysics)
+      updatePhysics();
+  }
+
+  // GameObject itself will probably have nothing to add to the draw function,
+  // but lower objects could probably do some stuff for the states, such as
+  // calculating the transform.
+
+  bool handleInput (InputEvent const & input);
+  /* Top level input handler for a particular game object.
+   * This might actually get changed seriously, as most input (except maybe
+   * the mouse) will be going through the state before reaching a GameObject.
+   */
 
   virtual void update (sf::Time const & deltaT);
   // Main update step. Approximately the current updateAi;

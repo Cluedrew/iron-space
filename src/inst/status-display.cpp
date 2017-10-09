@@ -2,6 +2,8 @@
 
 // Implementation of StatusDisplay, game character data output.
 
+#include <iostream>
+#include <string>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics.hpp>
 #include "object/entity.hpp"
@@ -38,12 +40,19 @@ struct StatusDisplayAi : public AiComponent
 
   void update (GameObject & container, sf::Time const & deltaT)
   {
-    // Might use the inner update function.
+    StatusDisplay * display = dynamic_cast<StatusDisplay *>(&container);
+    if (!display)
+      throw GameFault("StatusDisplayAi not on StatusDisplay.");
+
+    // Internal State updates.
+
+    // Update core for drawing.
+    display->updateCore(deltaT);
   }
 
   void handleCollision (GameObject & container, GameObjectPtr & ptr)
   {
-    // Does this ever need to handle any collisions?
+    // Clicks and hovers on the items displayed in status.
   }
 };
 
@@ -51,69 +60,65 @@ struct StatusDisplayAi : public AiComponent
 
 class StatusDisplayGraphics : public GraphicsComponent
 {
+public:
+  const sf::Texture * texture;
 private:
-  const sf::Texture & texture;
-
   void draw (sf::RenderTarget& target, sf::RenderStates states) const
   {
-    sf::Sprite toDraw(texture);
+    sf::Sprite toDraw(*texture);
 
-    sf::Vector2u drawSize = texture.getSize();
-    toDraw.setOrigin(drawSize.x, drawSize.y / 2);
+    sf::Vector2u drawSize = texture->getSize();
+    toDraw.setOrigin(drawSize.x / 2, drawSize.y);
 
     sf::Vector2u targetSize = target.getSize();
-    toDraw.setPosition(targetSize.x, targetSize.y / 2);
+    toDraw.setPosition(targetSize.x / 2, targetSize.y);
 
     target.draw(toDraw, states);
   }
 
 public:
-  StatusDisplayGraphics(const sf::RenderTexture & render) :
-      texture(render.getTexture())
+  StatusDisplayGraphics() :
+      texture(nullptr)
   {}
 };
 
 
 
 StatusDisplay::StatusDisplay () :
-  Widget(new NullAi(), new NullPhysics(), new NullGraphics())
+  Widget(new StatusDisplayAi(),
+         new NullPhysics(),
+         new StatusDisplayGraphics())
 {
-  if (!core.create(100, 200))
+  if (!core.create(200, 100))
   {
     throw GameFault("Could not create StatusDisplay Texture.");
   }
+
+  StatusDisplayGraphics * g = getCastGraphics<StatusDisplayGraphics>();
+  if (!g)
+  {
+    throw GameFault("The type of StatusDisplay's graphics changed.");
+  }
+  g->texture = &core.getTexture();
 }
 
-//StatusDisplay::~StatusDisplay ()
-//{}
-
-// Probably will not be called.
-void StatusDisplay::draw
-    (sf::RenderTarget& target, sf::RenderStates states) const
+// Internal function for updating the image on core.
+void StatusDisplay::updateCore (sf::Time const & deltaT)
 {
-  const sf::Texture & texture = core.getTexture();
-  sf::Sprite sprite(texture);
-
-  sf::Vector2u offset(0, target.getSize().y - core.getSize().y);
-  states.transform.translate(0, target.getSize().y - core.getSize().y);
-  target.draw(sprite, states);
-}
-
-#if 0
-// I'm not sure where this goes, but I think we need it somewhere.
-void StatusDisplay::update ( [ sf::Time const & deltaT ] )
-{
-  // I think this section, updating the center, will actually have to happen
-  // earlier, before the main draw pass while this is mutable.
-
   core.clear(sf::Color::Black);
+
+  {
+    //sf::Vector2f size = core.getSize();
+    sf::RectangleShape frame(sf::Vector2f(core.getSize()));
+    frame.setFillColor(sf::Color::Transparent);
+    frame.setOutlineColor(sf::Color::Cyan);
+    frame.setOutlineThickness(-3);
+    core.draw(frame);
+  }
 
   if (0 == selection.size())
   {
     // Empty core.
-
-    delete header;
-    header = nullptr;
   }
   else if (1 == selection.size())
   {
@@ -123,33 +128,25 @@ void StatusDisplay::update ( [ sf::Time const & deltaT ] )
     // TODO: Consider TextGraphics, similar use but less overhead (all uses).
     TextFragment header(entity.getName(), 10, 10);
 
-    core.draw(*header);
+    core.draw(header);
 
     //display(*selection.front());
   }
   else
   {
-    int count = 0;
-
     // List of all entities selected.
-    for (Entity const * entity : selection)
-    {
+    //for (Entity const * entity : selection)
+    //{
       // Display just a little bit of information on each one.
-
-      // For now, their count.
-      ++count;
-    }
+    //}
 
     std::string title("Entity Objects Selected: ");
-    title + to_string(count);
+    title + std::to_string(selection.size());
     TextFragment header(title, 10, 10);
 
-    core.draw(*header);
+    core.draw(header);
   }
-
-  core.swap();
 }
-#endif
 
 void StatusDisplay::display (Entity const & source)
 {

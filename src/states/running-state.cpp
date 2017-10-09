@@ -91,12 +91,13 @@ WorldState * RunningState::handleInput (InputEvent const & ievent)
 // see header
 WorldState * RunningState::update (sf::Time const & deltaT)
 {
-
-  PlaneDrawable<PlaneObject>::iterator it;
-  for (it = map.begin() ; it != map.end() ; ++it)
-    it->updateAi(deltaT);
+  for (PlaneObject & object : map)
+    object.updateAi(deltaT);
 
   map.resolveCollisions();
+
+  for (Widget & object : hud)
+    object.updateAi(deltaT);
 
   return this;
 }
@@ -106,4 +107,5 @@ void RunningState::draw (sf::RenderTarget & target,
     sf::RenderStates states) const
 {
   target.draw(map, states);
+  target.draw(hud, states);
 }

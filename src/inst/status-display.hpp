@@ -33,7 +33,10 @@ private:
   // Display variables:
   unsigned char numStatusBars;
 
-  void draw (sf::RenderTarget& target, sf::RenderStates states) const;
+  void updateCore (sf::Time const & deltaT);
+
+  // Yet another reason I have to refactor.
+  friend class StatusDisplayAi;
 
 protected:
 public:
