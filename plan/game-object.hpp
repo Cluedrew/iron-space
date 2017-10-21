@@ -234,4 +234,36 @@ class ActivePhysics2D : public PassivePhysics2D;
  * components is a way around that.
  */
 
+class Listener
+{
+public:
+  void regester ();
+  void unRegester ();
+  void inputHandler (InputEvent const &);
+};
+class Announcer
+{
+  std::vector<Listener *> regesteredListeners;
+public:
+  void announce (InputEvent const &);
+};
+/* So I am considering a Listener system to respond to inputs. I have little
+ * experiance with them. The main decision points right now are:
+ * - How is its regestered? There needs to be some overhead unit to
+ *   distribute the calls. What will it be? I think some class with the same
+ *   idea as Announcer, but with more divisions, might do it.
+ * - What is regestered? The system I used was class based with a bunch of
+ *   overridable functions. I found that awkward. I'm thinking:
+ *   - Single functions, would be ideal but I actually need a second bit of
+ *     data. I might look into method pointers (member function pointers?) to
+ *     to see if they are a solution.
+ *   - Whole GameObjects is another posibility. Every GameObject is a listener
+ *     that may or may not be registered to the input event dispatcher. If
+ *     there is exactly one dispatcher this should be enough. Also quite
+ *     portable from the older system.
+ * - Which regestered functions are called? I might be able to get away with
+ *   every event going to every listener at this scale. However having an "am
+ *   I interested" system might save some repeated code anyways.
+ */
+
 #endif//GAME_OBJECT
