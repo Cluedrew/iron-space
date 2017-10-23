@@ -1,42 +1,43 @@
 #ifndef GAME_OBJECT
 #define GAME_OBJECT
 
-/* So some thoughts on a posible rework on the GameObject. The current
- * container based design is having some issues. Most of this has to do
- * with comunication between the components.
+/* I think I'm not going to have a stable GameObject design for a long time.
+ * So this is going to be my giant todo list for slowly making them better.
  *
- * For instance if the Ai wants to tell the Graphics how to draw itself,
- * it will have to get a GraphicsComponent and then cast it down to the
- * type with the proper interface. Or it could store the pointer itself,
- * but at that point it is starting to take on the role of the GameObject.
+ * Issues:
  *
- * On a more technically level it had to do with type casting, which seems
- * to fit into C# (Unity) better than C++ (Unreal). The other issue is that I
- * miss having a centeral location to put my code into. Really this is the Ai
- * component again, as what it does with the components of the object is given
- * in a completely different place than where the components are decided.
+ *   General redesign going on right now. Trying to make the GameObjects do
+ * more work for the instance classes. The old design was almost a less
+ * effective way to implement virtual function overrides. I'm aiming to try
+ * and create a layer of code that does all the shared work for the lower
+ * classes. But "all shared work" is funny. If every class does it then it
+ * is can go in easy. But most things aren't quite that clean.
  *
- * So I am thinking of discarding the "generic container" model and then
- * have a GameObject base class which you inherite from and then create the
- * exact object you want. Shouldn't be any slower, it just pushes the virtual
- * method look-ups up a layer and shouldn't slow things down.
+ *   OK, code re-use is great, but the component system is resulting in a lot
+ * of "wiring" to get the components to speak together. Many of which require
+ * particular other components. So it is more trouble than it is worth. "has
+ * a" components might still be a thing, but will probably in line them and
+ * use them on a case-by-case basis.
+ *   As a bridge to that feature, the overridable functions replacing the
+ * components might direct calls to the components until they are not used
+ * in any base class.
  *
- * Components will still be a thing, especially for reuse, but they might be
- * direct members instead of pointers. This is slightly less optimal but I
- * think I have a ways to go before I worry about that.
+ *   Where to put physics? Parts of it make sense being universal across all
+ * classes, mainly that the ideas of collision and space are the same for
+ * Widgets and PlaneObjects. But other times it is a waste of code, Widgets
+ * don't need a volocity in any sane situation for instance.
  *
- * Further re-use will come from intermediate base classes. These handle
- * functions many (but not all) of the final game objects share. Some of the
- * system hooks will probably move down to here. It depends on how general
- * the hooks are.
+ *   Input handling has been partially solved with... Idea, set a FatFunction
+ * and regester a copy of it instead of passing in the parameters directly.
  *
- * That being said I think I also need to rework the main loops steps and
- * standard hooks. Two main decisions: how many hooks to include at the base
- * (I have been doing add them as they are used, but it might be better to
- * add empty hooks and let them go unused, either as no-ops or don't even call
- * them sometimes), the other is I kind of want to do some stuff with double
- * buffering. I can't control the ordering so well and this is my best
- * solution I have right now.
+ *
+ * Hirarchy:
+ * A brief look at some of the higher level objects, the base GameObjects and
+ * the intermediate object types. Very brief until I
+ *
+ * - GameObject
+ *   - Widget
+ *   - PlaneObject
  */
 
 class GameObject : public sf::Drawable

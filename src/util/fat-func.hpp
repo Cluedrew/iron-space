@@ -9,9 +9,14 @@
  * TODO:
  * - If possible, create constructors that set the caller and data.
  * - Define (or delete) the copy/move constrctor/assignment operations.
+ * - Also look into equality and comparison, although it might not be
+ *   prefict because of inlining, finding copies should be enough.
  * - A Return(Arg0, Arg1, ...) syntax could replace Return, Arg0, Arg1, ...
  *   Is that cleaner? How would I even do that?
  * - call -> operator() would be more function like, but would it be clear?
+ * - Look into the const methods, see if we can mix in constant pointers to
+ *   the object. (Mimiced with good function design, low priority.)
+ * - Should the assert in call be a recoverable error (a thrown exception)?
  */
 
 #include <cassert>
@@ -44,9 +49,6 @@ public:
     data(nullptr), caller(nullptr)
   {}
 
-  // Can I also create setting constructors?
-  // The big five might all work with the defaults.
-
   template<ReturnT (*function)(Args...)>
   inline void set(void)
   {
@@ -63,8 +65,6 @@ public:
 
   ReturnT call(Args&&... args) const
   {
-    // Would an exception be a better way of handling this?
-    // throw UnsetFatFunctionError?
     assert(nullptr != caller);
     return caller(data, std::forward<Args>(args)...);
   }

@@ -144,23 +144,4 @@ TEST_CASE("Tests for FatFunction", "[util]")
     func.call(4);
     REQUIRE( 4 == globalMoveValue );
   }
-
-  /* I don't know what this test will actually look like yet.
-     However I would like to find a way to bind a const function instead
-     of the one on the mutable object. If it doesn't work it might just have
-     to have a different name.
-  SECTION("Mutability control of object")
-  {
-    FatFunction<void> func;
-    MutableCalls obj;
-
-    func.set<MutableCalls, &MutableCalls::call>(&obj);
-    func.call();
-    REQUIRE( 1 == obj.numMutCalls );
-
-    func.set< ??? ::call ??? >(&obj);
-    func.call();
-    REQUIRE( 1 == obj.numMutCalls );
-  }
-  */
 }
