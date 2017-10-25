@@ -6,66 +6,81 @@
  * It was going to use (well does) FatFunction directly, but I think it
  * doesn't take much more work to implement it over all callables (say,
  * regular function pointers). So that might change soon.
+ *
+ * Debating about the container type, it a set might be better, except that
+ * it makes colisions on the output disappear. The vector solution acts as a
+ * multiset of sorts.
  */
 
-
-
-// The actual loop over them thing would be special cased for when they
-// don't return anything.
-template<typename ReturnT, typename... Args>
-class GroupCall
-{
-  using AllReturnT = _Some_Container_<ReturnT>;
-  using FunctionT = FatFunction<ReturnT, Args...>;
-
-  static AllReturnT callAll(_Some_Container_<FunctionT> funcs, Args... args)
-  {
-    AllReturnT ret;
-    for (FunctionT func : funcs)
-      ret.insert(func(args...));
-    return ret;
-  }
-}
-// I don't think this is how this parial template specialization would work.
-template<void, typename... Args>
-class GroupCall<void, Args...>
-{
-  using AllReturnT = void;
-  using FunctionT = FatFunction<void, Args...>;
-
-  static AllReturnT callAll(_Some_Container_<FunctionT> funcs, Args... args)
-  {
-    for (FunctionT func : funcs) func(args...);
-  }
-}
+template<typename T>
+using VectorWrap = std::conditional<std::is_void<T>::type, T, std::vector<T>>;
 
 template<typename ReturnT, typename... Args>
 class CallList
 {
 public:
-  using ThisGroupCall = GroupCall<ReturnT, Args...>;
-  using AllReturnT = ThisGroupCall::AllReturnT;
-  using FunctionT = ThisGroupCall::FunctionT;
+  using FunctionT = FatFunction<ReturnT, Args...>;
 
 private:
-  _Some_Container_<ThisGroupCall::FunctionT> calls;
+  std::vector<FunctionT> funcs;
 public:
 
-  AllReturnT callAll(Args... args)
-  // Does not forward arguments, it can't as it makes mutible calls with them.
-  {
-    return ThisGroupCall::callAll(calls, args...);
-  }
+  VectorWrap<ReturnT>::type callAll(Args... args);
 
-  void insert(FunctionT call)
-  {
-    calls.insert(call);
-  }
+  void insert(FunctionT func);
+  void remove(FunctionT func);
+};
 
-  void remove(FunctionT call)
+#endif//CALL_LIST_HPP
+
+// .tpp file.
+
+template<typename ReturnT, typename... Args>
+void CallList<ReturnT, Args...>::insert (FunctionT func)
+{
+  funcs.push_back(func);
+}
+
+template<typename ReturnT, typename... Args>
+void CallList<ReturnT, Args...>::remove (FunctionT func)
+{
+  std::vector<FatFunction<ReturnT, Args...>>::const_iterator it;
+  for (it = funcs.cbegin() ; it != funcs.cend() ; ++it)
   {
-    calls.remove(call);
+    if (*it == func)
+    {
+      funcs.erase(it);
+      return;
+    }
   }
 }
 
-#endif//CALL_LIST_HPP
+template<typename ReturnT, typename... Args>
+VectorWrap<ReturnT>::type CallList<ReturnT, Args...>(Args... args)
+{
+  return CallListHelper::callAll(funcs, args...);
+}
+
+template<typename ReturnT, typename... Args>
+class CallListHelper
+{
+  static std::vector<ReturnT> callAll (
+      std::vector<FatFunction<ReturnT, Args...>> const & funcs, Args... args)
+  {
+    std::vector<ReturnT> ret;
+    ret.resurve(funcs.size());
+    for (FatFunction<ReturnT, Args...> func : funcs)
+      ret.push_back(func(args...));
+    return ret;
+  }
+};
+
+template<typename... Args>
+class CallListHelper<void, Args...>
+{
+  static void callAll (
+      std::vector<FatFunction<ReturnT, Args...>> const & funcs, Args... args)
+  {
+    for (FatFunction<void, Args...> func : funcs) func(args...);
+  }
+};
