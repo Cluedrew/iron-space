@@ -42,6 +42,9 @@ void doubling (int & value) { value *= 2; }
 int globalMoveValue = 0;
 void moveAndSet (int && value) { globalMoveValue = value; }
 
+char resultA (void) { return 'a'; }
+char resultB (void) { return 'b'; }
+
 TEST_CASE("Tests for FatFunction", "[util]")
 {
   globalCount = 0;
@@ -52,7 +55,7 @@ TEST_CASE("Tests for FatFunction", "[util]")
     signal.set<globalIncrement>();
 
     REQUIRE( 0 == globalCount );
-    signal.call();
+    signal();
     REQUIRE( 1 == globalCount );
   }
 
@@ -63,7 +66,7 @@ TEST_CASE("Tests for FatFunction", "[util]")
     signal.set<Counter, &Counter::increment>(&localCounter);
 
     REQUIRE( 0 == localCounter.count );
-    signal.call();
+    signal();
     REQUIRE( 1 == localCounter.count );
   }
 
@@ -73,7 +76,7 @@ TEST_CASE("Tests for FatFunction", "[util]")
     func.set<getGlobalCount>();
 
     globalCount = 4;
-    REQUIRE( 4 == func.call() );
+    REQUIRE( 4 == func() );
   }
 
   SECTION("Non-void return type used with method binding.")
@@ -83,7 +86,7 @@ TEST_CASE("Tests for FatFunction", "[util]")
     func.set<Counter, &Counter::getCount>(&localCounter);
 
     localCounter.count = 4;
-    REQUIRE( 4 == func.call() );
+    REQUIRE( 4 == func() );
   }
 
   SECTION("Paramter used with function binding.")
@@ -91,9 +94,9 @@ TEST_CASE("Tests for FatFunction", "[util]")
     FatFunction<void, int> func;
     func.set<globalIncrementBy>();
 
-    func.call(1);
+    func(1);
     REQUIRE( 1 == globalCount );
-    func.call(2);
+    func(2);
     REQUIRE( 3 == globalCount );
   }
 
@@ -103,9 +106,9 @@ TEST_CASE("Tests for FatFunction", "[util]")
     Counter localCounter;
     func.set<Counter, &Counter::incrementBy>(&localCounter);
 
-    func.call(1);
+    func(1);
     REQUIRE( 1 == localCounter.count );
-    func.call(2);
+    func(2);
     REQUIRE( 3 == localCounter.count );
   }
 
@@ -114,15 +117,15 @@ TEST_CASE("Tests for FatFunction", "[util]")
     FatFunction<char, char, int> map;
     map.set<rotate>();
 
-    REQUIRE( 'j' == map.call('c', 7) );
+    REQUIRE( 'j' == map('c', 7) );
 
     Rotator backwardRotate(false);
     Rotator forwardRotate(true);
 
     map.set<Rotator, &Rotator::rotate>(&backwardRotate);
-    REQUIRE( 'l' == map.call('p', 4) );
+    REQUIRE( 'l' == map('p', 4) );
     map.set<Rotator, &Rotator::rotate>(&forwardRotate);
-    REQUIRE( 'a' == map.call('z', 1) );
+    REQUIRE( 'a' == map('z', 1) );
   }
 
   SECTION("References should be maintained.")
@@ -131,7 +134,7 @@ TEST_CASE("Tests for FatFunction", "[util]")
     func.set<doubling>();
 
     int num = 7;
-    func.call(num);
+    func(num);
     REQUIRE( 14 == num );
   }
 
@@ -141,7 +144,36 @@ TEST_CASE("Tests for FatFunction", "[util]")
     FatFunction<void, int &&> func;
     func.set<moveAndSet>();
 
-    func.call(4);
+    func(4);
     REQUIRE( 4 == globalMoveValue );
+  }
+
+  //SECTION("Setter constructors.")
+  //{
+  //  FatFunction<void> func<globalIncrement>();
+  //  Counter test;
+  //  FatFunction<void> call<Counter, &Counter::increment>(&test);
+  //}
+
+  SECTION("Copying, moving, assignment and equality.")
+  {
+    FatFunction<char> baseA;
+    baseA.set<resultA>();
+    FatFunction<char> baseB;
+    baseB.set<resultB>();
+
+    FatFunction<char> func0;
+    func0 = baseA;
+    REQUIRE( func0 == baseA );
+
+    FatFunction<char> func1(baseA);
+    REQUIRE( func0 == func1 );
+    REQUIRE( func0 != baseB );
+
+    FatFunction<char> func2(std::move(FatFunction<char>(baseB)));
+    REQUIRE( func2 == baseB );
+
+    func2 = std::move(FatFunction<char>(baseA));
+    REQUIRE( func2 == baseA );
   }
 }

@@ -26,14 +26,21 @@
  * classes, mainly that the ideas of collision and space are the same for
  * Widgets and PlaneObjects. But other times it is a waste of code, Widgets
  * don't need a volocity in any sane situation for instance.
+ *   Actually if we accept some unused physics code/storage. Then it can just
+ * be done on the core class with a flag.
  *
- *   Input handling has been partially solved with... Idea, set a FatFunction
- * and regester a copy of it instead of passing in the parameters directly.
+ *   Input handling has been partially solved with the FatFunction callbacks.
+ * There is still the matters of what preprocessing I can do, where I can do
+ * it and the hook functions that recive the final input.
+ *   Not to mention how do they access the subject to listen for inputs.
+ *
+ *   At some point I should also think about a system to create child classes
+ * on game objects. That is a bit further away (and I'm glab about that).
  *
  *
  * Hirarchy:
  * A brief look at some of the higher level objects, the base GameObjects and
- * the intermediate object types. Very brief until I
+ * the intermediate object types. Very brief until I fillin the descriptions.
  *
  * - GameObject
  *   - Widget
@@ -82,6 +89,12 @@ class GameObject : public sf::Drawable
     return false;
   }
 
+  bool handleInput (InputEvent const & input);
+  /* Top level input handler for a particular game object.
+   * This might actually get changed seriously, as most input (except maybe
+   * the mouse) will be going through the state before reaching a GameObject.
+   */
+
   void updateStep (sf::Time const & deltaT)
   {
     // Call the overridable update for object behaviour.
@@ -94,15 +107,6 @@ class GameObject : public sf::Drawable
   // GameObject itself will probably have nothing to add to the draw function,
   // but lower objects could probably do some stuff for the states, such as
   // calculating the transform.
-
-  bool handleInput (InputEvent const & input);
-  /* Top level input handler for a particular game object.
-   * This might actually get changed seriously, as most input (except maybe
-   * the mouse) will be going through the state before reaching a GameObject.
-   */
-
-  virtual void update (sf::Time const & deltaT);
-  // Main update step. Approximately the current updateAi;
 
   //virtual void swap ();
   /* If we have a buffer approch there will have to be a way to update the
@@ -218,53 +222,6 @@ class GameObject3D : public GameObject;
  * counting. All the big engines I know of use it, its only real drawback is
  * cycles can break the system, so avoid that. I think adding an alive field
  * to the object would allow me to mimic the nulling ptr, in most cases.
- */
-
-class PassivePhysics2D;
-class ActivePhysics2D : public PassivePhysics2D;
-/* Possible new form of physics. A PassivePhysics object stays in place and
- * does not move over time, if you want it do you do so manually. Its only
- * functionality is to detect collisions. This is for things like Widgets.
- *
- * An ActivePhysics object can have things like speed and will move itself
- * around every frame. It is for GameObject2D.
- *
- * The point of this is really to cut down on code duplication. Those two
- * objects have a lot of shared behaviour but I think the difference is also
- * enough that they can't share an additional ancestor. Using these as
- * components is a way around that.
- */
-
-class Listener
-{
-public:
-  void regester ();
-  void unRegester ();
-  void inputHandler (InputEvent const &);
-};
-class Announcer
-{
-  std::vector<Listener *> regesteredListeners;
-public:
-  void announce (InputEvent const &);
-};
-/* So I am considering a Listener system to respond to inputs. I have little
- * experiance with them. The main decision points right now are:
- * - How is its regestered? There needs to be some overhead unit to
- *   distribute the calls. What will it be? I think some class with the same
- *   idea as Announcer, but with more divisions, might do it.
- * - What is regestered? The system I used was class based with a bunch of
- *   overridable functions. I found that awkward. I'm thinking:
- *   - Single functions, would be ideal but I actually need a second bit of
- *     data. I might look into method pointers (member function pointers?) to
- *     to see if they are a solution.
- *   - Whole GameObjects is another posibility. Every GameObject is a listener
- *     that may or may not be registered to the input event dispatcher. If
- *     there is exactly one dispatcher this should be enough. Also quite
- *     portable from the older system.
- * - Which regestered functions are called? I might be able to get away with
- *   every event going to every listener at this scale. However having an "am
- *   I interested" system might save some repeated code anyways.
  */
 
 #endif//GAME_OBJECT

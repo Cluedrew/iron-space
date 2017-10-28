@@ -99,14 +99,39 @@ void GameObject::draw (sf::RenderTarget & target,
   }
 }
 
+// Name to: reciveInput?
 bool GameObject::handleInput (InputEvent const & input)
 {
-  // Or
-  if (input.type == InputEvent::Select)
+  // For all relievent event times, check to see if targets this object.
+  // I think that is all can do at this point and that is not very much.
+  // InputEvent pos whould have to be a vector2
+  if (InputEvent::Select == input.type && !collides(PointCollider(input.pos)))
+    return false;
+  else
+    return innerHandleInput(input);
+}
+
+// This pair could be used in the input handler, but we need to have some
+// access to the attached state. I could just store it, one wasted pointer
+// on non-listening objects is reasonable at this scale.
+void GameObject::regester ()
+{
+  WorldState * state = getItSomeHow();
+  FatFunction<void, InputEvent const &> listener;
+  listener.set<GameObject, &GameObject::handleInput>(this);
+  state.listeners.insert(listener);
+}
+
+void GameObject::unregester ()
+{
+  WorldState * state = getItSomeHow();
+  FatFunction<void, InputEvent const &> listener;
+  listener.set<GameObject, &GameObject::handleInput>(this);
+  state.listeners.remove(listener);
 }
 
 
-class PlaneObject
+class PlaneObject : public GameObject
 {
 public:
   PlaneObject ();
@@ -121,5 +146,17 @@ protected:
 
 PlaneObject::PlaneObject ()
 {
-  setFlags(GameObject::UpdatePhysics);
+  setFlag(GameObject::UpdatePhysics);
+}
+
+
+class Widget : public GameObject
+{
+public:
+  Widget ();
+};
+
+Widget::Widget () :
+{
+  //setFlag(...);
 }
