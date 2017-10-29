@@ -3,6 +3,10 @@
 
 /* An extention to the Plane class that is also Drawable, and has the
  * nessasary draw function defined to draw all of its contents.
+ *
+ * TODO: Re-examine this being seperate from the regular Plane. Will I ever
+ * use non-drawable 2D objects? Or a whole grid of them? Invisible triggers
+ * will probably be mixed into the map.
  */
 
 #include <SFML/Graphics/Drawable.hpp>

@@ -55,7 +55,7 @@ WorldState * MainMenu::update (sf::Time const & deltaT)
   for (PlaneDrawable<Widget>::iterator it = gui.begin() ;
        it != gui.end() ; ++it)
   {
-    it->updateAi(deltaT);
+    it->updateStep(deltaT);
   }
 
   if (started)

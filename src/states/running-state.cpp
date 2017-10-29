@@ -55,7 +55,7 @@ WorldState * RunningState::handleInput (InputEvent const & ievent)
     {
       InputEvent unselect = {.type = InputEvent::Unselect};
       for (auto&& object : selected)
-        object->handleInput(unselect);
+        object->receiveInput(unselect);
     }
     map.handleInput(ievent);
     {
@@ -76,7 +76,7 @@ WorldState * RunningState::handleInput (InputEvent const & ievent)
   case InputEvent::Point:
     for (auto&& object : selected)
     {
-      object->handleInput(ievent);
+      object->receiveInput(ievent);
     }
     break;
 
@@ -92,12 +92,12 @@ WorldState * RunningState::handleInput (InputEvent const & ievent)
 WorldState * RunningState::update (sf::Time const & deltaT)
 {
   for (PlaneObject & object : map)
-    object.updateAi(deltaT);
+    object.updateStep(deltaT);
 
   map.resolveCollisions();
 
   for (Widget & object : hud)
-    object.updateAi(deltaT);
+    object.updateStep(deltaT);
 
   return this;
 }

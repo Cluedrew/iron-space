@@ -13,7 +13,7 @@
 
 GameObject::GameObject (AiComponent * ai, PhysicsComponent * physics,
     GraphicsComponent * graphics) :
-  sf::Transformable(), sf::Drawable(), ptrsToThis(),
+  sf::Transformable(), sf::Drawable(), ptrsToThis(), controlFlagSet(0),
   ai(ai), physics(physics), graphics(graphics)
 {
   ai->init(*this);
@@ -22,7 +22,7 @@ GameObject::GameObject (AiComponent * ai, PhysicsComponent * physics,
 
 GameObject::GameObject (sf::Transformable const & start, AiComponent * ai,
     PhysicsComponent * physics, GraphicsComponent * graphics) :
-  sf::Transformable(start), sf::Drawable(), ptrsToThis(),
+  sf::Transformable(start), sf::Drawable(), ptrsToThis(), controlFlagSet(0),
   ai(ai), physics(physics), graphics(graphics)
 {
   ai->init(*this);
@@ -31,8 +31,8 @@ GameObject::GameObject (sf::Transformable const & start, AiComponent * ai,
 
 GameObject::GameObject (GameObject && other) :
   sf::Transformable(other), sf::Drawable(),
-  ptrsToThis(other.ptrsToThis), ai(other.ai),
-  physics(other.physics), graphics(other.graphics)
+  ptrsToThis(other.ptrsToThis), controlFlagSet(other.controlFlagSet),
+  ai(other.ai), physics(other.physics), graphics(other.graphics)
 {
   // How do you copy over the transformable.
   assert(other.ptrsToThis.empty());
@@ -53,7 +53,7 @@ GameObject::~GameObject ()
 
 
 // see header
-bool GameObject::handleInput (InputEvent const & input)
+bool GameObject::receiveInput (InputEvent const & input)
 {
   return ai->handleInput(*this, input);
 }
@@ -69,11 +69,13 @@ bool GameObject::collides (Collider const & other) const
 }
 
 // see header
-void GameObject::updateAi (sf::Time const & deltaT)
+void GameObject::updateStep (sf::Time const & deltaT)
 {
-  ai->update(*this, deltaT);
-  // quick fix
-  physics->updatePosition(*this);
+  update(deltaT);
+
+  // Might have to double buffer this some day.
+  if (getFlag(UpdatePhysics))
+    physics->updatePosition(*this);
 }
 
 GraphicsComponent * GameObject::getGraphics ()
@@ -106,4 +108,10 @@ void GameObject::draw (sf::RenderTarget & target, sf::RenderStates states) const
 {
   states.transform *= getTransform();
   target.draw(*graphics, states);
+}
+
+// see header (hook default)
+void GameObject::update (sf::Time const & deltaT)
+{
+  if (ai) ai->update(*this, deltaT);
 }

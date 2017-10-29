@@ -99,7 +99,7 @@ bool Plane<Object2D>::handleInput (InputEvent const & ievent)
     {
       if (it->collides(click))
       {
-        if (it->handleInput(ievent))
+        if (it->receiveInput(ievent))
         {
           return true;
         }

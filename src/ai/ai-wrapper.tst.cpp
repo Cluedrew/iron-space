@@ -19,6 +19,6 @@ TEST_CASE("Testing for the AiWrapper.", "[ai]")
   SECTION("Check Contstruction and the init function.")
   {
     PlaneObject test(new AiWrapper(), new NullPhysics(), new NullGraphics());
-    test.updateAi(sf::Time::Zero);
+    test.updateStep(sf::Time::Zero);
   }
 }

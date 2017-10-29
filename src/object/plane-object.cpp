@@ -4,14 +4,18 @@ PlaneObject::PlaneObject (AiComponent * ai,
                PhysicsComponent * physics,
                GraphicsComponent * graphics) :
     GameObject(ai, physics, graphics)
-{}
+{
+  setFlag(UpdatePhysics);
+}
 
 PlaneObject::PlaneObject (sf::Transformable const & start,
                AiComponent * ai,
                PhysicsComponent * physics,
                GraphicsComponent * graphics) :
     GameObject(start, ai, physics, graphics)
-{}
+{
+  setFlag(UpdatePhysics);
+}
 
 void PlaneObject::updatePhysics (sf::Time const & deltaT)
 {}

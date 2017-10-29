@@ -1,8 +1,7 @@
 #ifndef GAME_OBJECT_HPP
 #define GAME_OBJECT_HPP
 
-/*
- The centeral GameObject for the system. It is based off of the Unity
+/* The centeral GameObject for the system. It is based off of the Unity
  * GameObject with a few important changes, mostly specializing it for the
  * given game. Although the GameObject is supposed to be component base,
  * there is actually no room for components here. Inherated sub-classes are
@@ -23,6 +22,7 @@
  * project progresses.
  */
 
+#include <bitset>
 #include <SFML/Graphics.hpp>
 class Collider;
 #include "game-object-ptr.hpp"
@@ -37,9 +37,19 @@ class GameObject :
     public sf::Transformable,
     public sf::Drawable
 {
+public:
+  enum ControlFlags
+  {
+    UpdatePhysics,
+
+    ControlFlagCap,
+  };
+
 private:
   GameObjectPtr::back_ptr_container ptrsToThis;
   friend class GameObjectPtr;
+
+  std::bitset<ControlFlagCap> controlFlagSet;
 
   AiComponent * ai;
   PhysicsComponent * physics;
@@ -79,7 +89,7 @@ public:
 
 
 
-  bool handleInput (InputEvent const & input);
+  bool receiveInput (InputEvent const & input);
   /* Called during Input Step:
    * Resive and store a piece of input for this class.
    * Params: Reference to InputEvent.
@@ -93,12 +103,10 @@ public:
    * Check if this object collides with another.
    */
 
-  // Rather temp at this time.
-  void updateAi (sf::Time const & deltaT);
-  /* Called during AI Step:
-   * Decide on actions to perform this turn.
-   * Params: Time passed.
-   * Effect: Varies with AIComponent.
+  void updateStep (sf::Time const & deltaT);
+  /* Main update function, update AI and Physics.
+   * Params: Time to move the object forward by.
+   * Effect: Calls update and updatePhysics.
    */
 
   GraphicsComponent * getGraphics();
@@ -139,6 +147,22 @@ public:
   /* Draw the GameObject, in its current state, to the target.
    * Params: The draw target
    * Effect: Draws to screen.
+   */
+
+protected:
+  void setFlag (ControlFlags flag) { controlFlagSet.set(flag, true); }
+  void unsetFlag (ControlFlags flag) { controlFlagSet.set(flag, false); }
+  bool getFlag (ControlFlags flag) { return controlFlagSet.test(flag); }
+  /* Getters and setters for the control flag.
+   * I think some might have effects when you change them, otherwise the
+   * ControlFlags could have direct access.
+   */
+
+  // The rest are hooks to override.
+  virtual void update (sf::Time const & deltaT);
+  /* Move the object forward in time.
+   * Params: The amount of time by which to move forword.
+   * Effect: Default, delagates to ai.update.
    */
 };
 
