@@ -27,6 +27,10 @@ Or, parts of this project I didn't do:
 ## Code ##
 Some stuff you might want to look at before diving into the code base.
 
+I have tried to keep an updated overview of the code around, however I am
+changing my plans so much that they tent to be vague in a effort not to be
+wrong. Most comments in the source files should be up to date.
+
 ### Directories ###
 First a bit about the layout of the code base.
 +   *src* is the top level code directory and contains files that run the core

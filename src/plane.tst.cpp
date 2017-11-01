@@ -17,7 +17,7 @@
 
 
 // Replacement for the GameObject for testing the Plane.
-struct TestObject
+struct TestObject : public sf::Drawable
 {
   Collider * body;
 
@@ -43,6 +43,8 @@ struct TestObject
   {
     return body && body->collides(other);
   }
+
+  void draw (sf::RenderTarget &, sf::RenderStates) const {}
 };
 
 

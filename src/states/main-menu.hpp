@@ -6,7 +6,7 @@
  */
 
 #include "world-state.hpp"
-#include "plane-drawable.hpp"
+#include "plane.hpp"
 #include "object/widget.hpp"
 
 
@@ -14,7 +14,7 @@
 class MainMenu : public WorldState
 {
 private:
-  PlaneDrawable<Widget> gui;
+  Plane<Widget> gui;
   bool started;
 
 protected:

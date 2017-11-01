@@ -129,9 +129,9 @@ void Plane<Object2D>::resolveCollisions ()
   }
 }
 
-/* I need something like this for the new collision system.
-template<>
-void Plane<PlaneObject>::resolveCollisions ()
+// see header
+template<typename Object2D>
+void Plane<Object2D>::overlapStep ()
 {
   iterator const end = objects.end();
   for (iterator it = objects.begin() ; it != end ; ++it)
@@ -143,7 +143,16 @@ void Plane<PlaneObject>::resolveCollisions ()
     it->endOverlapStep();
   }
 }
-*/
+
+// see header
+template<typename Object2D>
+void Plane<Object2D>::draw
+    (sf::RenderTarget & target, sf::RenderStates states) const
+{
+  typename Plane<Object2D>::const_iterator it;
+  for (it = this->cbegin() ; it != this->cend() ; ++it)
+    target.draw(*it, states);
+}
 
 
 #endif//PLANE_TPP

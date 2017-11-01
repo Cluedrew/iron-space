@@ -8,7 +8,7 @@
 #include <vector>
 #include <SFML/Audio/Music.hpp>
 #include "world-state.hpp"
-#include "plane-drawable.hpp"
+#include "plane.hpp"
 class PlaneObject;
 class Widget;
 
@@ -17,8 +17,8 @@ class Widget;
 class RunningState : public WorldState
 {
 private:
-  PlaneDrawable<PlaneObject> map;
-  PlaneDrawable<Widget> hud;
+  Plane<PlaneObject> map;
+  Plane<Widget> hud;
   sf::Music bgm;
   std::vector<PlaneObject*> selected;
 

@@ -7,13 +7,10 @@
  *
  * The filter_it from the ABCToolBox would actually fix in really well here.
  * Maybe I should go back to that.
- *
- * Object2D must have defined on it:
- * bool collides (Collider const &) const;
- * bool collides (Object2D const &) const;
  */
 
 #include <vector>
+#include <SFML/Graphics/Drawable.hpp>
 #include "util/double-ptr.hpp"
 class InputEvent;
 class Collider;
@@ -21,7 +18,7 @@ class Collider;
 
 
 template<typename Object2D>
-class Plane
+class Plane : public sf::Drawable
 {
 public:
   typedef DoublePtr<typename std::vector<Object2D *>::iterator> iterator;
@@ -83,6 +80,18 @@ public:
   /* Find all the collisions in the plane and notify the colliding objects.
    * Effect: The objects within the plane might cause some as they resolve
    *    the collisions.
+   */
+
+  void overlapStep ();
+  /* Find and notify all overlapping objects.
+   * Effect: Call overlapCheck for all pairs, after an object has had all its
+   *   checks preformed its endOverlapStep is called.
+   */
+
+  void draw (sf::RenderTarget & target, sf::RenderStates states) const;
+  /* Draw all game objects within this plane.
+   * Params: target to draw to plus the states that repersent the options.
+   * Effect: Draw all the objects in the Plane to the target.
    */
 };
 
