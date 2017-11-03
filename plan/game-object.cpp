@@ -20,6 +20,8 @@ private:
   PhysicsComponent * physics;
   GraphicsComponent * graphics;
 
+  // -> Collider * body;
+
 protected:
   void setFlag (ControlFlags flag) { controlFlagSet |= flag; }
   void unsetFlag (ControlFlags flag) { controlFlagSet &= ~flag; }

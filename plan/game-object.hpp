@@ -26,8 +26,13 @@
  * classes, mainly that the ideas of collision and space are the same for
  * Widgets and PlaneObjects. But other times it is a waste of code, Widgets
  * don't need a volocity in any sane situation for instance.
- *   Actually if we accept some unused physics code/storage. Then it can just
- * be done on the core class with a flag.
+ *   The PhysicsComponent is a thin wrapper around Collider, it was originally
+ * supposed to be there, with a active version that would handle velocity and
+ * rotation. Although I might keep the Collider, that logic will probably move
+ * up to the class. (Just a question of which class.)
+ *   Putting it on the GameObject with a control flag might work. The cost of
+ * that is some dead code and maybe some wasted space, maybe a bit of speed.
+ * At my scale I can give up some of that, but I would like clean solution.
  *
  *   Input handling has been partially solved with the FatFunction callbacks.
  * There is still the matters of what preprocessing I can do, where I can do
@@ -73,6 +78,10 @@ class GameObject : public sf::Drawable
  * Just having proper containers for mixing might help that.
  */
 {
+  // We can replace the PhysicsComponent with a straight Collider.
+  Collider * body;
+
+public:
   // Some examples:
 
   enum ControlFlags

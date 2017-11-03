@@ -143,7 +143,7 @@ public:
    * Effect: Varies with AIComponent.
    */
 
-  void draw (sf::RenderTarget & target, sf::RenderStates states) const;
+  virtual void draw (sf::RenderTarget & target, sf::RenderStates states) const;
   /* Draw the GameObject, in its current state, to the target.
    * Params: The draw target
    * Effect: Draws to screen.

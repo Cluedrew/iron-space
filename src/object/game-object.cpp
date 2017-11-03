@@ -103,11 +103,14 @@ void GameObject::handleCollision (GameObjectPtr & with)
   ai->handleCollision(*this, with);
 }
 
-// see header
+// see header (hook default)
 void GameObject::draw (sf::RenderTarget & target, sf::RenderStates states) const
 {
-  states.transform *= getTransform();
-  target.draw(*graphics, states);
+  if (graphics)
+  {
+    states.transform *= getTransform();
+    target.draw(*graphics, states);
+  }
 }
 
 // see header (hook default)
