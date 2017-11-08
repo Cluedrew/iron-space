@@ -39,8 +39,17 @@
  * it and the hook functions that recive the final input.
  *   Not to mention how do they access the subject to listen for inputs.
  *
- *   At some point I should also think about a system to create child classes
- * on game objects. That is a bit further away (and I'm glab about that).
+ *   Collision handling has also gone to a weird place. Because all the child
+ * types I am creating provide their own collision handling, but I still have
+ * this required handleCollision on the main class.
+ *   I could just tear that out and leave collision handling to the children
+ * by their own rules. This would require either getting that functionality
+ * out of the AiComponent or rewiring. Is there a shared solution that might
+ * work better and prevent duplication of code.
+ *
+ *   At some point I should also think about a system to store children on
+ * GameObjects. Not type children, but leaf nodes within the state. But that
+ * is a bit further away.
  *
  *
  * Hirarchy:
