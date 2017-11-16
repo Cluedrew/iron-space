@@ -69,6 +69,15 @@ bool GameObject::collides (Collider const & other) const
 }
 
 // see header
+bool GameObject::isOverlapping (Collider const & other) const
+{
+  if (physics)
+    return physics->collides(other);
+  else
+    return false;
+}
+
+// see header
 void GameObject::updateStep (sf::Time const & deltaT)
 {
   update(deltaT);

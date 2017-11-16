@@ -53,6 +53,12 @@ public:
    * Return: True if they overlap, false otherwise.
    */
 
+  bool isOverlapping (Collider const & with) const;
+  /* Check for overlap with a collider.
+   * Params: Constant reference to collider.
+   * Return: True if they overlap, false otherwise.
+   */
+
   bool overlapCheck (PlaneObject & with);
   /* Check for and resolve overlap between two objects.
    * Params: Mutable reference to other object.

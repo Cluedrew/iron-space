@@ -76,7 +76,7 @@ std::vector<Object2D*> Plane<Object2D>::overlapping (Collider const & with)
   std::vector<Object2D*> result;
   for (it = objects.begin() ; it != objects.end() ; ++it)
   {
-    if (it->collides(with))
+    if (it->isOverlapping(with))
     {
       Object2D & ref = *it;
       result.emplace_back(&ref);
@@ -97,7 +97,7 @@ bool Plane<Object2D>::handleInput (InputEvent const & ievent)
 
     for (it = objects.begin() ; it != objects.end() ; ++it)
     {
-      if (it->collides(click))
+      if (it->isOverlapping(click))
       {
         if (it->receiveInput(ievent))
         {
@@ -118,7 +118,7 @@ void Plane<Object2D>::resolveCollisions ()
   {
     for (jt = it, ++jt ; jt != objects.end() ; ++jt)
     {
-      if (it->collides(*jt))
+      if (it->isOverlapping(*jt))
       {
         GameObjectPtr jPtr(*jt);
         it->handleCollision(jPtr);

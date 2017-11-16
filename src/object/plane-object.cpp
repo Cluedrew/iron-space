@@ -31,6 +31,12 @@ bool PlaneObject::isOverlapping (PlaneObject const & with) const
   return collides(with);
 }
 
+bool PlaneObject::isOverlapping (Collider const & with) const
+{
+  // Same as the last.
+  return collides(with);
+}
+
 bool PlaneObject::overlapCheck (PlaneObject & with)
 {
   if (!isOverlapping(with))

@@ -103,6 +103,11 @@ public:
    * Check if this object collides with another.
    */
 
+  bool isOverlapping (Collider const & other) const;
+  /* Check to see if this GameObject overlaps with the given Collider.
+   * Params: Reference to Collider object.
+   */
+
   void updateStep (sf::Time const & deltaT);
   /* Main update function, update AI and Physics.
    * Params: Time to move the object forward by.
