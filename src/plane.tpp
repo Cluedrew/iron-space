@@ -138,7 +138,7 @@ void Plane<Object2D>::overlapStep ()
   {
     for (iterator jt = it ; (++jt) != end ; )
       if (it->overlapCheck(*jt))
-        jt->overlapChecke(*it);
+        jt->overlapCheck(*it);
     // I think this can be mixed in, as long as it's checks are done.
     it->endOverlapStep();
   }

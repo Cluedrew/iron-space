@@ -14,6 +14,7 @@
 #include "graphics/circle-graphics.hpp"
 #include "pause-screen.hpp"
 #include "inst/chase-orb.hpp"
+#include "inst/blinker.hpp"
 #include "inst/status-display.hpp"
 
 
@@ -27,6 +28,8 @@ RunningState::RunningState () :
   map.emplace(PlaneObject(new BlueTouch(315, 300),
                 new PhysicsComponent(new CircleCollider(0, 0, 25)),
                 new CircleGraphics(25)));
+  // TODO: Using this causes a Segmentation fault, look into that.
+  //map.insert(new Blinker(315, 300));
   map.insert(new ChaseOrb(25, 25));
 
   hud.insert(new StatusDisplay());

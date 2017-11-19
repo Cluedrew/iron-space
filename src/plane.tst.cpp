@@ -34,6 +34,16 @@ struct TestObject : public sf::Drawable
       body(body)
   {}
 
+  bool isOverlapping (TestObject const & other) const
+  {
+    return body && other.body && body->collides(*other.body);
+  }
+
+  bool isOverlapping (Collider const & other) const
+  {
+    return body && body->collides(other);
+  }
+
   bool collides (TestObject const & other) const
   {
     return body && other.body && body->collides(*other.body);
