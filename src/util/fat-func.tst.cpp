@@ -49,6 +49,17 @@ TEST_CASE("Tests for FatFunction", "[util]")
 {
   globalCount = 0;
 
+  SECTION("Check bool convertion.")
+  {
+    FatFunction<void> func;
+
+    REQUIRE_FALSE( func );
+    func.set<globalIncrement>();
+    REQUIRE( func );
+    func.clear();
+    REQUIRE( !func );
+  }
+
   SECTION("Simplest use of function binding.")
   {
     FatFunction<void> signal;

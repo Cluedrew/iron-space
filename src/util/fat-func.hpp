@@ -73,20 +73,31 @@ public:
     caller = methodCaller<ClassT, method>;
   }
 
+  inline void clear ()
+  {
+    data = nullptr;
+    caller = nullptr;
+  }
+
   ReturnT operator() (Args&&... args) const
   {
     assert(nullptr != caller);
     return caller(data, std::forward<Args>(args)...);
   }
 
-  bool operator== (FatFunction<ReturnT, Args...> const & other)
+  bool operator== (FatFunction<ReturnT, Args...> const & other) const
   {
     return data == other.data && caller == other.caller;
   }
 
-  bool operator!= (FatFunction<ReturnT, Args...> const & other)
+  bool operator!= (FatFunction<ReturnT, Args...> const & other) const
   {
     return !this->operator==(other);
+  }
+
+  operator bool () const
+  {
+    return nullptr != caller;
   }
 
   FatFunction(FatFunction<ReturnT, Args...> const &) = default;
