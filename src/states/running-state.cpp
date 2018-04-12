@@ -16,6 +16,7 @@
 #include "inst/chase-orb.hpp"
 #include "inst/blinker.hpp"
 #include "inst/status-display.hpp"
+#include "inst/base-station.hpp"
 
 
 
@@ -31,6 +32,8 @@ RunningState::RunningState () :
   // TODO: Using this causes a Segmentation fault, look into that.
   //map.insert(new Blinker(315, 300));
   map.insert(new ChaseOrb(25, 25));
+
+  map.insert(new BaseStation(450, 200));
 
   hud.insert(new StatusDisplay());
 

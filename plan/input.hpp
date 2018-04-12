@@ -81,7 +81,7 @@ public:
 
   virtual ~Listener ()
   {
-    if (toCall) removeSlectionListener(this/toCall);
+    if (toCall) removeSelectionListener(this/toCall);
   }
 };
 
@@ -95,4 +95,11 @@ public:
  *
  * A more important consern, I have to implement some variant of another plan
  * for the each system. Which gets back to this with just a bit more focus.
+ */
+
+
+/* Note on Selection:
+ * The ability to have a GameObject "selected" is powerful and quite generic
+ * for this game, but maybe not overall. It serves the original purpose on
+ * units, but it could be repurposed for GUI selection and similar.
  */

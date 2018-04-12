@@ -28,6 +28,8 @@ private:
 protected:
 public:
   Entity (PhysicsComponent * physics, GraphicsComponent * graphics);
+  Entity (sf::Transformable const & start,
+          PhysicsComponent * physics, GraphicsComponent * graphics);
 
   virtual std::string const & getName () const = 0;
   /* Non-unique name of this entity.

@@ -9,3 +9,8 @@
 Entity::Entity(PhysicsComponent * physics, GraphicsComponent * graphics) :
     PlaneObject(new AiWrapper(), physics, graphics)
 {}
+
+Entity::Entity(sf::Transformable const & start,
+               PhysicsComponent * physics, GraphicsComponent * graphics) :
+    PlaneObject(start, new AiWrapper(), physics, graphics)
+{}
