@@ -18,16 +18,12 @@
 #include "object/widget.hpp"
 namespace sf { class RenderTarget; class RenderStates; }
 class Entity;
-class TextFragment;
 
 
 
 class StatusDisplay : public Widget
 {
 private:
-  // Might actually be stored elsewhere.
-  std::vector<Entity const *> selection;
-
   sf::RenderTexture core;
 
   // Display variables:

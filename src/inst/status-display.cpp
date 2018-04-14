@@ -7,6 +7,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics.hpp>
 #include "object/entity.hpp"
+#include "core/interface.hpp"
 #include "ai/null-ai.hpp"
 #include "physics/null-physics.hpp"
 #include "graphics/null-graphics.hpp"
@@ -116,6 +117,10 @@ void StatusDisplay::updateCore (sf::Time const & deltaT)
     core.draw(frame);
   }
 
+  // Copy all the currently stored entities.
+  std::vector<Entity *> selection(
+    interface.selectBegin(), interface.selectEnd());
+
   if (0 == selection.size())
   {
     // Empty core.
@@ -130,7 +135,7 @@ void StatusDisplay::updateCore (sf::Time const & deltaT)
 
     core.draw(header);
 
-    //display(*selection.front());
+    display(*selection.front());
   }
   else
   {

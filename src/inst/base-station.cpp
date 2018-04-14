@@ -2,6 +2,8 @@
 
 // Implementation of BaseStation and BaseStationGraphics.
 
+#include "core/interface.hpp"
+#include "input/input-event.hpp"
 #include "physics/physics-component.hpp"
 #include "physics/circle-collider.hpp"
 #include "graphics/graphics-component.hpp"
@@ -10,7 +12,7 @@
 
 
 
-static float const rimRadius = 100;
+static float const rimRadius = 50;
 static float const coreRadius = 10;
 
 struct BaseStationGraphics : public GraphicsComponent {
@@ -21,7 +23,8 @@ struct BaseStationGraphics : public GraphicsComponent {
 
   BaseStationGraphics() :
     rim(rimRadius), core(coreRadius),
-    nsSpokes(sf::Vector2f(5, 197)), ewSpokes(sf::Vector2f(197, 5))
+    nsSpokes(sf::Vector2f(5, rimRadius * 2)),
+    ewSpokes(sf::Vector2f(rimRadius * 2, 5))
   {
     rim.setOrigin(rimRadius, rimRadius);
     rim.setOutlineThickness(-5);
@@ -29,9 +32,9 @@ struct BaseStationGraphics : public GraphicsComponent {
     rim.setFillColor(sf::Color::Transparent);
     core.setOrigin(coreRadius, coreRadius);
     core.setFillColor(sf::Color::White);
-    nsSpokes.setOrigin(3, 99);
+    nsSpokes.setOrigin(3, rimRadius);
     nsSpokes.setFillColor(sf::Color::Cyan);
-    ewSpokes.setOrigin(99, 3);
+    ewSpokes.setOrigin(rimRadius, 3);
     ewSpokes.setFillColor(sf::Color::Cyan);
   }
 
@@ -63,8 +66,14 @@ void BaseStation::display (StatusDisplay & target) const
 
 bool BaseStation::innerHandleInput (InputEvent const & input)
 {
-  // Selection has to be handled.
-  return false;
+  switch (input.type)
+  {
+  case InputEvent::Select:
+    interface.select(this);
+    return true;
+  default:
+    return false;
+  }
 }
 
 void BaseStation::innerUpdateAi (sf::Time const & deltaT)
