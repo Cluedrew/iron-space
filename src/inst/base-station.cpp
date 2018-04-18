@@ -49,7 +49,7 @@ struct BaseStationGraphics : public GraphicsComponent {
 
 BaseStation::BaseStation(int startX, int startY) :
   Entity(xyTransformable(startX, startY),
-         new PhysicsComponent(new CircleCollider(0, 0, 100)),
+         new PhysicsComponent(new CircleCollider(0, 0, rimRadius)),
          new BaseStationGraphics())
 {}
 
@@ -68,8 +68,12 @@ bool BaseStation::innerHandleInput (InputEvent const & input)
 {
   switch (input.type)
   {
+  // TODO: This is not something I want to have to write for every unit.
   case InputEvent::Select:
-    interface.select(this);
+    interface.selection.setTo(this);
+    return true;
+  case InputEvent::Unselect:
+    interface.selection.erase(this);
     return true;
   default:
     return false;

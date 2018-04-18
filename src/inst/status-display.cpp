@@ -119,7 +119,7 @@ void StatusDisplay::updateCore (sf::Time const & deltaT)
 
   // Copy all the currently stored entities.
   std::vector<Entity *> selection(
-    interface.selectBegin(), interface.selectEnd());
+    interface.selection.begin(), interface.selection.end());
 
   if (0 == selection.size())
   {

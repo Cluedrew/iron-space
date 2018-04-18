@@ -12,36 +12,34 @@
 
 
 
-class Interface
+class Selection : public std::set<Entity *>
+/* A wrapper class around a set of Entity pointers. The standard set functions
+ * are usually sufficient, but for a couple of cases I just needed something
+ * extra.
+ */
 {
-  std::set<Entity *> selected;
-
 public:
-  // SelectIterator & ConstSelectIterator
-  using select_iterator = std::set<Entity *>::iterator;
-  using const_select_iterator = std::set<Entity *>::const_iterator;
-
-  void clearSelect();
-  /* Clear the current selection.
-   * Effect: Changes the selection so no entities are selected.
+  inline void setTo(Entity * entity)
+  { clear(); insert(entity); }
+  inline void setTo(std::vector<Entity *> const entities)
+  { clear(); insert(entities.begin(), entities.end()); }
+  inline void setTo(std::set<Entity *> const entities)
+  { clear(); insert(entities.begin(), entities.end()); }
+  /* Replace the contents of the Selection with a new entity or entities.
+   * Params:
+   *   - A single Entity pointer.
+   *   - A container that contains entity pointers.
+   * Effect: The Selection contains only (and all) entities given.
    */
+  //template<typename ContainerT>
+  //inline void setTo(ContainerT const & entities)
+  //{ clear(); insert(entities.begin(), entities.end()); }
+};
 
-  void select(Entity *);
-  void select(std::vector<Entity *>);
-  /* Clear the current selection and replace it with the given entity/ies.
-   * Params: A pointer Entity, or pointers to the Entities, to select.
-   * Effect: Changes the selection so only the provided entities are selected.
-   */
 
-  size_t numSelected();
-  /* Get the size of the current selection.
-   * Return: The number of unique entities currently selected.
-   */
-
-  select_iterator selectBegin();
-  const_select_iterator selectCBegin() const;
-  select_iterator selectEnd();
-  const_select_iterator selectCEnd() const;
+struct Interface
+{
+  Selection selection;
 };
 
 extern Interface interface;
