@@ -88,9 +88,10 @@ public:
 StatusDisplay::StatusDisplay () :
   Widget(new StatusDisplayAi(),
          new NullPhysics(),
-         new StatusDisplayGraphics())
+         new StatusDisplayGraphics()),
+  titleFont("FreeSans.ttf")
 {
-  if (!core.create(200, 100))
+  if (!core.create(400, 150))
   {
     throw GameFault("Could not create StatusDisplay Texture.");
   }
@@ -130,12 +131,12 @@ void StatusDisplay::updateCore (sf::Time const & deltaT)
     // Information about the selected entitiy.
     Entity const & entity = *selection.front();
 
-    // TODO: Consider TextGraphics, similar use but less overhead (all uses).
-    TextFragment header(entity.getName(), 10, 10);
+    sf::Text title(entity.getName(), *titleFont, 20);
+    title.setPosition(10, 10);
 
-    core.draw(header);
+    core.draw(title);
 
-    display(*selection.front());
+    display(entity);
   }
   else
   {
@@ -151,6 +152,8 @@ void StatusDisplay::updateCore (sf::Time const & deltaT)
 
     core.draw(header);
   }
+  // Update the internal image (upside-down otherwise).
+  core.display();
 }
 
 void StatusDisplay::display (Entity const & source)

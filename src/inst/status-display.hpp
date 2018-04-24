@@ -15,8 +15,9 @@
 
 #include <string>
 #include <SFML/Graphics/RenderTexture.hpp>
-#include "object/widget.hpp"
 namespace sf { class RenderTarget; class RenderStates; }
+#include "object/widget.hpp"
+#include "graphics/font-marc.hpp"
 class Entity;
 
 
@@ -25,6 +26,7 @@ class StatusDisplay : public Widget
 {
 private:
   sf::RenderTexture core;
+  FontMaRC titleFont;
 
   // Display variables:
   unsigned char numStatusBars;
